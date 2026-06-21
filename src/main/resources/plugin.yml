@@ -1,0 +1,22 @@
+name: lycohism
+description: $description
+prefix: Lycohism
+version: '${version}'
+
+main: com.tinyyana.lycohism.Lycohism
+api-version: '26.2'
+load: POSTWORLD
+
+authors: [ TinyYana ]
+website: https://tinyyana.com
+
+commands:
+  lycohism:
+    description: Lycohism 核心指令。
+    usage: /lycohism help
+    aliases: [ lyco ]
+
+permissions:
+  lycohism.admin:
+    description: 存取 Lycohism 管理子指令（reload、debug）。
+    default: op
