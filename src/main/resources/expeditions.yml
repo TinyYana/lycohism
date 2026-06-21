@@ -1,0 +1,70 @@
+# Lycohism 遠征設定
+# 每個遠征都是一個獨立、持久的世界，玩家從書房介面前往並帶回素材。
+# 世界在第一次進入時才建立（lazy），之後保存在磁碟上。
+# 顯示名稱放在 lang.yml 的 content-names，首次進入提示放在 messages.expedition.first-hint。
+
+expeditions:
+
+  # 雨後森林：v0.5 的第一個遠征地。永遠下著雨，回流到溫室。
+  # 主題 雨息／苔蘚／濕地／藥草；專屬素材為苔華（見 phenomena.yml）。
+  rainfall_forest:
+    # 對應的 Bukkit 世界名稱（會在伺服器資料夾下建立同名世界）。
+    # 所有玩家共用這一個世界（v0.5.1 決策：1-3 人測試服不做每人獨立實例）。
+    world-name: lycohism_rainfall_forest
+    # 鎖定永久降雨，營造「雨後森林」氛圍（不影響主世界天氣）。
+    always-raining: true
+    # 解鎖條件：玩家必須先完成這些原版進度，書房才會開放遠征入口。
+    # 用 namespaced key。story/enter_the_nether = 曾踏入地獄；把遠征往後挪到中期，
+    # 並讓進度線跟地獄產生關聯（v0.5.1 決策）。
+    requires-advancements:
+      - minecraft:story/enter_the_nether
+    # 強制生態：保留 vanilla 地形與特徵，但把整個世界鋪成濕地／森林系生態，
+    # 帶來紅樹林、泥地、沼澤植被、潮濕水色與霧氣。生態以「抖動 Voronoi」分配，
+    # 邊界自然彎曲、不再是方形切塊。名稱用原版 biome key（可省略 minecraft: 前綴）。
+    biomes:
+      - mangrove_swamp
+      - swamp
+      - jungle
+    # 氛圍威脅：在玩家附近生成主題怪「雨怨」，讓雨後森林有存在感。
+    # v0.5.2：頻率調高、改成不限白天（永雨的陰鬱世界，白天也該有東西在動）。
+    hazard:
+      enabled: true
+      mob: DROWNED            # 原版實體類型（沼澤雨夜的溺屍很合題）
+      display-name-key: content-names.rain_wraith
+      chance: 0.6             # 每次掃描、每位玩家的生成機率（掃描間隔約 10 秒）
+      max-nearby: 4           # 玩家附近最多同時存在的雨怨數量
+      radius: 28              # 生成／計數半徑（格）
+      night-only: false       # 白天也會出現（永雨世界），要回到只在夜晚改成 true
+
+  # 永夜荒原：v0.6 第二遠征地。永遠是夜晚，與雨後森林（晝）形成晝夜對比。
+  # 非去不可的理由：(1) 只有這裡能穩定累積月輝（永夜，蓄能晶整日蓄月輝），
+  # (2) 專屬素材月輝核心，是製作輝能之鏡（月之力）的關鍵（見 phenomena.yml）。
+  moonless_waste:
+    world-name: lycohism_moonless_waste
+    # 鎖定永久夜晚（關閉日夜循環、時間定在午夜），營造永夜氛圍。
+    always-night: true
+    # 月輝蓄積加倍，讓「專程來荒原」更有吸引力（被動蓄能速率 ×2）。
+    energy-multiplier: 2.0
+    # 解鎖條件：沿用踏入地獄門檻；可在此改成更後期的進度。
+    requires-advancements:
+      - minecraft:story/enter_the_nether
+    # 強制生態：幽暗＋荒蕪的混合，讓「荒原」名實相符——深暗（sculk 幽冥）、黑森林（陰暗林冠）、
+    # 風蝕礫丘（裸岩荒地）。永夜＋這些生態 = 陰森的不毛之地。
+    biomes:
+      - deep_dark
+      - dark_forest
+      - windswept_gravelly_hills
+    # 氛圍威脅：玩家整體實力已上去，這裡刻意更危險——夜魅更大、更兇、帶 buff、數量更多。
+    hazard:
+      enabled: true
+      mob: BOGGED              # 1.21 的苔沼骷髏，當作永夜的夜魅
+      display-name-key: content-names.night_shade
+      chance: 0.6
+      max-nearby: 5
+      radius: 30
+      night-only: false
+      scale: 1.5              # 體型放大（generic.scale）
+      effects:               # 生成時掛上的永久增益（潛行名稱＝原版效果 id）
+        strength: 1          # 力量 II
+        speed: 1             # 速度 II
+        fire_resistance: 0

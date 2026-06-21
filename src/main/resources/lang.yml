@@ -1,0 +1,1096 @@
+# Lycohism 文字設定
+# 所有玩家看得到的文字都集中在這裡，方便改字、改語氣、改顏色，不需重新編譯。
+# 格式為 MiniMessage：https://docs.advntr.dev/minimessage/format.html
+#
+# 注意：書本頁面是「淺色羊皮紙」底，請使用深色（black / dark_gray / dark_green /
+# dark_purple / dark_aqua / dark_red …）才看得清楚，不要用 white / gray / yellow。
+
+# ── GUI 介面外觀（所有設施選單共用，維持一致性）────────────────────────────
+gui:
+  filler-material: GRAY_STAINED_GLASS_PANE
+  header-material: PINK_PETALS
+  back-material: ARROW
+  breadcrumb-separator: " ▸ "
+  back: "<white>返回</white>"
+  back-lore:
+    - "<dark_gray>回到上一頁。</dark_gray>"
+
+  common:
+    requires: "<gray>需要：</gray>"
+    cost-line: "<gray>· {item} <white>x{amount}</white></gray>"
+    cost-hidden: "<dark_gray>· <obfuscated>未知素材</obfuscated> <gray>x{amount}</gray></dark_gray>"
+    cost-hidden-hint: "<dark_gray>拿起未知素材後，名稱就會顯現。</dark_gray>"
+    cost-plain: "{item} x{amount}"
+    click-craft: "<yellow>點擊製作。</yellow>"
+    click-repair: "<yellow>點擊修復。</yellow>"
+    click-enchant: "<yellow>點擊附加經驗修補。</yellow>"
+    click-cultivate: "<dark_gray>點擊培育。</dark_gray>"
+
+  workshop:
+    root: "<dark_aqua>工房</dark_aqua>"
+    broken: "<dark_gray>工房（損壞）</dark_gray>"
+    tools-leaf: "<aqua>工具製作</aqua>"
+    materials-leaf: "<aqua>建材加工</aqua>"
+    tools-lore:
+      - "<gray>製作完整顯示用途與成本的生活工具。</gray>"
+    materials-lore:
+      - "<gray>把常用建材整組轉換。</gray>"
+    repair: "<yellow>修復工房</yellow>"
+    repair-lore:
+      - "<gray>工房需要修復才能運作。</gray>"
+    status: "<aqua>工房狀態</aqua>"
+    status-lore:
+      - "<gray>等級 <white>{level}</white> / 2</gray>"
+      - "<gray>可用：工具製作、建材加工、經驗修補。</gray>"
+      - "<dark_gray>點擊在聊天欄查看完整內容。</dark_gray>"
+    mending: "<gradient:#8fd3ff:#ffffff>雨息附魔</gradient>"
+    mending-lore:
+      - "<gray>替主手工具永久附加經驗修補。</gray>"
+      - "<gray>另需消耗 <white>{levels}</white> 個經驗等級。</gray>"
+    conversion: "<gray>{input} → {output}</gray>"
+    conversion-action: "<dark_gray>點擊轉換背包中的整組。</dark_gray>"
+    output-name: "<aqua>{item}</aqua>"
+    header-main: "<aqua>工房</aqua>"
+    header-main-lore:
+      - "<gray>修復後的加工據點。</gray>"
+      - "<gray>選擇下方一項功能。</gray>"
+    header-broken-lore:
+      - "<gray>工房還在沉睡。</gray>"
+      - "<gray>備齊材料，點擊修復喚醒它。</gray>"
+    header-tools-lore:
+      - "<gray>用自然之物製作生活工具。</gray>"
+    header-materials-lore:
+      - "<gray>把背包裡的建材整組轉換。</gray>"
+
+  study:
+    root: "<dark_aqua>書房</dark_aqua>"
+    sealed: "<dark_gray>書房（沉寂）</dark_gray>"
+    header-main: "<aqua>書房</aqua>"
+    header-main-lore:
+      - "<gray>記錄你走過的調律之路。</gray>"
+      - "<gray>選擇下方一項分類。</gray>"
+    header-sealed-lore:
+      - "<gray>散落的紀錄還沒有整理。</gray>"
+      - "<gray>備齊材料，點擊整理書房。</gray>"
+    repair: "<yellow>整理書房</yellow>"
+    repair-lore:
+      - "<gray>讓散落的自然紀錄重新有序。</gray>"
+    # ── 分類（root 的三個入口）─────────────────────────────
+    books-leaf: "<aqua>書冊</aqua>"
+    books-lore:
+      - "<gray>翻閱手冊、圖鑑與發現紀錄。</gray>"
+    tools-leaf: "<light_purple>記憶器物</light_purple>"
+    tools-lore:
+      - "<gray>製作觀測與整理用的工具。</gray>"
+    progress-leaf: "<aqua>調律之路</aqua>"
+    progress-lore:
+      - "<gray>回顧走過的路，看見下一步。</gray>"
+    expedition-leaf: "<gradient:#8fd3ff:#d9f3ff>遠征</gradient>"
+    expedition-lore:
+      - "<gray>解鎖並直接前往遠征地。</gray>"
+    header-books-lore:
+      - "<gray>翻閱你累積的調律紀錄。</gray>"
+    header-tools-lore:
+      - "<gray>用自然之物製作記憶工具。</gray>"
+    header-expedition-lore:
+      - "<gray>循著雨痕，前往主世界之外。</gray>"
+    # ── 書冊 leaf ──────────────────────────────────────────
+    manual: "<light_purple>調律手冊</light_purple>"
+    manual-lore:
+      - "<gray>查看目前能做的下一步。</gray>"
+    compendium: "<aqua>自然圖鑑</aqua>"
+    compendium-lore:
+      - "<gray>查看已發現的自然現象。</gray>"
+    record: "<green>發現紀錄</green>"
+    record-lore:
+      - "<gray>回顧你完成過的調律。</gray>"
+    # ── 遠征 leaf ──────────────────────────────────────────
+    expedition-enter: "<gradient:#8fd3ff:#d9f3ff>進入雨後森林</gradient>"
+    expedition-enter-name: "<gradient:#8fd3ff:#d9f3ff>前往 {name}</gradient>"
+    expedition-locked-name: "<dark_gray>{name}（未解鎖）</dark_gray>"
+    expedition-enter-lore:
+      - "<gray>已解鎖。點擊直接進入遠征世界。</gray>"
+      - "<dark_gray>不會給予額外入口道具。</dark_gray>"
+    expedition-return: "<white>返回出發地</white>"
+    expedition-return-lore:
+      - "<gray>點擊返回進入遠征前的位置。</gray>"
+    gate-locked: "<dark_gray>雨後森林（未解鎖）</dark_gray>"
+    gate-locked-lore:
+      - "<gray>雨痕還很微弱，入口尚未解鎖。</gray>"
+      - "<gray>踏入<white>地獄</white>之後，再回來試試。</gray>"
+    status: "<aqua>書房狀態</aqua>"
+    status-lore:
+      - "<gray>等級 <white>{level}</white> / 2</gray>"
+      - "<gray>分類：書冊、記憶器物、遠征。</gray>"
+      - "<dark_gray>點擊在聊天欄查看完整內容。</dark_gray>"
+  greenhouse:
+    root: "<dark_aqua>溫室</dark_aqua>"
+    broken: "<dark_gray>溫室（荒蕪）</dark_gray>"
+    cultivate-leaf: "<green>培育</green>"
+    tools-leaf: "<green>植物工具</green>"
+    cultivate-lore:
+      - "<gray>用花脈換取常用與稀有植物。</gray>"
+    tools-lore:
+      - "<gray>製作能催熟、採收與補種的植物工具。</gray>"
+    repair: "<yellow>開墾溫室</yellow>"
+    repair-lore:
+      - "<gray>讓荒蕪的溫室重新適合生長。</gray>"
+    status: "<green>溫室狀態</green>"
+    status-lore:
+      - "<gray>等級 <white>{level}</white> / 2</gray>"
+      - "<gray>可用：花脈與苔華培育、花脈剪、苔露膏與苔肥。</gray>"
+      - "<dark_gray>點擊在聊天欄查看完整內容。</dark_gray>"
+    output-name: "<green>{item} x{amount}</green>"
+    header-main: "<green>溫室</green>"
+    header-main-lore:
+      - "<gray>讓植物與花脈在此安頓。</gray>"
+      - "<gray>選擇下方一項功能。</gray>"
+    header-broken-lore:
+      - "<gray>溫室還很荒蕪。</gray>"
+      - "<gray>備齊材料，點擊開墾。</gray>"
+    header-cultivate-lore:
+      - "<gray>用花脈培育植物素材。</gray>"
+    header-tools-lore:
+      - "<gray>製作植物系工具。</gray>"
+
+  admin:
+    title: "<dark_purple>Lycohism 管理員</dark_purple>"
+    header: "<light_purple>管理員工具</light_purple>"
+    header-lore:
+      - "<gray>版本 <white>{version}</white>｜Debug {debug}</gray>"
+      - "<gray>集中處理測試物品、階段與遠征。</gray>"
+    materials: "<aqua>給予自然素材</aqua>"
+    materials-lore:
+      - "<gray>挑選一份 Lycohism 自然素材。</gray>"
+    tools: "<light_purple>給予工具</light_purple>"
+    tools-lore:
+      - "<gray>挑選一件工具或測試物品。</gray>"
+    stages: "<yellow>調整遊戲階段</yellow>"
+    stages-lore:
+      - "<gray>把指定章節設成目前進度。</gray>"
+    expedition: "<gradient:#8fd3ff:#d9f3ff>切換遠征世界</gradient>"
+    expedition-lore:
+      - "<gray>無視解鎖門檻進入；已在遠征時返回。</gray>"
+    reload: "<green>重新載入設定</green>"
+    reload-lore:
+      - "<gray>重新讀取設定、內容與進度。</gray>"
+    sounds: "<aqua>音效測試集</aqua>"
+    sounds-lore:
+      - "<gray>試聽四組音階盒旋律。</gray>"
+    sounds-header-lore:
+      - "<gray>每組使用同一段音階，方便比較音色。</gray>"
+    sound-chime: "<light_purple>水晶鐘</light_purple>"
+    sound-harp: "<gold>豎琴</gold>"
+    sound-flute: "<green>長笛</green>"
+    sound-bell: "<yellow>鐘聲</yellow>"
+    click-sound:
+      - "<yellow>點擊試聽。</yellow>"
+    items-header-lore:
+      - "<gray>點擊物品，直接取得一份。</gray>"
+    stages-header-lore:
+      - "<gray>點擊章節，把它設為目前階段。</gray>"
+      - "<dark_gray>發光的羅盤是目前階段。</dark_gray>"
+    item-id: "<dark_gray>ID：{id}</dark_gray>"
+    stage-id: "<dark_gray>階段 ID：{id}</dark_gray>"
+    click-give: "<yellow>點擊取得。</yellow>"
+    click-stage: "<yellow>點擊切換。</yellow>"
+    expedition-header-lore:
+      - "<gray>挑一個遠征世界直接前往（無視門檻）。</gray>"
+    expedition-id: "<dark_gray>遠征 ID：{id}</dark_gray>"
+    click-expedition: "<yellow>點擊前往。</yellow>"
+    expedition-return: "<white>返回主世界</white>"
+    expedition-return-lore:
+      - "<gray>若正在遠征世界，點擊返回出發地。</gray>"
+
+  nexus:
+    title: "<gradient:#ffe9a8:#c0a8ff>輝能核心</gradient>"
+    header: "<gold>輝能核心</gold>"
+    header-lore:
+      - "<gray>據點的輝能倉。</gray>"
+      - "<gray>擁有者：<white>{owner}</white>｜成員：<white>{members}</white></gray>"
+      - "<dark_gray>用 /lycohism nexus share <玩家> 分享存取。</dark_gray>"
+    sun: "<gold>☀ 日輝</gold>"
+    sun-lore:
+      - "<gray>存量 <white>{value}</white> / {cap}</gray>"
+      - "<dark_gray>由日輝塔經中繼器灌入。</dark_gray>"
+    moon: "<aqua>☾ 月輝</aqua>"
+    moon-lore:
+      - "<gray>存量 <white>{value}</white> / {cap}</gray>"
+      - "<dark_gray>由月輝塔經中繼器灌入。</dark_gray>"
+
+  # 調律之路（progression line）的獨立 UI。
+  progression:
+    title: "<dark_aqua>調律之路</dark_aqua>"
+    header: "<aqua>調律之路</aqua>"
+    header-lore:
+      - "<gray>你走過的路，與下一步。</gray>"
+      - "<gray>已完成 <white>{done}</white> / {total}</gray>"
+    advancement-root-title: "Lycohism"
+    advancement-root-description: "自然調律的物語。"
+    advancement-intro-title: "你所知道的物語"
+    advancement-intro-description: "世界裡仍有你尚未察覺的自然回應。"
+    done-name: "<green>✔ {title}</green>"
+    unlocked-label: "<aqua>已解鎖：</aqua>"
+    current-name: "<yellow>▶ {title}</yellow>"
+    objective-label: "<gold>目前目標：</gold>"
+    locked-name: "<dark_gray>？？？</dark_gray>"
+    locked-lore:
+      - "<dark_gray>還沒走到這一步。</dark_gray>"
+    upcoming-name: "<dark_gray>⌛ {title}</dark_gray>"
+
+content-names:
+  morning_dew: "<gradient:#cfe8ff:#ffffff>晨露</gradient>"
+  rain_breath: "<gradient:#8fd3ff:#d9f3ff>雨息</gradient>"
+  flower_vein: "<gradient:#ff9ed6:#ffd9ef>花脈</gradient>"
+  moon_dew: "<gradient:#c7b8ff:#f4f0ff>月露</gradient>"
+  wind_trace: "<gradient:#b8e6ff:#ffffff>風痕</gradient>"
+  leyline_sand: "<gradient:#d8c3a5:#fff1d6>地脈砂</gradient>"
+  dew_light: "<gradient:#fff6c0:#ffffff>露光瓶</gradient>"
+  flower_bookmark: "<gradient:#ffd6e8:#ffffff>花籤</gradient>"
+  stonework_hammer: "<gradient:#cfd6df:#ffffff>石工槌</gradient>"
+  rain_bandage: "<gradient:#8fd3ff:#ffffff>雨紋繃帶</gradient>"
+  flower_vein_shears: "<gradient:#ff9ed6:#ffffff>花脈剪</gradient>"
+  wind_vane: "<gradient:#b8e6ff:#ffffff>風標</gradient>"
+  moon_pouch: "<gradient:#c7b8ff:#ffffff>月紗袋</gradient>"
+  leyline_probe: "<gradient:#d8c3a5:#fff1d6>地脈探針</gradient>"
+  tuning_manual: "<gradient:#9b6cff:#5a3aa8>調律手冊</gradient>"
+  moss_bloom: "<gradient:#7fd6a0:#e3fff0>苔華</gradient>"
+  rain_gate: "<gradient:#8fd3ff:#d9f3ff>雨痕門符</gradient>"
+  rainfall_forest: "<gradient:#6fb3d6:#cfeefe>雨後森林</gradient>"
+  rain_wraith: "<gradient:#5a7d99:#9fc4dd>雨怨</gradient>"
+  moss_balm: "<gradient:#7fd6a0:#d8ffe8>苔露膏</gradient>"
+  moss_fertile: "<gradient:#9ad17f:#e6ffcf>苔肥</gradient>"
+  ember_bloom: "<gradient:#ff9d5c:#ffe0a3>燼華</gradient>"
+  energy_crystal: "<gradient:#ffe9a8:#a8c8ff>蓄能晶</gradient>"
+  radiant_focus: "<gradient:#ffd98a:#c0a8ff>輝能之鏡</gradient>"
+  moon_core: "<gradient:#a89cff:#e6e0ff>月輝核心</gradient>"
+  energy_relay: "<gradient:#ffd98a:#a8c8ff>能量中繼器</gradient>"
+  sun_tower: "<gradient:#ffe9a8:#ffd24a>日輝塔</gradient>"
+  moon_tower: "<gradient:#c0a8ff:#e6e0ff>月輝塔</gradient>"
+  energy_nexus: "<gradient:#ffe9a8:#c0a8ff>輝能核心</gradient>"
+  energy_altar: "<gradient:#c0a8ff:#ffd98a>輝能祭壇</gradient>"
+  solar_pick: "<gradient:#ffe07a:#ffb24a>日炎鎬</gradient>"
+  star_compass: "<gradient:#aaccff:#e0f0ff>星圖羅盤</gradient>"
+  lunar_spore: "<gradient:#d8b8ff:#f0e0ff>月華灑</gradient>"
+  moonless_waste: "<gradient:#3a3a5a:#9a8fd6>永夜荒原</gradient>"
+  night_shade: "<gradient:#4a4466:#8a7fbf>夜魅</gradient>"
+
+structures:
+  moss-altar:
+    chest-name: "<dark_green>苔生調律壇的供物</dark_green>"
+  dew-well:
+    chest-name: "<aqua>露語井的沉積物</aqua>"
+  wind-circle:
+    chest-name: "<gray>風痕石環的藏物</gray>"
+  rainfall-dungeon:
+    chest-name: "<dark_aqua>雨浸地窖的補給箱</dark_aqua>"
+  moondial:
+    chest-name: "<light_purple>月晷下的供奉</light_purple>"
+  sundial:
+    chest-name: "<gold>日晷下的供奉</gold>"
+
+items:
+  dew_light:
+    name: "<gradient:#fff6c0:#ffffff>露光瓶</gradient>"
+    lore:
+      - "<gray>在黑暗中提供兩分鐘夜視。</gray>"
+      - "<dark_gray>右鍵消耗；使用後留下空玻璃瓶。</dark_gray>"
+  flower_bookmark:
+    name: "<gradient:#ffd6e8:#ffffff>花籤</gradient>"
+    lore:
+      - "<gray>記住一個地方，之後指引方向。</gray>"
+      - "<dark_gray>潛行右鍵記住、右鍵指引。</dark_gray>"
+  stonework_hammer:
+    name: "<gradient:#cfd6df:#ffffff>石工槌</gradient>"
+    lore:
+      - "<gray>讓石材加工更方便。</gray>"
+      - "<dark_gray>右鍵石材方塊循環變體。</dark_gray>"
+  rain_bandage:
+    name: "<gradient:#8fd3ff:#ffffff>雨紋繃帶</gradient>"
+    lore:
+      - "<gray>用雨息浸潤的簡單繃帶。</gray>"
+      - "<dark_gray>右鍵恢復少量生命，使用後消耗。</dark_gray>"
+  flower_vein_shears:
+    name: "<gradient:#ff9ed6:#ffffff>花脈剪</gradient>"
+    lore:
+      - "<gray>讓未成熟作物立刻長成。</gray>"
+      - "<dark_gray>成熟後再右鍵可採收並補種。</dark_gray>"
+  wind_vane:
+    name: "<gradient:#b8e6ff:#ffffff>風標</gradient>"
+    lore:
+      - "<gray>讀取此刻的自然採集條件。</gray>"
+      - "<dark_gray>拿在任一手時，持續顯示環境讀數。</dark_gray>"
+  moon_pouch:
+    name: "<gradient:#c7b8ff:#ffffff>月紗袋</gradient>"
+    lore:
+      - "<gray>自動收納撿到的自然現象。</gray>"
+      - "<dark_gray>右鍵取出袋內全部內容。</dark_gray>"
+  leyline_probe:
+    name: "<gradient:#d8c3a5:#fff1d6>地脈探針</gradient>"
+    lore:
+      - "<gray>讓地脈砂回應附近的礦脈。</gray>"
+      - "<dark_gray>拿在任一手時，持續顯示最近礦脈。</dark_gray>"
+  rain_gate:
+    name: "<gradient:#8fd3ff:#d9f3ff>雨痕門符</gradient>"
+    lore:
+      - "<gray>循著雨痕，前往下著雨的森林。</gray>"
+      - "<dark_gray>主世界右鍵前往，遠征世界右鍵返回原地。</dark_gray>"
+      - "<dark_gray>需先踏入過地獄，雨痕才會回應。</dark_gray>"
+  moss_balm:
+    name: "<gradient:#7fd6a0:#d8ffe8>苔露膏</gradient>"
+    lore:
+      - "<gray>右鍵塗抹，獲得一段溫和的持續再生。</gray>"
+      - "<dark_gray>只能用雨後森林的苔華在溫室調製。</dark_gray>"
+  moss_fertile:
+    name: "<gradient:#9ad17f:#e6ffcf>苔肥</gradient>"
+    lore:
+      - "<gray>右鍵植物，催長周圍一小塊作物與植被。</gray>"
+      - "<dark_gray>只能用雨後森林的苔華在溫室調製。</dark_gray>"
+  energy_crystal:
+    name: "<gradient:#ffe9a8:#a8c8ff>蓄能晶</gradient>"
+    lore:
+      - "<gray>放在背包就會吸收滿溢的輝能。</gray>"
+      - "<gray>你的能量池滿了之後，多的會存進這裡。</gray>"
+      - "<dark_gray>右鍵把晶體裡的能量倒回自身的輝能池。</dark_gray>"
+  radiant_focus:
+    name: "<gradient:#ffd98a:#c0a8ff>輝能之鏡</gradient>"
+    lore:
+      - "<gray>右鍵引動<gold>日輝</gold>：抗火與力量的日之祝福。</gray>"
+      - "<gray>潛行右鍵引動<aqua>月輝</aqua>：夜視與緩降的月之祝福。</gray>"
+      - "<dark_gray>需要永夜荒原的月輝核心才能製作。</dark_gray>"
+  solar_pick:
+    name: "<gradient:#ffe07a:#ffb24a>日炎鎬</gradient>"
+    lore:
+      - "<gray>右鍵消耗<gold>日輝</gold>，獲得一段挖掘加速。</gray>"
+      - "<dark_gray>工房 Lv2 解鎖。</dark_gray>"
+  star_compass:
+    name: "<gradient:#aaccff:#e0f0ff>星圖羅盤</gradient>"
+    lore:
+      - "<gray>右鍵指出最近<aqua>能量塔</aqua>的方向與距離。</gray>"
+      - "<dark_gray>書房 Lv2 解鎖。</dark_gray>"
+  lunar_spore:
+    name: "<gradient:#d8b8ff:#f0e0ff>月華灑</gradient>"
+    lore:
+      - "<gray>右鍵植物，消耗<aqua>月輝</aqua>對一片區域施骨粉。</gray>"
+      - "<dark_gray>溫室 Lv2 解鎖。</dark_gray>"
+  blueprint:
+    name: "<gradient:#9ad1ff:#e0f0ff>{structure} 藍圖</gradient>"
+    lore:
+      - "<gray>看向地面右鍵：顯示<green>幽靈輪廓</green>（綠=有、紅=缺）。</gray>"
+      - "<gray>潛行右鍵：用背包材料<white>直接建造</white>。</gray>"
+      - "<dark_gray>建造 {structure} 的設計圖。</dark_gray>"
+
+# 調律之路各章節文案（對應 progression.yml 的 stage id）。
+progression:
+  stages:
+    awakening:
+      title: "<white>初遇晨露</white>"
+      lore:
+        - "<gray>清晨的第一滴自然之力。</gray>"
+      details:
+        - "<gray>晨露採集與初階自然配方。</gray>"
+      hint: "<gray>清晨在草地、花叢間採集晨露。</gray>"
+    workshop:
+      title: "<white>喚醒工房</white>"
+      lore:
+        - "<gray>讓基地長出第一個功能。</gray>"
+      details:
+        - "<gray>工具製作、建材加工與雨息附魔。</gray>"
+      hint: "<gray>備齊材料，在工作台修復工房。</gray>"
+    first_tools:
+      title: "<white>第一件生活工具</white>"
+      lore:
+        - "<gray>自然開始替你解決生存的小麻煩。</gray>"
+      details:
+        - "<gray>露光瓶：消耗後獲得兩分鐘夜視。</gray>"
+      hint: "<gray>在工房用晨露做出露光瓶。</gray>"
+    rain:
+      title: "<white>雨的氣息</white>"
+      lore:
+        - "<gray>雨天不再只是等待。</gray>"
+      details:
+        - "<gray>採集雨息，催長作物並製作恢復用品。</gray>"
+      hint: "<gray>雨天在水邊與森林採集雨息。</gray>"
+    study:
+      title: "<white>翻開書房</white>"
+      lore:
+        - "<gray>開始記錄你走過的路。</gray>"
+      details:
+        - "<gray>手冊、圖鑑、發現紀錄與調律之路。</gray>"
+      hint: "<gray>備齊材料，整理書房。</gray>"
+    greenhouse:
+      title: "<white>溫室生機</white>"
+      lore:
+        - "<gray>植物與農業有了著落。</gray>"
+      details:
+        - "<gray>植物培育、花脈剪、苔露膏與苔肥。</gray>"
+      hint: "<gray>備齊材料，開墾溫室。</gray>"
+    night:
+      title: "<white>夜的記憶</white>"
+      lore:
+        - "<gray>夜晚與月色值得停留。</gray>"
+      details:
+        - "<gray>月露，以及風標與月紗袋的製作。</gray>"
+      hint: "<gray>晴朗的滿月夜採集月露。</gray>"
+    nether_gate:
+      title: "<white>通往地獄</white>"
+      lore:
+        - "<gray>更遠的路，需要更深的足跡。</gray>"
+      details:
+        - "<gray>書房中的雨後森林入口。</gray>"
+      hint: "<gray>踏入地獄一次，書房的遠征入口便會解鎖。</gray>"
+    expedition:
+      title: "<white>第一次遠征</white>"
+      lore:
+        - "<gray>走出主世界，去雨後的森林。</gray>"
+      details:
+        - "<gray>雨後森林與專屬素材苔華。</gray>"
+      hint: "<gray>從書房的遠征介面前往雨後森林。</gray>"
+    expedition_yield:
+      title: "<white>帶回的禮物</white>"
+      lore:
+        - "<gray>遠征的收穫，化成只有那裡才有的東西。</gray>"
+      details:
+        - "<gray>用苔華調製苔露膏與苔肥。</gray>"
+      hint: "<gray>用苔華在溫室調製苔露膏。</gray>"
+    radiance:
+      title: "<white>輝能初現</white>"
+      lore:
+        - "<gray>日與月的光，開始能被收攏。</gray>"
+      details:
+        - "<gray>蓄能晶；在天空下被動蓄日輝與月輝。</gray>"
+      hint: "<gray>在工房製作蓄能晶，到戶外站在天空下蓄能。</gray>"
+    solar_tower:
+      title: "<gold>日之塔</gold>"
+      lore:
+        - "<gray>循著日光，立起第一座高塔。</gray>"
+      details:
+        - "<gray>日輝塔：高聳的剛性結構，為附近供應日輝。</gray>"
+      hint: "<gray>建造日輝塔並右鍵塔基核心啟動（管理員可 /lycohism build sun_tower）。</gray>"
+    lunar_tower:
+      title: "<aqua>月之塔</aqua>"
+      lore:
+        - "<gray>循著月色，立起對應的高塔。</gray>"
+      details:
+        - "<gray>月輝塔：與日輝塔對稱，為附近供應月輝。</gray>"
+      hint: "<gray>建造月輝塔並右鍵塔基核心啟動。</gray>"
+    lunar_waste:
+      title: "<white>踏入永夜</white>"
+      lore:
+        - "<gray>沒有黎明的荒原，是月之力的源頭。</gray>"
+      details:
+        - "<gray>永夜荒原：整日可蓄月輝、月輝核心的產地。</gray>"
+      hint: "<gray>從書房遠征介面前往永夜荒原。</gray>"
+    moon_attunement:
+      title: "<white>月之調律</white>"
+      lore:
+        - "<gray>把帶回的月輝核心，鍛成可用的力量。</gray>"
+      details:
+        - "<gray>輝能之鏡：以日輝／月輝引動日月之祝福。</gray>"
+      hint: "<gray>帶月輝核心回工房，製作輝能之鏡。</gray>"
+    radiant_nexus:
+      title: "<gold>輝能據點</gold>"
+      lore:
+        - "<gray>把流散的輝能，收攏進一座核心。</gray>"
+      details:
+        - "<gray>輝能核心：基地能量倉，可分享給夥伴。</gray>"
+      hint: "<gray>建造輝能核心並右鍵信標核心啟動認領。</gray>"
+    energy_grid:
+      title: "<yellow>輝能網路</yellow>"
+      lore:
+        - "<gray>用中繼器把塔與核心串成一張網。</gray>"
+      details:
+        - "<gray>能量中繼器：延伸塔到核心的輸送距離。</gray>"
+      hint: "<gray>在塔與核心之間建造能量中繼器並右鍵啟動。</gray>"
+    facility_growth:
+      title: "<white>設施的成長</white>"
+      lore:
+        - "<gray>把累積的輝能，回饋到基地本身。</gray>"
+      details:
+        - "<gray>用核心輝能把設施升到 Lv2。</gray>"
+      hint: "<gray>在核心附近執行 /lycohism upgrade workshop。</gray>"
+
+terms:
+  none: "<dark_gray>無</dark_gray>"
+  list-separator: "、"
+  enabled: "<green>開啟</green>"
+  disabled: "<red>關閉</red>"
+  shared: "已有存取"
+  not-shared: "沒有存取"
+  period:
+    morning: "清晨"
+    day: "白天"
+    dusk: "黃昏"
+    night: "夜晚"
+  weather:
+    clear: "晴朗"
+    rain: "下雨"
+    thunder: "雷雨"
+  moon-phase:
+    0: "滿月"
+    1: "虧凸月"
+    2: "下弦月"
+    3: "殘月"
+    4: "新月"
+    5: "眉月"
+    6: "上弦月"
+    7: "盈凸月"
+  direction:
+    north: "北方"
+    east: "東方"
+    south: "南方"
+    west: "西方"
+    nearby: "附近"
+  vertical:
+    above: "上方"
+    level: "同一高度"
+    below: "下方"
+
+messages:
+  common:
+    missing-materials: "<red>材料不足。</red> <gray>需要：{costs}</gray>"
+    recipe-locked: "<gray>這份做法還有素材未辨認；先親手拿起那些素材。</gray>"
+  crafting:
+    confirm-vanilla: "<yellow>這個原版配方會消耗 Lycohism 道具。</yellow> <gray>10 秒內再點一次確認；Shift＋右鍵可永久不再詢問。</gray>"
+    confirm-disabled: "<gray>已永久關閉原版合成提醒。</gray>"
+  tools:
+    dew-light-used: "<white>露光瓶化成微光，照亮接下來兩分鐘。</white>"
+    flower-shears-grown: "<white>花脈沿著莖葉流動，作物已經成熟。</white>"
+    flower-shears-harvested: "<white>採收並補種了作物。</white>"
+    moon-pouch-capacity: "<gray>已收納 <white>{stored}</white> / {capacity}</gray>"
+    moon-pouch-entry: "<dark_gray>· {item} x{amount}</dark_gray>"
+    moon-pouch-released: "<white>月紗袋放出了收納的自然現象。</white>"
+    moon-pouch-empty: "<gray>月紗袋裡還沒有自然現象。</gray>"
+    wind-vane-status: "<aqua>風標</aqua> {period}・{weather}・{moon} <gray>可採：{phenomena}</gray>"
+    leyline-probe-status: "<gold>探針</gold> {item}・{direction}・{vertical}・{distance}格"
+    leyline-probe-none-status: "<gold>探針</gold> <dark_gray>附近沒有礦脈</dark_gray>"
+    held-status-separator: " <dark_gray>｜</dark_gray> "
+    bookmark-remembered: "<white>花籤記住了這個地方。</white>"
+    bookmark-empty: "<gray>先潛行右鍵，記住一個地方。</gray>"
+    bookmark-other-world: "<gray>那個地方在另一個世界。</gray>"
+    bookmark-arrived: "<white>你就在花籤記住的地方。</white>"
+    bookmark-guide: "<white>指引：{arrow} <gray>還有 <white>{distance}</white> 格</gray>"
+    rain-tending-mature: "<gray>這株作物已經成熟。</gray>"
+    rain-tending-grown: "<white>雨息滲入土壤，作物向上生長。</white>"
+    bandage-used: "<white>雨紋舒展，傷口稍微平復了。</white>"
+    bandage-not-needed: "<gray>現在不需要使用繃帶。</gray>"
+    moss-balm-used: "<white>苔露滲入肌膚，傷勢正緩緩癒合。</white>"
+    moss-fertile-used: "<white>苔肥化開，周圍的植物抽長了。</white>"
+    moss-fertile-empty: "<gray>這裡沒有可以催長的植物。</gray>"
+    ember-used: "<white>燼華在掌心碎開，火焰一時傷不了你。</white>"
+    crystal-status: "<gold>日輝</gold> {sun}<dark_gray>/{cap}</dark_gray> <dark_gray>·</dark_gray> <aqua>月輝</aqua> {moon}<dark_gray>/{cap}</dark_gray>"
+    crystal-banked: "<white>蓄能晶將 <yellow>{amount}</yellow> 點輝能灌入了你的能量池。</white>"
+    crystal-empty: "<gray>蓄能晶還沒有可灌入的輝能，或你的能量池已滿。</gray>"
+    focus-sun: "<gold>日輝在身上流轉，化作日之祝福。</gold>"
+    focus-moon: "<aqua>月輝在身上流轉，化作月之祝福。</aqua>"
+    focus-no-sun: "<gray>日輝不足。先用蓄能晶在白天蓄能並灌入能量池。</gray>"
+    focus-no-moon: "<gray>月輝不足。前往永夜荒原，用蓄能晶蓄滿月輝。</gray>"
+    solar-pick-used: "<gold>日炎灌注，挖掘變得迅捷。</gold>"
+    solar-pick-empty: "<gray>日輝不足，無法驅動日炎鎬。</gray>"
+    lunar-spore-used: "<aqua>月華散落，周圍的植物抽長了。</aqua>"
+    lunar-spore-empty: "<gray>這裡沒有可催長的植物，或月輝不足。</gray>"
+    compass-reading: "<aqua>星圖</aqua> {name} <gray>·</gray> {arrow} <gray>·</gray> <white>{distance}</white> 格"
+    compass-none: "<gray>附近沒有已登記的能量塔。</gray>"
+    blueprint-preview: "<gray>幽靈輪廓：<green>綠=已符合</green>、<red>紅=缺少</red>。潛行右鍵建造。</gray>"
+    blueprint-built: "<green>依藍圖建造完成。</green>"
+    blueprint-missing: "<red>材料不足，無法依藍圖建造。</red>"
+    blueprint-invalid: "<gray>這張藍圖沒有對應的結構。</gray>"
+  discovery:
+    manual-granted: "<gray>一本<white>調律手冊</white>出現在你的背包，右鍵翻閱。</gray>"
+  facility:
+    workshop-required: "<red>需要先修復工房。</red>"
+    workshop-repaired: "<green>工房回應了自然之物，已修復。</green>"
+    workshop-crafted: "<green>工房製作了 {item}。</green>"
+    workshop-status:
+      - "<gray>工房等級：<white>{level}</white> / 2。</gray>"
+      - "<gray>已解鎖：工具製作、建材加工、雨息附魔。</gray>"
+    conversion-empty: "<gray>背包裡沒有 {item}。</gray>"
+    conversion-done: "<green>加工了 <white>{amount}</white> 個 {item}。</green>"
+    mending-invalid: "<gray>請把可附魔的工具、武器或盔甲拿在主手。</gray>"
+    mending-present: "<gray>這件物品已經有經驗修補。</gray>"
+    mending-levels-missing: "<red>經驗不足。</red> <gray>需要 {levels} 個經驗等級。</gray>"
+    mending-applied: "<green>雨息附著在工具上，形成了經驗修補。</green>"
+    greenhouse-required: "<red>需要先開墾溫室。</red>"
+    greenhouse-repaired: "<green>溫室重新長出了生機。</green>"
+    greenhouse-crafted: "<green>溫室製作了 {item}。</green>"
+    greenhouse-status:
+      - "<gray>溫室等級：<white>{level}</white> / 2。</gray>"
+      - "<gray>已解鎖：花脈與苔華培育（含發光苔蘚）、花脈剪、苔露膏與苔肥。</gray>"
+    cultivated: "<green>溫室培育出 <white>{amount}</white> 個 {item}。</green>"
+    study-repaired: "<green>書房重新記起了你走過的路。</green>"
+    study-crafted: "<green>書房整理出了 {item}。</green>"
+    study-status:
+      - "<gray>書房等級：<white>{level}</white> / 2。</gray>"
+      - "<gray>已解鎖：手冊、圖鑑、發現紀錄、風標、月紗袋、遠征入口。</gray>"
+  expedition:
+    entered: "<white>你循著雨痕，踏入了 {name}。</white>"
+    title:
+      rainfall_forest: "<gradient:#8fd3ff:#d9f3ff>雨後森林</gradient>"
+      moonless_waste: "<gradient:#3a3a5a:#9a8fd6>永夜荒原</gradient>"
+    subtitle:
+      rainfall_forest: "<gray>雨聲深處，苔蘚正記住你的腳步。</gray>"
+      moonless_waste: "<gray>沒有黎明的荒原，月色凝成可握的冷光。</gray>"
+    returned: "<white>雨痕收攏，你回到了出發的地方。</white>"
+    none-configured: "<red>目前沒有可前往的遠征地。</red>"
+    locked: "<gray>路徑還太微弱。<white>踏入過地獄</white>之後，書房入口才會解鎖。</gray>"
+    first-hint:
+      rainfall_forest: "<gray>雨一直下，林子裡似乎有別的東西。尋找<white>苔蘚與濕地植被</white>，採集<white>苔華</white>帶回溫室。</gray>"
+      moonless_waste: "<gray>這裡沒有白天，怪物也更兇。在天空下站著就會持續蓄<aqua>月輝</aqua>；擊殺夜魅或採集陰暗植被取得<white>月輝核心</white>。</gray>"
+  energy:
+    # 常駐能量條（boss bar）。{sun}/{sun_cap} 日輝、{moon}/{moon_cap} 月輝。
+    bar: "<gold>☀ 日輝 {sun}/{sun_cap}</gold>   <aqua>☾ 月輝 {moon}/{moon_cap}</aqua>"
+  altar:
+    hold-catalyst: "<gray>手持催化物，把素材丟在祭壇周圍，再右鍵中央。</gray>"
+    crafted: "<green>輝能匯聚，祭壇煉成了成品。</green>"
+    no-recipe: "<gray>沒有對應的祭壇配方（檢查手上的催化物）。</gray>"
+    missing-ingredients: "<red>祭壇周圍的素材不足。</red>"
+    missing-energy: "<red>你的輝能不足以驅動這次煉製。</red>"
+  upgrade:
+    usage: "<gray>用法：<yellow>/{label} upgrade <workshop|study|greenhouse></yellow>（站在你的輝能核心附近）</gray>"
+    done: "<green>{facility} 已升級到 Lv2。</green> <gray>消耗了核心的輝能與材料。</gray>"
+    not-repaired: "<red>要先把這個設施修復到 Lv1 才能升級。</red>"
+    already: "<gray>這個設施已經是 Lv2 了。</gray>"
+    no-nexus: "<red>附近沒有你能存取的輝能核心。</red> <gray>先建造並認領一座核心。</gray>"
+    missing-materials: "<red>升級材料不足。</red>"
+    missing-energy: "<red>核心的輝能不足。</red> <gray>讓日輝塔／月輝塔多產一些再來。</gray>"
+  nexus:
+    claimed: "<green>輝能核心已啟動，你成為擁有者。</green> <gray>右鍵核心可查看存量。</gray>"
+    not-allowed: "<red>這個輝能核心不屬於你，也未被分享。</red>"
+    relay-registered: "<green>能量中繼器已接入網路。</green>"
+    relay-exists: "<gray>這個中繼器已經在網路裡了。</gray>"
+    tower-registered: "<green>能量塔已登記，開始為附近的核心供能。</green>"
+    tower-exists: "<gray>這座能量塔已經登記過了。</gray>"
+    share-usage: "<gray>用法：<yellow>/{label} nexus <share|unshare> <玩家></yellow>（站在你擁有的核心附近）</gray>"
+    no-owned: "<red>附近沒有你擁有的輝能核心。</red>"
+    player-not-found: "<red>找不到玩家：{player}</red>"
+    shared: "<green>已把核心存取分享給 <white>{player}</white>。</green>"
+    unshared: "<green>已取消 <white>{player}</white> 的核心存取。</green>"
+    share-noop: "<gray>沒有變化（對方本來就{state}）。</gray>"
+
+commands:
+  root: "<gray>Lycohism <white>v{version}</white> — 自然調律生存擴充。輸入 <yellow>/{label} help</yellow> 查看指令。</gray>"
+  version: "<gray>版本：<white>{version}</white></gray>"
+  reloaded: "<green>設定已重新載入。</green>"
+  debug: "<gray>Debug 模式：{state}（於 config.yml 調整 <yellow>debug</yellow> 後 reload）。</gray>"
+  player-only: "<red>此指令只能由玩家使用。</red>"
+  unknown: "<red>未知指令。</red> <gray>輸入 <yellow>/{label} help</yellow>。</gray>"
+  give-usage: "<gray>用法：<yellow>/{label} give <物品> [數量]</yellow></gray>"
+  give-items: "<gray>物品：{items}</gray>"
+  give-unknown: "<red>未知物品：{item}</red>"
+  give-done: "<green>已給予 {item} <white>x{amount}</white>。</green>"
+  stage-usage: "<gray>用法：<yellow>/{label} stage <階段></yellow></gray>"
+  stage-list: "<gray>階段：{stages}</gray>"
+  stage-unknown: "<red>未知階段：{stage}</red>"
+  stage-done: "<green>目前遊戲階段已設為 <white>{stage}</white>。</green>"
+  build-usage: "<gray>用法：<yellow>/{label} build <結構> [ghost]</yellow>（看向要建造的位置）</gray>"
+  build-items: "<gray>結構：{items}</gray>"
+  build-unknown: "<red>未知結構：{id}</red>"
+  build-ghost: "<gray>顯示 <white>{id}</white> 的幽靈輪廓（綠=已符合、紅=缺少）。</gray>"
+  build-done: "<green>已建造多方塊結構 <white>{id}</white>。</green>"
+  no-permission: "<red>你沒有權限這麼做。</red>"
+  help:
+    player:
+      - "<gray>— Lycohism 指令 —</gray>"
+      - "<yellow>/{label} version</yellow> <gray>查看版本</gray>"
+      - "<yellow>/{label} help</yellow> <gray>顯示此說明</gray>"
+      - "<yellow>/{label} workshop</yellow> <gray>開啟工房（或潛行右鍵工作台）</gray>"
+      - "<yellow>/{label} study</yellow> <gray>開啟書房（或潛行右鍵書櫃）</gray>"
+      - "<yellow>/{label} greenhouse</yellow> <gray>開啟溫室（或潛行右鍵花盆）</gray>"
+      - "<yellow>/{label} progress</yellow> <gray>查看調律之路（進度）</gray>"
+      - "<yellow>/{label} nexus <share|unshare> <玩家></yellow> <gray>分享你的輝能核心存取</gray>"
+      - "<yellow>/{label} upgrade <設施></yellow> <gray>用核心輝能把設施升到 Lv2</gray>"
+    admin:
+      - "<yellow>/{label} admin</yellow> <gray>開啟整合管理員介面</gray>"
+      - "<yellow>/{label} reload</yellow> <gray>重新載入設定</gray>"
+      - "<yellow>/{label} debug</yellow> <gray>查看 debug 狀態</gray>"
+      - "<yellow>/{label} expedition</yellow> <gray>前往／返回遠征地（測試用）</gray>"
+      - "<yellow>/{label} stage <階段></yellow> <gray>切換目前遊戲階段（測試用）</gray>"
+      - "<yellow>/{label} give <物品> [數量]</yellow> <gray>取得 Lycohism 物品（測試用）</gray>"
+      - "<yellow>/{label} build <結構> [ghost]</yellow> <gray>秒放/預覽多方塊結構（測試用）</gray>"
+      - "<yellow>/{label} blueprint <結構></yellow> <gray>取得結構藍圖（給玩家/福利）</gray>"
+
+# ── 書本內容（淺底，請用深色文字）──────────────────────────────────────────
+books:
+  manual:
+    title: "<dark_purple>調律手冊</dark_purple>"
+    item-name: "<gradient:#9b6cff:#5a3aa8>調律手冊</gradient>"
+    item-lore:
+      - "<dark_gray>記錄你感受到的自然現象。</dark_gray>"
+      - "<dark_gray>右鍵翻閱。</dark_gray>"
+    cover:
+      - "<dark_purple><bold>調律手冊</bold></dark_purple>"
+      - ""
+      - "<black>世界藏著自然回應。</black>"
+      - ""
+      - "<gold>時間、天氣、</gold>"
+      - "<gold>高度與生態。</gold>"
+    entries:
+      - requires: [ morning_dew ]
+        title: "晨露"
+        done:
+          - "<dark_green><bold>✔ 晨露</bold></dark_green>"
+          - ""
+          - "<gold>清晨</gold><black>破壞草葉。</black>"
+          - "<black>凝成初階調律素材。</black>"
+        hint:
+          - "<dark_gray>· 晨露</dark_gray>"
+          - ""
+          - "<gold>清晨</gold><black>前往草地。</black>"
+          - "<black>採集草葉與花朵。</black>"
+      - requires: [ dew_light ]
+        title: "露光瓶"
+        done:
+          - "<dark_green><bold>✔ 露光瓶</bold></dark_green>"
+          - ""
+          - "<gold>右鍵</gold><black>消耗露光瓶。</black>"
+          - "<black>獲得兩分鐘夜視。</black>"
+        hint:
+          - "<dark_gray>· 露光瓶</dark_gray>"
+          - ""
+          - "<gold>玻璃瓶＋晨露</gold>"
+          - "<black>在工作台合成。</black>"
+      - requires: [ workshop ]
+        title: "工房"
+        done:
+          - "<dark_green><bold>✔ 工房</bold></dark_green>"
+          - ""
+          - "<gold>潛行＋空手</gold>"
+          - "<black>右鍵工作台開啟。</black>"
+          - "<black>製作工具、加工建材。</black>"
+        hint:
+          - "<dark_gray>· 工房</dark_gray>"
+          - ""
+          - "<gold>晨露×4</gold>"
+          - "<black>備齊木板與石材。</black>"
+          - "<black>再右鍵工作台。</black>"
+      - requires: [ flower_bookmark, stonework_hammer ]
+        title: "工房工具"
+        done:
+          - "<dark_green><bold>✔ 工房工具</bold></dark_green>"
+          - ""
+          - "<aqua>花籤</aqua><black>負責定位。</black>"
+          - "<aqua>石工槌</aqua><black>加工石材。</black>"
+        hint:
+          - "<dark_gray>· 工房工具</dark_gray>"
+          - ""
+          - "<black>修復工房後，</black>"
+          - "<black>製作花籤與石工槌。</black>"
+      - requires: [ rain_breath ]
+        title: "雨息"
+        done:
+          - "<dark_green><bold>✔ 雨息</bold></dark_green>"
+          - ""
+          - "<gold>手持雨息</gold>"
+          - "<black>右鍵未成熟作物。</black>"
+          - "<black>推進兩階生長。</black>"
+        hint:
+          - "<dark_gray>· 雨息</dark_gray>"
+          - ""
+          - "<gold>下雨時</gold><black>前往河岸。</black>"
+          - "<black>採集苔蘚與藤蔓。</black>"
+      - requires: [ rain_bandage, tool_repair ]
+        title: "雨息的用途"
+        done:
+          - "<dark_green><bold>✔ 雨息用途</bold></dark_green>"
+          - ""
+          - "<aqua>雨紋繃帶</aqua><black>：恢復</black>"
+          - "<aqua>雨息修復</aqua><black>：附魔</black>"
+        hint:
+          - "<dark_gray>· 雨息的用途</dark_gray>"
+          - ""
+          - "<black>帶雨息回工房。</black>"
+          - "<gold>完成兩種用途。</gold>"
+      - requires: [ study ]
+        title: "書房"
+        done:
+          - "<dark_green><bold>✔ 書房</bold></dark_green>"
+          - ""
+          - "<gold>潛行＋空手</gold>"
+          - "<black>右鍵書櫃開啟。</black>"
+          - "<black>圖鑑與紀錄解鎖。</black>"
+        hint:
+          - "<dark_gray>· 書房</dark_gray>"
+          - ""
+          - "<gold>雨息＋書架＋講台</gold>"
+          - "<black>修復你的書房。</black>"
+      - requires: [ leyline_sand ]
+        title: "地脈砂"
+        done:
+          - "<dark_green><bold>✔ 地脈砂</bold></dark_green>"
+          - ""
+          - "<gold>高度三十二以下</gold>"
+          - "<black>採掘深層岩石。</black>"
+        hint:
+          - "<dark_gray>· 地脈砂</dark_gray>"
+          - ""
+          - "<gold>深入地下</gold>"
+          - "<black>採掘深板岩與凝灰岩。</black>"
+      - requires: [ leyline_probe ]
+        title: "地脈探針"
+        done:
+          - "<dark_green><bold>✔ 地脈探針</bold></dark_green>"
+          - ""
+          - "<gold>任一手持探針</gold>"
+          - "<black>持續顯示附近礦脈。</black>"
+        hint:
+          - "<dark_gray>· 地脈探針</dark_gray>"
+          - ""
+          - "<gold>地脈砂×3</gold>"
+          - "<black>帶回工房製作。</black>"
+      - requires: [ flower_vein ]
+        title: "花脈"
+        done:
+          - "<dark_green><bold>✔ 花脈</bold></dark_green>"
+          - ""
+          - "<black>採集花朵與櫻葉。</black>"
+          - "<black>用於溫室培育。</black>"
+        hint:
+          - "<dark_gray>· 花脈</dark_gray>"
+          - ""
+          - "<gold>採集花朵</gold>"
+          - "<black>也留意櫻葉與花叢。</black>"
+      - requires: [ greenhouse ]
+        title: "溫室"
+        done:
+          - "<dark_green><bold>✔ 溫室</bold></dark_green>"
+          - ""
+          - "<gold>潛行＋空手</gold>"
+          - "<black>右鍵花盆開啟。</black>"
+          - "<black>培育植物與花脈剪。</black>"
+        hint:
+          - "<dark_gray>· 溫室</dark_gray>"
+          - ""
+          - "<gold>花脈＋玻璃＋苔蘚</gold>"
+          - "<black>開墾溫室。</black>"
+      - requires: [ wind_trace ]
+        title: "風痕"
+        done:
+          - "<dark_green><bold>✔ 風痕</bold></dark_green>"
+          - ""
+          - "<gold>高度九十六以上</gold>"
+          - "<black>採掘山地岩層。</black>"
+          - "<black>用來製作風標。</black>"
+        hint:
+          - "<dark_gray>· 風痕</dark_gray>"
+          - ""
+          - "<gold>登上高山</gold>"
+          - "<black>採集岩層、積雪、草皮。</black>"
+      - requires: [ moon_dew ]
+        title: "月露"
+        done:
+          - "<dark_green><bold>✔ 月露</bold></dark_green>"
+          - ""
+          - "<gold>晴朗滿月夜</gold>"
+          - "<black>採集花葉凝成月露。</black>"
+          - "<black>用於記憶與整理。</black>"
+        hint:
+          - "<dark_gray>· 月露</dark_gray>"
+          - ""
+          - "<gold>晴朗滿月夜</gold>"
+          - "<black>前往花葉間採集。</black>"
+      - requires: [ wind_vane, moon_pouch ]
+        requires-any: true
+        title: "夜晚與記憶"
+        done:
+          - "<dark_green><bold>✔ 夜晚與記憶</bold></dark_green>"
+          - ""
+          - "<aqua>風標</aqua><black>：環境讀數</black>"
+          - "<aqua>月紗袋</aqua><black>：自動收納</black>"
+        hint:
+          - "<dark_gray>· 夜晚與記憶</dark_gray>"
+          - ""
+          - "<black>月露製作月紗袋。</black>"
+          - "<black>月露＋風痕製作風標。</black>"
+      - requires: [ rainfall_forest ]
+        title: "遠征：雨後森林"
+        done:
+          - "<dark_green><bold>✔ 雨後森林</bold></dark_green>"
+          - ""
+          - "<aqua>書房遠征介面</aqua><black>可前往。</black>"
+          - "<black>採集苔華，回溫室培育。</black>"
+        hint:
+          - "<dark_gray>· 遠征：雨後森林</dark_gray>"
+          - ""
+          - "<gold>踏入地獄</gold><black>後回到書房。</black>"
+          - "<black>從遠征介面進入森林。</black>"
+
+  compendium:
+    title: "<dark_aqua>自然圖鑑</dark_aqua>"
+    intro:
+      - "<dark_aqua><bold>自然圖鑑</bold></dark_aqua>"
+      - ""
+      - "<black>只記錄親自遇見的</black>"
+      - "<black>自然回應。</black>"
+    entries:
+      - requires: [ morning_dew ]
+        title: "晨露"
+        found:
+          - "<dark_green><bold>✔ 晨露</bold></dark_green>"
+          - ""
+          - "<gold>清晨</gold><black>採集草葉。</black>"
+          - "<black>凝成初階調律素材。</black>"
+        hidden:
+          - "<dark_gray>· 未知現象</dark_gray>"
+          - ""
+          - "<gold>清晨・草葉・微光</gold>"
+      - requires: [ rain_breath ]
+        title: "雨息"
+        found:
+          - "<dark_green><bold>✔ 雨息</bold></dark_green>"
+          - ""
+          - "<gold>雨天</gold><black>採集濕潤植物。</black>"
+          - "<black>用於農業與工具。</black>"
+        hidden:
+          - "<dark_gray>· 未知現象</dark_gray>"
+          - ""
+          - "<gold>雨天・河岸・苔蘚</gold>"
+          - "<gold>藤蔓</gold>"
+      - requires: [ flower_vein ]
+        title: "花脈"
+        found:
+          - "<dark_green><bold>✔ 花脈</bold></dark_green>"
+          - ""
+          - "<black>採集花朵與櫻葉。</black>"
+          - "<black>溫室培育素材。</black>"
+        hidden:
+          - "<dark_gray>· 未知現象</dark_gray>"
+          - ""
+          - "<gold>花朵・櫻花林・花叢</gold>"
+      - requires: [ moon_dew ]
+        title: "月露"
+        found:
+          - "<dark_green><bold>✔ 月露</bold></dark_green>"
+          - ""
+          - "<gold>晴朗滿月夜</gold>"
+          - "<black>採集花葉凝成月露。</black>"
+        hidden:
+          - "<dark_gray>· 未知現象</dark_gray>"
+          - ""
+          - "<gold>晴朗・滿月・花葉</gold>"
+      - requires: [ wind_trace ]
+        title: "風痕"
+        found:
+          - "<dark_green><bold>✔ 風痕</bold></dark_green>"
+          - ""
+          - "<gold>高度九十六以上</gold>"
+          - "<black>採集岩層與積雪。</black>"
+        hidden:
+          - "<dark_gray>· 未知現象</dark_gray>"
+          - ""
+          - "<gold>高山・岩面・積雪</gold>"
+      - requires: [ leyline_sand ]
+        title: "地脈砂"
+        found:
+          - "<dark_green><bold>✔ 地脈砂</bold></dark_green>"
+          - ""
+          - "<gold>高度三十二以下</gold>"
+          - "<black>採掘深層岩石。</black>"
+        hidden:
+          - "<dark_gray>· 未知現象</dark_gray>"
+          - ""
+          - "<gold>地下・深層岩石・洞窟</gold>"
+      - requires: [ moss_bloom ]
+        title: "苔華"
+        found:
+          - "<dark_green><bold>✔ 苔華</bold></dark_green>"
+          - ""
+          - "<gold>雨後森林</gold>"
+          - "<black>採集苔蘚與濕地植被。</black>"
+          - "<black>於溫室培育成稀有素材。</black>"
+        hidden:
+          - "<dark_gray>· 未知現象</dark_gray>"
+          - ""
+          - "<gold>遠征・雨後・苔蘚</gold>"
+      - requires: [ moon_core ]
+        title: "月輝核心"
+        found:
+          - "<dark_green><bold>✔ 月輝核心</bold></dark_green>"
+          - ""
+          - "<gold>永夜荒原</gold>"
+          - "<black>擊殺夜魅或採集陰暗植被。</black>"
+          - "<black>製作輝能之鏡的月之力。</black>"
+        hidden:
+          - "<dark_gray>· 未知現象</dark_gray>"
+          - ""
+          - "<gold>永夜・荒原・冷光</gold>"
+
+  record:
+    title: "<dark_green>發現紀錄</dark_green>"
+    header: "<black>已發現 </black><dark_green>{count}</dark_green><black> / {total}</black>"
+    legend:
+      - ""
+      - "<dark_green>✔ 已發現</dark_green>"
+      - "<dark_gray>◇ 未知紀錄</dark_gray>"
+    entry-line: "<dark_green>✔ {item}</dark_green>"
+    hidden-line: "<dark_gray>◇ <obfuscated>{item}</obfuscated></dark_gray>"
+    entries:
+      - id: morning_dew
+        label: "晨露"
+      - id: dew_light
+        label: "露光瓶"
+      - id: workshop
+        label: "工房"
+      - id: flower_bookmark
+        label: "花籤"
+      - id: stonework_hammer
+        label: "石工槌"
+      - id: rain_breath
+        label: "雨息"
+      - id: rain_tending
+        label: "雨息滋養"
+      - id: rain_bandage
+        label: "雨紋繃帶"
+      - id: tool_repair
+        label: "雨息修復"
+      - id: study
+        label: "書房"
+      - id: flower_vein
+        label: "花脈"
+      - id: greenhouse
+        label: "溫室"
+      - id: flower_vein_shears
+        label: "花脈剪"
+      - id: moon_dew
+        label: "月露"
+      - id: wind_trace
+        label: "風痕"
+      - id: leyline_sand
+        label: "地脈砂"
+      - id: wind_vane
+        label: "風標"
+      - id: moon_pouch
+        label: "月紗袋"
+      - id: leyline_probe
+        label: "地脈探針"
+      - id: rainfall_forest
+        label: "雨後森林"
+      - id: moss_bloom
+        label: "苔華"
+      - id: moss_balm
+        label: "苔露膏"
+      - id: moss_fertile
+        label: "苔肥"
+      - id: ember_bloom
+        label: "燼華"
+      - id: energy_crystal
+        label: "蓄能晶"
+      - id: radiant_focus
+        label: "輝能之鏡"
+      - id: moonless_waste
+        label: "永夜荒原"
+      - id: moon_core
+        label: "月輝核心"
+      - id: sun_tower
+        label: "日輝塔"
+      - id: moon_tower
+        label: "月輝塔"
+      - id: energy_nexus
+        label: "輝能核心"
+      - id: energy_relay
+        label: "能量中繼器"
+      - id: solar_pick
+        label: "日炎鎬"
+      - id: star_compass
+        label: "星圖羅盤"
+      - id: lunar_spore
+        label: "月華灑"

@@ -1,0 +1,270 @@
+# Lycohism 自然現象設定
+# 每個現象都掛鉤原版行為（破壞來源方塊）＋ 時間／天氣／世界條件。
+# 新增現象只需在此複製一段並調整欄位，無需改動程式碼。
+#
+# 選填 requires-advancements：玩家須完成列出的原版進度，此現象才會掉落。
+# 使用 namespaced key，例如：
+#   requires-advancements:
+#     - "minecraft:story/enter_the_nether"
+# 留空或省略代表不設限；格式錯誤的 key 會在啟動時警告並忽略。
+
+phenomena:
+
+  # 晨露：v0.1 的第一個自然現象。清晨採集草葉時凝結而成。
+  morning_dew:
+    # 顯示名稱（MiniMessage 格式）
+    name: "<gradient:#cfe8ff:#ffffff>晨露</gradient>"
+    # 道具外觀使用的原版材質（物品身份由 PDC 標記，不靠材質判斷）
+    item-material: GHAST_TEAR
+    # 道具說明（MiniMessage，每行一條）
+    lore:
+      - "<gray>清晨凝結在草葉上的微光。</gray>"
+    # 來源方塊：破壞這些方塊時有機率取得
+    source-blocks:
+      - SHORT_GRASS
+      - TALL_GRASS
+      - FERN
+      - LARGE_FERN
+      - DANDELION
+      - POPPY
+      - CORNFLOWER
+      - OXEYE_DAISY
+      - AZURE_BLUET
+    # 取得時間窗（單位：tick；0 = 清晨 6 點。若需跨夜可設定 start > end）
+    time:
+      start: 0
+      end: 3000
+    # 天氣條件：ANY / CLEAR / RAIN / THUNDER
+    weather: ANY
+    # 世界環境：NORMAL / NETHER / THE_END
+    environment: NORMAL
+    # 每次破壞來源方塊取得的機率（0.0 ~ 1.0）
+    chance: 0.2
+    # 玩家首次取得時顯示的提示（只顯示一次）
+    first-hint: "<white>你找到了一滴晨露。</white>"
+
+  # 雨息：v0.2 的雨天現象。雨中採集濕潤植物時取得。
+  rain_breath:
+    name: "<gradient:#8fd3ff:#d9f3ff>雨息</gradient>"
+    item-material: PRISMARINE_CRYSTALS
+    lore:
+      - "<gray>雨落在植物間留下的流動氣息。</gray>"
+      - "<dark_gray>可直接滋養作物，也是恢復與修復素材。</dark_gray>"
+    source-blocks:
+      - SUGAR_CANE
+      - LILY_PAD
+      - VINE
+      - MOSS_BLOCK
+      - MOSS_CARPET
+      - SEAGRASS
+      - TALL_SEAGRASS
+    time:
+      start: 0
+      end: 24000
+    weather: RAIN
+    environment: NORMAL
+    chance: 0.18
+    first-hint: "<white>雨聲裡留下了一縷雨息。</white>"
+    # 手持雨息右鍵作物時，額外推進的生長階段。
+    crop-growth-stages: 2
+
+  # 花脈：v0.3 的花卉現象。採集花朵、櫻葉與花叢時取得，是溫室培育的核心。
+  flower_vein:
+    name: "<gradient:#ff9ed6:#ffd9ef>花脈</gradient>"
+    item-material: PINK_PETALS
+    lore:
+      - "<gray>花叢與櫻葉間流動的生長之力。</gray>"
+      - "<dark_gray>溫室培育的核心素材。</dark_gray>"
+    source-blocks:
+      - PINK_PETALS
+      - CHERRY_LEAVES
+      - FLOWERING_AZALEA_LEAVES
+      - BLUE_ORCHID
+      - ALLIUM
+      - LILY_OF_THE_VALLEY
+      - PINK_TULIP
+      - RED_TULIP
+      - ORANGE_TULIP
+      - WHITE_TULIP
+      - WITHER_ROSE
+    time:
+      start: 0
+      end: 24000
+    weather: ANY
+    environment: NORMAL
+    chance: 0.18
+    first-hint: "<white>一縷花脈在指間散開。</white>"
+
+  # 月露：v0.4 的夜間現象。滿月時在花與葉面凝結，讓夜晚值得留下。
+  moon_dew:
+    name: "<gradient:#c7b8ff:#f4f0ff>月露</gradient>"
+    item-material: AMETHYST_SHARD
+    lore:
+      - "<gray>滿月映在花葉間凝成的安靜微光。</gray>"
+      - "<dark_gray>可製作環境風標與自動收納的月紗袋。</dark_gray>"
+    source-blocks:
+      - PINK_PETALS
+      - CHERRY_LEAVES
+      - FLOWERING_AZALEA_LEAVES
+      - OXEYE_DAISY
+      - LILY_OF_THE_VALLEY
+      - BLUE_ORCHID
+    time:
+      start: 13000
+      end: 23000
+    # Minecraft 月相：0 = 滿月。
+    moon-phases: [ 0 ]
+    weather: CLEAR
+    environment: NORMAL
+    chance: 0.16
+    first-hint: "<white>滿月在花葉間留下一滴月露。</white>"
+
+  # 風痕：高處採集風化岩層與山地植被時捕捉，並作為風標的核心素材。
+  wind_trace:
+    name: "<gradient:#b8e6ff:#ffffff>風痕</gradient>"
+    item-material: BREEZE_ROD
+    lore:
+      - "<gray>高處的風在岩面與草葉間留下的痕跡。</gray>"
+      - "<dark_gray>可製作讀取自然條件的風標。</dark_gray>"
+    source-blocks:
+      - GRASS_BLOCK
+      - STONE
+      - ANDESITE
+      - GRAVEL
+      - SNOW
+      - SNOW_BLOCK
+    height:
+      min: 96
+      max: 320
+    time:
+      start: 0
+      end: 24000
+    weather: ANY
+    environment: NORMAL
+    chance: 0.12
+    first-hint: "<white>高處的風在你手中留下一道風痕。</white>"
+
+  # 地脈砂：深入地底採掘岩層時取得，可製作感知附近礦脈的探針。
+  leyline_sand:
+    name: "<gradient:#d8c3a5:#fff1d6>地脈砂</gradient>"
+    item-material: GLOWSTONE_DUST
+    lore:
+      - "<gray>深層岩隙裡沉積的微亮砂粒。</gray>"
+      - "<dark_gray>可製作感知附近礦脈的地脈探針。</dark_gray>"
+    source-blocks:
+      - STONE
+      - DEEPSLATE
+      - TUFF
+      - CALCITE
+      - DRIPSTONE_BLOCK
+    height:
+      min: -64
+      max: 32
+    time:
+      start: 0
+      end: 24000
+    weather: ANY
+    environment: NORMAL
+    chance: 0.08
+    first-hint: "<white>岩層間滲出了一小撮地脈砂。</white>"
+
+  # 苔華：v0.5 雨後森林的專屬素材。只在遠征世界採集苔蘚與濕地植被時取得。
+  # worlds 限定它不會在主世界掉落；帶回主世界後在溫室培育成稀有植物素材。
+  moss_bloom:
+    name: "<gradient:#7fd6a0:#e3fff0>苔華</gradient>"
+    item-material: SEA_PICKLE
+    lore:
+      - "<gray>雨後森林裡，苔蘚與濕土凝出的綠色微光。</gray>"
+      - "<dark_gray>帶回主世界，在溫室培育成稀有植物素材。</dark_gray>"
+    source-blocks:
+      - MOSS_BLOCK
+      - MOSS_CARPET
+      - MANGROVE_LEAVES
+      - MANGROVE_ROOTS
+      - MUDDY_MANGROVE_ROOTS
+      - AZALEA_LEAVES
+      - FLOWERING_AZALEA_LEAVES
+      - BIG_DRIPLEAF
+      - SMALL_DRIPLEAF
+    time:
+      start: 0
+      end: 24000
+    weather: ANY
+    environment: NORMAL
+    # 只在雨後森林遠征世界掉落。
+    worlds:
+      - lycohism_rainfall_forest
+    chance: 0.35
+    first-hint: "<white>雨後森林回應了你，指間凝出一縷苔華。</white>"
+
+  # 燼華：v0.5.5 地獄解鎖素材。踏入過地獄後才會回應（requires-advancements）。
+  # 兩種取得：在地獄採集地獄植被（特殊採集物），或擊殺地獄怪物掉落（怪物掉落物）。
+  # 右鍵可碎開取得短暫抗火（見 ToolUseListener）。
+  ember_bloom:
+    name: "<gradient:#ff9d5c:#ffe0a3>燼華</gradient>"
+    item-material: BLAZE_POWDER
+    lore:
+      - "<gray>地獄植被間凝結的餘燼微光。</gray>"
+      - "<dark_gray>右鍵碎開，獲得短暫的抗火。</dark_gray>"
+    source-blocks:
+      - NETHER_WART_BLOCK
+      - WARPED_WART_BLOCK
+      - SHROOMLIGHT
+      - CRIMSON_FUNGUS
+      - WARPED_FUNGUS
+      - WEEPING_VINES
+      - WEEPING_VINES_PLANT
+      - TWISTING_VINES
+      - TWISTING_VINES_PLANT
+    time:
+      start: 0
+      end: 24000
+    weather: ANY
+    environment: NETHER
+    # 踏入過地獄才解鎖（與遠征同門檻，把地獄內容定位在中期之後）。
+    requires-advancements:
+      - minecraft:story/enter_the_nether
+    chance: 0.3
+    # 地獄怪物擊殺掉落（需玩家擊殺、且已踏入過地獄）。
+    mob-drops:
+      BLAZE: 0.35
+      WITHER_SKELETON: 0.3
+      PIGLIN_BRUTE: 0.5
+      HOGLIN: 0.25
+      MAGMA_CUBE: 0.12
+    first-hint: "<white>地獄的餘燼回應了你，掌心凝出一縷燼華。</white>"
+
+  # 月輝核心：v0.6 第二遠征地「永夜荒原」的專屬素材。worlds 限定只在永夜世界掉落，
+  # 是製作輝能之鏡（月之力）的關鍵，也是遠征的「非去不可」理由之一。
+  # 永夜荒原永遠是夜晚，因此也是穩定累積月輝的唯一實用地點（見蓄能晶 EnergyCrystal）。
+  moon_core:
+    name: "<gradient:#a89cff:#e6e0ff>月輝核心</gradient>"
+    item-material: ECHO_SHARD
+    lore:
+      - "<gray>永夜荒原裡，夜色凝結出的一點冷光。</gray>"
+      - "<dark_gray>製作輝能之鏡（月之力）的關鍵素材。</dark_gray>"
+    # 採集物來源（陰暗林冠／幽冥植被）；多人公平性主要靠下方 mob-drops。
+    source-blocks:
+      - DARK_OAK_LEAVES
+      - GLOW_LICHEN
+      - SCULK
+      - SCULK_VEIN
+      - BROWN_MUSHROOM
+      - RED_MUSHROOM
+    time:
+      start: 0
+      end: 24000
+    weather: ANY
+    environment: NORMAL
+    # 只在永夜荒原遠征世界掉落（mob-drops 也受此 worlds 過濾，見 MobDropListener）。
+    worlds:
+      - lycohism_moonless_waste
+    chance: 0.25
+    # 多人公平性：除了開箱與採集，永夜荒原裡擊殺怪物也會掉月輝核心（可再生、不需跑遠搶箱）。
+    mob-drops:
+      BOGGED: 0.5
+      WITCH: 0.4
+      SKELETON: 0.25
+      ZOMBIE: 0.2
+      SPIDER: 0.2
+    first-hint: "<white>永夜回應了你，指間凝出一點月輝核心。</white>"

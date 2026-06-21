@@ -1,0 +1,39 @@
+# Lycohism 設定檔
+# https://github.com/TinyYana/lycohism
+
+# 啟用後會在 console 輸出額外的 debug 訊息。
+debug: false
+
+# 稽核紀錄：把插件產出/移動的東西（給予、掉落、合成、輝能消耗、結構認領）寫到
+# plugins/lycohism/logs/lycohism-audit.log，方便多人伺服器追查經濟與重複刷。
+audit:
+  enabled: true
+
+# 玩家訊息前綴，支援 MiniMessage 格式：https://docs.advntr.dev/minimessage/format.html
+prefix: "<gradient:#f7a8b8:#ffd6e0>[Lycohism]</gradient> <reset>"
+
+# 輝能系統（v0.6 日與月能量）。
+# v0.6.1：玩家在戶外見天時「自己」被動蓄能（白天日輝、夜晚月輝）；池滿後溢流自動注入
+# 背包裡的蓄能晶。靠近日晷／月晷（自然生成的能量塔）會提高對應能量的蓄積速度。
+# 之後（v0.7）的設施升級會消耗這裡的能量。
+energy:
+  sun-cap: 200          # 日輝池上限
+  moon-cap: 200         # 月輝池上限
+  base-charge: 2        # 每秒（見天時）累積的基礎量
+  tower-bonus: 3        # 靠近對應能量塔時的倍率
+  tower-radius: 16.0    # 能量塔加成／光環的作用半徑（格）
+
+# 輝能據點（v0.7）。玩家建造並右鍵啟動「輝能核心」當基地能量倉；日輝塔／月輝塔產能，
+# 經能量中繼器一段段串到核心。之後的設施升級會消耗核心裡的輝能。
+nexus:
+  capacity: 5000            # 核心日輝/月輝各自的容量上限
+  network-range: 48.0      # 節點之間（核心↔中繼↔塔）可連接的最大「水平」距離（格，約 3 區塊）
+  production-per-cycle: 10   # 每個連上的塔、每秒灌進核心的量（塔只在對應時段＋見天時產能）
+
+# 設施升級到 Lv2 的成本（/lycohism upgrade <設施>）：材料 ＋ 附近核心的輝能。
+facility-upgrade:
+  nexus-sun: 500            # 消耗核心日輝
+  nexus-moon: 500           # 消耗核心月輝
+  materials:                # 額外材料（id:數量；Lycohism 素材或原版方塊）
+    - "GOLD_BLOCK:2"
+    - "AMETHYST_BLOCK:2"

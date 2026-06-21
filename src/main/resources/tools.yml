@@ -1,0 +1,173 @@
+# Lycohism 生活工具設定
+# 工具行為寫在程式碼，平衡數值放這裡；玩家可見名稱與 lore 統一放在 lang.yml。
+
+tools:
+
+  # 露光瓶：消耗品，右鍵取得兩分鐘夜視，使用後留下空玻璃瓶。
+  dew_light:
+    # 合成消耗的晨露數量（另需 1 個玻璃瓶）
+    dew-cost: 1
+    # 每次使用給予夜視的時間（tick；20 tick = 1 秒）
+    effect-duration-ticks: 2400
+    cost:
+      - "morning_dew:1"
+      - "GLASS_BOTTLE:1"
+
+  # 花籤：於工房製作。潛行右鍵記住地點，右鍵指引方向與距離。
+  flower_bookmark:
+    # 製作成本（id:數量；id 為方塊比對材質，為 Lycohism 物品比對身份）
+    cost:
+      - "morning_dew:2"
+      - "PAPER:1"
+
+  # 石工槌：於工房製作。右鍵石材方塊原地循環變體，消耗耐久。
+  stonework_hammer:
+    # 工具底材（需為可損耗物品，耐久即為使用次數限制）
+    base-material: IRON_PICKAXE
+    # 右鍵循環順序（破壞後變為清單中的下一個，循環）
+    cycle:
+      - COBBLESTONE
+      - STONE
+      - STONE_BRICKS
+      - CHISELED_STONE_BRICKS
+    cost:
+      - "morning_dew:2"
+      - "COBBLESTONE:3"
+      - "STICK:2"
+
+  # 雨紋繃帶：於工房製作，消耗品。只恢復少量生命，不取代食物與藥水。
+  rain_bandage:
+    heal-amount: 4.0
+    cost:
+      - "rain_breath:1"
+      - "PAPER:2"
+      - "STRING:1"
+
+  # 花脈剪：右鍵未成熟作物直接催熟；成熟作物則採收並補種。
+  flower_vein_shears:
+    # 工具底材（需為可損耗物品，耐久即為使用次數限制）
+    base-material: SHEARS
+    # 催熟比採收消耗更多耐久。
+    growth-durability-cost: 2
+    cost:
+      - "flower_vein:2"
+      - "IRON_INGOT:1"
+
+  # 風標：讀取當下時間、天氣、月相，提示目前可採集的自然現象。
+  wind_vane:
+    forecast-cost:
+      - "moon_dew:1"
+      - "wind_trace:2"
+      - "CLOCK:1"
+      - "COPPER_INGOT:2"
+
+  # 月紗袋會自動收納撿到的自然現象，右鍵一次取出全部內容。
+  moon_pouch:
+    capacity: 256
+    capture-cost:
+      - "moon_dew:4"
+      - "BUNDLE:1"
+      - "STRING:2"
+
+  # 雨痕門符：v0.5 遠征入口。右鍵在主世界開啟雨後森林，於遠征世界右鍵返回原地。
+  # 可重複使用、不消耗，是刻意的「前往／返回」道具。於書房製作。
+  rain_gate:
+    cost:
+      - "rain_breath:8"
+      - "moon_dew:2"
+      - "ENDER_PEARL:1"
+      - "PAPER:1"
+
+  # ── 雨後森林專屬產出（只能用苔華製作，給遠征「非去不可」的理由）。皆於溫室製作。──
+  # 苔露膏：消耗品，右鍵獲得一段溫和的持續再生（與雨紋繃帶的立即小補區隔）。
+  moss_balm:
+    effect-duration-ticks: 200   # 再生持續時間（tick；20 tick = 1 秒）
+    regen-amplifier: 1           # 0=再生 I、1=再生 II（上限 4）
+    cost:
+      - "moss_bloom:2"
+      - "GLISTERING_MELON_SLICE:1"
+
+  # 苔肥：消耗品，右鍵對植物方塊以骨粉催長周圍一小塊區域（原版生長規則）。
+  moss_fertile:
+    radius: 1                    # 以點擊方塊為中心的方形半徑（1 = 3x3，上限 3）
+    cost:
+      - "moss_bloom:1"
+      - "BONE_MEAL:3"
+
+  # ── 輝能系統（v0.6 日與月能量）。於工房製作。──────────────────────────────
+  # 蓄能晶：可攜帶的輝能電池（溢流儲存）。v0.6.1 玩家自己被動蓄能，池滿後溢流自動
+  # 注入背包裡的蓄能晶；右鍵把晶體內的能量倒回玩家池。
+  energy_crystal:
+    capacity: 100                # 單一能量（日輝或月輝）在晶體上的容量上限
+    cost:
+      - "moon_dew:3"
+      - "AMETHYST_SHARD:4"
+      - "GLASS:1"
+
+  # 輝能之鏡：第一個能量消耗道具，避免輝能變成無用收集品。
+  # 右鍵消耗日輝（抗火＋力量）；潛行右鍵消耗月輝（夜視＋緩降）。
+  # 需要永夜荒原的月輝核心才能製作，所以月之力只能靠去那裡取得。
+  radiant_focus:
+    sun-cost: 30                 # 右鍵日之祝福消耗的日輝
+    moon-cost: 30                # 潛行右鍵月之祝福消耗的月輝
+    effect-duration-ticks: 9600  # 主要效果持續時間（夜視/抗火/力量；tick，9600 = 8 分鐘）
+    slow-fall-ticks: 1200        # 緩降的例外較短時間（機動性強，刻意不拉長）
+    cost:
+      - "energy_crystal:1"
+      - "moon_core:1"
+      - "GOLD_INGOT:2"
+
+  # ── 設施 Lv2 解鎖的能量道具（需先用核心輝能把設施升到 Lv2）──────────────────
+  # 日炎鎬（工房 Lv2）：右鍵消耗日輝，獲得一段急迫（挖掘加速）。
+  solar_pick:
+    sun-cost: 25
+    effect-duration-ticks: 1200  # 急迫持續時間（tick）
+    haste-amplifier: 1           # 0=急迫 I、1=急迫 II
+    cost:
+      - "energy_crystal:1"
+      - "DIAMOND_PICKAXE:1"
+      - "GOLD_BLOCK:1"
+
+  # 星圖羅盤（書房 Lv2）：右鍵讀出最近能量塔的方向與距離（無消耗）。
+  star_compass:
+    cost:
+      - "wind_trace:4"
+      - "moon_dew:2"
+      - "COMPASS:1"
+
+  # 月華灑（溫室 Lv2）：右鍵植物，消耗月輝對一片區域施骨粉。
+  lunar_spore:
+    moon-cost: 25
+    radius: 2                     # 以點擊方塊為中心的方形半徑（2 = 5x5，上限 4）
+    cost:
+      - "moss_bloom:2"
+      - "energy_crystal:1"
+      - "GLOW_BERRIES:8"
+
+  # 地脈探針：短距離掃描附近原版礦脈，避免取代正常探索與採礦。
+  leyline_probe:
+    horizontal-radius: 8
+    vertical-radius: 12
+    # 被動讀數的重新掃描間隔；action bar 本身每秒更新。
+    refresh-interval-ticks: 60
+    probe-cost:
+      - "leyline_sand:3"
+      - "COPPER_INGOT:2"
+      - "REDSTONE:1"
+    target-materials:
+      - COAL_ORE
+      - DEEPSLATE_COAL_ORE
+      - IRON_ORE
+      - DEEPSLATE_IRON_ORE
+      - COPPER_ORE
+      - DEEPSLATE_COPPER_ORE
+      - GOLD_ORE
+      - DEEPSLATE_GOLD_ORE
+      - REDSTONE_ORE
+      - DEEPSLATE_REDSTONE_ORE
+      - LAPIS_ORE
+      - DEEPSLATE_LAPIS_ORE
+      - DIAMOND_ORE
+      - DEEPSLATE_DIAMOND_ORE
+      - EMERALD_ORE
+      - DEEPSLATE_EMERALD_ORE

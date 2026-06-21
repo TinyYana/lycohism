@@ -1,0 +1,114 @@
+# Lycohism 調律之路（progression line）
+# 每個 stage 是一個里程碑。完成條件可用三種（可混用，需全部滿足）：
+#   discoveries  : 發現紀錄 id 全部具備
+#   advancements : 原版進度 namespaced key 全部完成
+#   facilities   : 設施等級 >= 指定值（workshop / study / greenhouse）
+# 顯示名稱、描述、提示放在 lang.yml 的 progression.stages.<id>（title / lore / hint）。
+# preview: true 代表「規劃中」章節，永遠不算完成，只用來預告下一步方向。
+# 章節順序即顯示順序；最多 14 個會顯示在 UI 上。
+progression:
+  stages:
+
+    awakening:
+      icon: DANDELION
+      requires:
+        discoveries: [ morning_dew ]
+
+    workshop:
+      icon: CRAFTING_TABLE
+      requires:
+        facilities: { workshop: 1 }
+
+    first_tools:
+      icon: GLASS_BOTTLE
+      requires:
+        discoveries: [ dew_light ]
+
+    rain:
+      icon: WATER_BUCKET
+      requires:
+        discoveries: [ rain_breath ]
+
+    study:
+      icon: BOOKSHELF
+      requires:
+        facilities: { study: 1 }
+
+    greenhouse:
+      icon: FLOWERING_AZALEA
+      requires:
+        facilities: { greenhouse: 1 }
+
+    night:
+      icon: CLOCK
+      requires:
+        discoveries: [ moon_dew ]
+
+    # 進度線在這裡跟原版地獄掛鉤（也是書房遠征入口的門檻）。
+    nether_gate:
+      icon: FLINT_AND_STEEL
+      requires:
+        advancements: [ minecraft:story/enter_the_nether ]
+
+    expedition:
+      icon: FILLED_MAP
+      requires:
+        discoveries: [ rainfall_forest ]
+
+    expedition_yield:
+      icon: SLIME_BALL
+      requires:
+        discoveries: [ moss_balm ]
+
+    # ── v0.6 輝能線 → v0.7 日月分支 ────────────────────────────
+    radiance:
+      icon: AMETHYST_SHARD
+      requires:
+        discoveries: [ energy_crystal ]
+
+    # 從 radiance 分成日／月兩支：兩章的 advancement-parent 都指向 radiance，
+    # 在原版進度樹上形成可見的「日與月」分岔。
+    solar_tower:
+      icon: GOLD_BLOCK
+      advancement-parent: radiance
+      requires:
+        discoveries: [ sun_tower ]
+
+    lunar_tower:
+      icon: AMETHYST_BLOCK
+      advancement-parent: radiance
+      requires:
+        discoveries: [ moon_tower ]
+
+    # 月之支線：永夜荒原 → 月之力
+    lunar_waste:
+      icon: ECHO_SHARD
+      advancement-parent: lunar_tower
+      requires:
+        discoveries: [ moonless_waste ]
+
+    moon_attunement:
+      icon: CLOCK
+      advancement-parent: lunar_waste
+      requires:
+        discoveries: [ radiant_focus ]
+
+    # 日之支線：據點核心 → 輝能網路
+    radiant_nexus:
+      icon: BEACON
+      advancement-parent: solar_tower
+      requires:
+        discoveries: [ energy_nexus ]
+
+    energy_grid:
+      icon: LIGHTNING_ROD
+      advancement-parent: radiant_nexus
+      requires:
+        discoveries: [ energy_relay ]
+
+    # 設施升級：消耗核心輝能把設施提升到 Lv2（/lycohism upgrade）。日之支線的終點。
+    facility_growth:
+      icon: SCAFFOLDING
+      advancement-parent: energy_grid
+      requires:
+        facilities: { workshop: 2 }

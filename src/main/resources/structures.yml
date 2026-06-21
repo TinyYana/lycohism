@@ -1,0 +1,40 @@
+# 新生成區塊中的 Lycohism 獎勵結構。已生成的舊區塊不會補放。
+structures:
+  moss-altar:
+    enabled: true
+    # 每個新區塊 1.25%，約每 80 個合適區塊出現一座。
+    chance-per-chunk: 0.0125
+    min-y: 60
+    max-y: 130
+  dew-well:
+    enabled: true
+    # 主世界限定；約每 125 個合適的新區塊一座。
+    chance-per-chunk: 0.008
+    min-y: 60
+    max-y: 130
+  wind-circle:
+    enabled: true
+    # 主世界與遠征世界都會出現。
+    chance-per-chunk: 0.008
+    min-y: 70
+    max-y: 180
+  rainfall-dungeon:
+    enabled: true
+    # 雨後森林限定的小型低難度地窖；約每 80 個合適的新區塊一座。
+    chance-per-chunk: 0.012
+    min-y: 55
+    max-y: 120
+  moondial:
+    enabled: true
+    # 月晷（月輝塔）：十字基座＋階梯尖塔的有機造型（非方塊狀）。主世界與遠征世界都會出現。
+    # 靠近會提高月輝蓄積並有粒子光環。主世界寶箱給紫水晶，永夜荒原給月輝核心。
+    chance-per-chunk: 0.01
+    min-y: 60
+    max-y: 140
+  sundial:
+    enabled: true
+    # 日晷（日輝塔）：明亮砂岩階梯＋發光石尖塔＋金頂光柱。主世界限定。
+    # 靠近會提高日輝蓄積並有粒子光環。寶箱給蓄能晶，讓玩家自然接觸輝能系統。
+    chance-per-chunk: 0.01
+    min-y: 60
+    max-y: 140

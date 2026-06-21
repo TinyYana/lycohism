@@ -1,0 +1,61 @@
+# Lycohism 基地設施設定
+# 設施行為寫在程式碼，材料與轉換放這裡方便調整平衡。
+
+# 設施開啟方式：潛行 + 空手 + 右鍵對應方塊即可開啟（空手是為了不搶走原版放置／使用）。
+access:
+  require-sneak: true
+  workshop: CRAFTING_TABLE
+  study: BOOKSHELF
+  greenhouse: FLOWER_POT
+
+# 工房：v0.1 的第一個設施。修復後（等級 1）開啟工具製作與建材加工。
+workshop:
+  # 修復成本（id:數量；id 為方塊比對材質，為 Lycohism 物品比對身份）
+  repair-cost:
+    - "morning_dew:4"
+    - "OAK_PLANKS:8"
+    - "COBBLESTONE:8"
+  # 建材加工：點擊將背包中整組 INPUT 轉換為 OUTPUT（一次最多 64）
+  conversions:
+    - "COBBLESTONE>STONE"
+    - "STONE>STONE_BRICKS"
+    - "SAND>SANDSTONE"
+  # 高成本替主手工具附加經驗修補；玩家還需要支付經驗等級。
+  tool-mending-cost:
+    - "rain_breath:8"
+    - "moon_dew:4"
+    - "BOOK:1"
+  tool-mending-level-cost: 15
+
+# 書房：v0.2 的紀錄設施。修復後提供手冊、自然圖鑑與發現紀錄。
+study:
+  repair-cost:
+    - "rain_breath:2"
+    - "BOOKSHELF:4"
+    - "LECTERN:1"
+
+# 溫室：v0.3 的植物設施。開墾後（等級 1）開啟花脈培育與植物工具。
+greenhouse:
+  repair-cost:
+    - "flower_vein:4"
+    - "GLASS:8"
+    - "MOSS_BLOCK:4"
+  # 花脈培育：點擊消耗 INPUT 取得 OUTPUT（格式 inputId:數量>OUTPUT:數量）
+  cultivations:
+    - "flower_vein:1>BONE_MEAL:4"
+    - "flower_vein:1>WHEAT_SEEDS:4"
+    - "flower_vein:2>SUGAR_CANE:3"
+    - "flower_vein:2>MOSS_BLOCK:1"
+    - "flower_vein:3>CHERRY_SAPLING:1"
+    - "flower_vein:4>SPORE_BLOSSOM:1"
+    - "flower_vein:6>TORCHFLOWER_SEEDS:1"
+    # v0.5 雨後森林回流：苔華培育成稀有植物素材，明確改善主世界農業與建築。
+    # 產物需與上方花脈產物不重複（溫室會以產物去重，重複者會被略過）。
+    - "moss_bloom:1>CLAY:4"
+    - "moss_bloom:2>MANGROVE_PROPAGULE:2"
+    - "moss_bloom:2>GLOW_BERRIES:4"
+    - "moss_bloom:3>SLIME_BALL:3"
+    - "moss_bloom:4>PITCHER_POD:1"
+    # 微光苔：苔華培育成發光苔蘚（原版方塊，免絲綢之觸刮洞穴）。
+    # v0.5.3：原本的具名「微光苔」物品退回成單純培育產物（純插件不上資源包做不出獨特方塊）。
+    - "moss_bloom:2>GLOW_LICHEN:4"
