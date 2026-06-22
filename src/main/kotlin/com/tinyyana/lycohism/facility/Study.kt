@@ -77,6 +77,7 @@ class Study(private val plugin: Lycohism) {
             inv.setItem(SLOT_EXPEDITION, Menu.button(Material.FILLED_MAP, Texts.line("gui.study.expedition-leaf"), Texts.lines("gui.study.expedition-lore")))
             inv.setItem(SLOT_STATUS, Menu.button(Material.LECTERN, Texts.line("gui.study.status"), Texts.renderLines("gui.study.status-lore", "level" to stored.toString())))
             if (stored in 1 until FacilityUpgrade.MAX_LEVEL) inv.setItem(SLOT_UPGRADE, FacilityUi.upgradeButton(plugin, "study", stored))
+            else inv.setItem(SLOT_UPGRADE, FacilityUi.maxedButton())
         }
         player.openInventory(inv)
     }
@@ -91,31 +92,48 @@ class Study(private val plugin: Lycohism) {
         player.openInventory(inv)
     }
 
-    /** Highest tool slot shown at [effective] level; the menu sizes itself to fit it plus a back row. */
-    private fun toolsMaxSlot(effective: Int): Int = if (effective >= 3) SLOT_FORECAST else SLOT_STAR_COMPASS
+    /** One entry in the 器物 leaf, paired with its action; the list drives both layout and clicks so
+     *  buttons stay centred (Menu.centeredRow) and grow symmetrically as Lv2/Lv3 add 地圖標記/全境預報. */
+    private class ToolEntry(val render: ItemStack, val onClick: () -> Unit)
+
+    private fun toolEntries(player: Player, effective: Int): List<ToolEntry> {
+        val data = plugin.playerDataManager.rememberInventoryMaterials(player)
+        fun craftEntry(create: () -> ItemStack, cost: List<String>, onClick: () -> Unit) =
+            ToolEntry(FacilityUi.withCost(create(), Cost.parse(cost, plugin), "gui.common.click-craft", data), onClick)
+        return buildList {
+            add(craftEntry({ plugin.windVane.createItem() }, plugin.windVane.cost) {
+                craftTool(player, plugin.windVane.cost, WindVane.ID) { plugin.windVane.createItem() }
+            })
+            add(craftEntry({ plugin.moonPouch.createItem() }, plugin.moonPouch.cost) {
+                craftTool(player, plugin.moonPouch.cost, MoonPouch.ID) { plugin.moonPouch.createItem() }
+            })
+            // 星圖羅盤提早到書房 Lv1（#1：原本要塔產能升 Lv2 才能做，但它正是用來找塔的，邏輯倒置）。
+            add(craftEntry({ plugin.starCompass.createItem() }, plugin.starCompass.craftCost) {
+                craftTool(player, plugin.starCompass.craftCost, com.tinyyana.lycohism.tool.StarCompass.ID) { plugin.starCompass.createItem() }
+            })
+            // Lv2（升級結構）：標記最近能量塔到一張鎖定地圖（QoL，#4）。
+            if (effective >= 2) add(ToolEntry(
+                Menu.button(Material.FILLED_MAP, Texts.line("gui.study.map-mark"), Texts.lines("gui.study.map-mark-lore")),
+            ) { markNearestTower(player) })
+            // Lv3（蝕輝）：全境預報——讀出此刻此地所有可採集的自然現象，均衡口味的「探索向」三階強化。
+            if (effective >= 3) add(ToolEntry(
+                Menu.button(Material.SPYGLASS, Texts.line("gui.study.forecast"), Texts.lines("gui.study.forecast-lore")),
+            ) { forecastAll(player) })
+        }
+    }
 
     private fun openTools(player: Player, upgraded: Boolean) {
-        val effective = effectiveLevel(player, upgraded)
+        val entries = toolEntries(player, effectiveLevel(player, upgraded))
+        val slots = Menu.centeredRow(entries.size)
         val inv = create(
             StudyMenu.TOOLS,
             Menu.title(Texts.line("gui.study.root"), Texts.line("gui.study.tools-leaf")),
             upgraded,
-            Menu.sizeFor(toolsMaxSlot(effective)),
+            Menu.sizeFor(slots.max()),
         )
         inv.setItem(Menu.HEADER_SLOT, Menu.header(Texts.line("gui.study.tools-leaf"), *Texts.lines("gui.study.header-tools-lore").toTypedArray()))
-        putCraftButton(inv, SLOT_WIND_VANE, player, plugin.windVane.createItem(), plugin.windVane.cost)
-        putCraftButton(inv, SLOT_MOON_POUCH, player, plugin.moonPouch.createItem(), plugin.moonPouch.cost)
-        // 星圖羅盤提早到書房 Lv1（#1：原本要塔產能升 Lv2 才能做，但它正是用來找塔的，邏輯倒置）。
-        putCraftButton(inv, SLOT_STAR_COMPASS, player, plugin.starCompass.createItem(), plugin.starCompass.craftCost)
-        // Lv2（升級結構）：標記最近能量塔到一張鎖定地圖（QoL，#4）。
-        if (effective >= 2) {
-            inv.setItem(SLOT_MAP_MARK, Menu.button(Material.FILLED_MAP, Texts.line("gui.study.map-mark"), Texts.lines("gui.study.map-mark-lore")))
-        }
-        // Lv3（蝕輝）：全境預報——讀出此刻此地所有可採集的自然現象，均衡口味的「探索向」三階強化。
-        if (effective >= 3) {
-            inv.setItem(SLOT_FORECAST, Menu.button(Material.SPYGLASS, Texts.line("gui.study.forecast"), Texts.lines("gui.study.forecast-lore")))
-        }
-        inv.setItem(Menu.backSlotAfter(listOf(toolsMaxSlot(effective))), Menu.back())
+        entries.forEachIndexed { i, entry -> inv.setItem(slots[i], entry.render) }
+        inv.setItem(Menu.backSlotAfter(slots), Menu.back())
         player.openInventory(inv)
     }
 
@@ -146,7 +164,8 @@ class Study(private val plugin: Lycohism) {
             Menu.button(
                 Material.BARRIER,
                 Texts.render("gui.study.expedition-locked-name", "name" to expedition.displayName),
-                Texts.lines("gui.study.gate-locked-lore"),
+                // Per-expedition hint when present (e.g. 暮蝕需走過日月兩線), else the generic gate lore.
+                Texts.lines("gui.study.gate-locked-lore-${expedition.id}", Texts.lines("gui.study.gate-locked-lore")),
             )
         }
 
@@ -186,18 +205,14 @@ class Study(private val plugin: Lycohism) {
     }
 
     private fun handleTools(player: Player, slot: Int, upgraded: Boolean) {
-        val effective = effectiveLevel(player, upgraded)
-        if (slot == Menu.backSlotAfter(listOf(toolsMaxSlot(effective)))) {
-            openMain(player, upgraded)
+        val entries = toolEntries(player, effectiveLevel(player, upgraded))
+        val slots = Menu.centeredRow(entries.size)
+        val index = slots.indexOf(slot)
+        if (index in entries.indices) {
+            entries[index].onClick()
             return
         }
-        when (slot) {
-            SLOT_WIND_VANE -> craftTool(player, plugin.windVane.cost, WindVane.ID) { plugin.windVane.createItem() }
-            SLOT_MOON_POUCH -> craftTool(player, plugin.moonPouch.cost, MoonPouch.ID) { plugin.moonPouch.createItem() }
-            SLOT_STAR_COMPASS -> craftTool(player, plugin.starCompass.craftCost, com.tinyyana.lycohism.tool.StarCompass.ID) { plugin.starCompass.createItem() }
-            SLOT_MAP_MARK -> if (effective >= 2) markNearestTower(player)
-            SLOT_FORECAST -> if (effective >= 3) forecastAll(player)
-        }
+        if (slot == Menu.backSlotAfter(slots)) openMain(player, upgraded)
     }
 
     /** Lv3 全境預報: lists every natural phenomenon collectable here and now. */
@@ -365,16 +380,13 @@ class Study(private val plugin: Lycohism) {
         private const val SLOT_COMPENDIUM = 13
         private const val SLOT_RECORD = 15
 
-        // 器物 leaf
-        private const val SLOT_WIND_VANE = 12
-        private const val SLOT_MOON_POUCH = 14
-        private const val SLOT_STAR_COMPASS = 16
-        private const val SLOT_MAP_MARK = 10
-        private const val SLOT_FORECAST = 19
+        // 器物 leaf 的工具改由 toolEntries + Menu.centeredRow 動態置中，不再用固定 slot 常數。
 
-        // 遠征 leaf
+        // 遠征 leaf — 一格一個遠征，目前四個（雨後森林／永夜荒原／潮汐深淵／暮蝕之境），
+        // 對稱排在第二排。暮蝕之境是 BOSS 戰場，靠 requires-advancements 鎖到走過日月兩線才解。
+        // ponytail: 4 格剛好容納現有四個遠征；之後超過 4 個再改成分頁。
         private const val SLOT_GATE = 13
-        private val EXPEDITION_SLOTS = listOf(11, 13, 15)
+        private val EXPEDITION_SLOTS = listOf(10, 12, 14, 16)
 
         private const val DISCOVERY_ID = "study"
     }

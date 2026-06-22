@@ -91,12 +91,14 @@ class PhenomenonManager(private val plugin: Lycohism) {
                 return null
             }
 
+        // Empty source-blocks is allowed: some phenomena (e.g. 蝕輝結晶) have no natural break source and
+        // are only ever granted by code (BOSS drop) or mob-drops. They must still load so get()/createItem
+        // work — previously the skip here meant the eclipse boss silently dropped nothing.
         val sourceBlocks = node.getStringList("source-blocks")
             .mapNotNull { material(it, id, "source-blocks") }
             .toSet()
-        if (sourceBlocks.isEmpty()) {
-            plugin.logger.warning("Phenomenon '$id' has no valid source-blocks; skipping.")
-            return null
+        if (sourceBlocks.isEmpty() && !node.isConfigurationSection("mob-drops") && node.getDouble("chance", 0.2) > 0.0) {
+            plugin.logger.warning("Phenomenon '$id' has no source-blocks or mob-drops yet a non-zero chance; it can never drop naturally.")
         }
 
         val weather = enumOrDefault(node.getString("weather"), WeatherCondition.ANY, id, "weather")

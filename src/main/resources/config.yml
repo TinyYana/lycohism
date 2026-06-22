@@ -61,3 +61,24 @@ expedition-mob-boost:
   speed-mult: 1.1         # 移動速度倍率（小幅，避免追不到）
   scale: 1.15            # 體型（generic.scale）
   strength-amplifier: 1   # 力量等級（1 = 力量 I；0 = 不加）
+
+# v0.9.1 自動化：自動調律機（attunement_engine）。蓋好剛性多方塊、右鍵高爐控制器認領；每個處理週期
+# 從機器正上方的容器（玩家自放的箱子/木桶）取一份原料、消耗附近輝能核心的輝能、把加工成品放回容器。
+# 讓基地接手「工房建材加工」的重複點擊，並給輝能網路一個持續的能量出口。MVP 只做原版建材加工。
+automation:
+  process-every-cycles: 5   # 每隔幾個 EnergyService 週期（約 20 tick）處理一次；5 ≈ 每 5 秒
+  # 格式 "輸入>輸出[:數量];能量類型(SUN/MOON);每次消耗的輝能"。一次處理一份輸入。
+  # 日輝線（白天蓄的能量）跑石材加工；月輝線（夜晚蓄的）跑深色岩石加工——兩種能量都有自動化用途。
+  recipes:
+    # 日輝線：明亮石材
+    - "COBBLESTONE>STONE:1;SUN;4"
+    - "STONE>STONE_BRICKS:1;SUN;4"
+    - "SAND>SANDSTONE:1;SUN;4"
+    - "GRANITE>POLISHED_GRANITE:1;SUN;4"
+    - "DIORITE>POLISHED_DIORITE:1;SUN;4"
+    - "ANDESITE>POLISHED_ANDESITE:1;SUN;4"
+    # 月輝線：深色岩石
+    - "DEEPSLATE>DEEPSLATE_BRICKS:1;MOON;4"
+    - "COBBLED_DEEPSLATE>POLISHED_DEEPSLATE:1;MOON;4"
+    - "BLACKSTONE>POLISHED_BLACKSTONE:1;MOON;4"
+    - "TUFF>TUFF_BRICKS:1;MOON;4"

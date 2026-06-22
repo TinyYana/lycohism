@@ -142,6 +142,14 @@ progression:
       requires:
         facilities: { workshop: 2 }
 
+    # v0.9.2 自動化：蓋出第一台自動調律機，讓基地接手建材加工（輝能網路的持續出口）。
+    attunement_engine:
+      icon: BLAST_FURNACE
+      advancement-sound: minecraft:block.beacon.activate
+      advancement-parent: facility_growth
+      requires:
+        discoveries: [ attunement_engine ]
+
     # ── v0.8 蝕：日月兩支線在此收束 ───────────────────────────────
     # 暮蝕之境：要走過「日」的潮汐深淵與「月」的永夜荒原兩條線，蝕的章節才開啟（v0.8.1 #5）。
     eclipse_realm:

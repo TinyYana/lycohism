@@ -95,6 +95,14 @@ class NexusManager(private val plugin: Lycohism) {
             .minByOrNull { dist2(it, loc.x, loc.y, loc.z) }
     }
 
+    /** The nearest nexus to a location that [who] may use, within range — for the 自動調律機 whose owner
+     *  may be offline (so we can't use [accessibleNexus]'s player location). */
+    fun accessibleNexusAt(world: String, x: Double, y: Double, z: Double, who: UUID): Nexus? =
+        nexuses
+            .filter { it.world == world && it.isAllowed(who) }
+            .filter { dist2(it, x, y, z) <= networkRange * networkRange }
+            .minByOrNull { dist2(it, x, y, z) }
+
     /** The nearest nexus the player owns (any distance), for share/unshare commands. */
     fun ownedNexusNear(player: Player): Nexus? {
         val loc = player.location

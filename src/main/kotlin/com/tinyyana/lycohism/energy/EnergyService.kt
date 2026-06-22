@@ -64,6 +64,7 @@ class EnergyService(private val plugin: Lycohism) {
         }
         plugin.energyTowers.all().forEach(::towerAura)
         plugin.nexusManager.tick()
+        plugin.automationManager.tick()
     }
 
     private fun accrue(player: Player) {

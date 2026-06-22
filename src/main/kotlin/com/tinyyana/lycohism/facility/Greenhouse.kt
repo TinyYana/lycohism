@@ -91,6 +91,7 @@ class Greenhouse(private val plugin: Lycohism) {
             inv.setItem(SLOT_TOOLS, Menu.button(Material.SHEARS, Texts.line("gui.greenhouse.tools-leaf"), Texts.lines("gui.greenhouse.tools-lore")))
             inv.setItem(SLOT_STATUS, Menu.button(Material.OAK_SAPLING, Texts.line("gui.greenhouse.status"), Texts.renderLines("gui.greenhouse.status-lore", "level" to stored.toString())))
             if (stored in 1 until FacilityUpgrade.MAX_LEVEL) inv.setItem(SLOT_UPGRADE, FacilityUi.upgradeButton(plugin, "greenhouse", stored))
+            else inv.setItem(SLOT_UPGRADE, FacilityUi.maxedButton())
         }
         player.openInventory(inv)
     }
@@ -127,7 +128,32 @@ class Greenhouse(private val plugin: Lycohism) {
         player.openInventory(inv)
     }
 
+    /** One craftable in the 器物 leaf, paired with its action; the list drives both layout and clicks
+     *  so buttons stay centred (Menu.centeredRow) and grow symmetrically as the upgrade adds 月華灑. */
+    private class ToolEntry(val render: ItemStack, val onClick: () -> Unit)
+
+    private fun toolEntries(player: Player, effective: Int): List<ToolEntry> {
+        val data = plugin.playerDataManager.rememberInventoryMaterials(player)
+        fun craftEntry(create: () -> ItemStack, cost: List<String>, onClick: () -> Unit) =
+            ToolEntry(FacilityUi.withCost(create(), Cost.parse(cost, plugin), "gui.common.click-craft", data), onClick)
+        return buildList {
+            add(craftEntry({ plugin.flowerVeinShears.createItem() }, plugin.flowerVeinShears.cost) { craftShears(player) })
+            // 雨後森林專屬產出：只能用苔華製作，給遠征一個「非去不可」的回流理由。
+            add(craftEntry({ plugin.mossBalm.createItem() }, plugin.mossBalm.cost) {
+                craftTool(player, plugin.mossBalm.cost, com.tinyyana.lycohism.tool.MossBalm.ID) { plugin.mossBalm.createItem() }
+            })
+            add(craftEntry({ plugin.mossFertile.createItem() }, plugin.mossFertile.cost) {
+                craftTool(player, plugin.mossFertile.cost, com.tinyyana.lycohism.tool.MossFertile.ID) { plugin.mossFertile.createItem() }
+            })
+            if (effective >= 2) add(craftEntry({ plugin.lunarSpore.createItem() }, plugin.lunarSpore.craftCost) {
+                craftTool(player, plugin.lunarSpore.craftCost, com.tinyyana.lycohism.tool.LunarSpore.ID) { plugin.lunarSpore.createItem() }
+            })
+        }
+    }
+
     private fun openTools(player: Player, upgraded: Boolean) {
+        val entries = toolEntries(player, effectiveLevel(player, upgraded))
+        val slots = Menu.centeredRow(entries.size)
         val inv = Menu.create(
             GreenhouseHolder(GreenhouseMenu.TOOLS, upgraded),
             Menu.title(Texts.line("gui.greenhouse.root"), Texts.line("gui.greenhouse.tools-leaf")),
@@ -136,14 +162,8 @@ class Greenhouse(private val plugin: Lycohism) {
             Menu.HEADER_SLOT,
             Menu.header(Texts.line("gui.greenhouse.tools-leaf"), *Texts.lines("gui.greenhouse.header-tools-lore").toTypedArray()),
         )
-        putCraftButton(inv, SLOT_TOOL_SHEARS, player, plugin.flowerVeinShears.createItem(), plugin.flowerVeinShears.cost)
-        // 雨後森林專屬產出：只能用苔華製作，給遠征一個「非去不可」的回流理由。
-        putCraftButton(inv, SLOT_TOOL_BALM, player, plugin.mossBalm.createItem(), plugin.mossBalm.cost)
-        putCraftButton(inv, SLOT_TOOL_FERTILE, player, plugin.mossFertile.createItem(), plugin.mossFertile.cost)
-        if (effectiveLevel(player, upgraded) >= 2) {
-            putCraftButton(inv, SLOT_TOOL_SPORE, player, plugin.lunarSpore.createItem(), plugin.lunarSpore.craftCost)
-        }
-        inv.setItem(Menu.BACK_SLOT, Menu.back())
+        entries.forEachIndexed { i, entry -> inv.setItem(slots[i], entry.render) }
+        inv.setItem(Menu.backSlotAfter(slots), Menu.back())
         player.openInventory(inv)
     }
 
@@ -182,15 +202,14 @@ class Greenhouse(private val plugin: Lycohism) {
     }
 
     private fun handleTools(player: Player, rawSlot: Int, upgraded: Boolean) {
-        when (rawSlot) {
-            SLOT_TOOL_SHEARS -> craftShears(player)
-            SLOT_TOOL_BALM -> craftTool(player, plugin.mossBalm.cost, com.tinyyana.lycohism.tool.MossBalm.ID) { plugin.mossBalm.createItem() }
-            SLOT_TOOL_FERTILE -> craftTool(player, plugin.mossFertile.cost, com.tinyyana.lycohism.tool.MossFertile.ID) { plugin.mossFertile.createItem() }
-            SLOT_TOOL_SPORE -> if (effectiveLevel(player, upgraded) >= 2) {
-                craftTool(player, plugin.lunarSpore.craftCost, com.tinyyana.lycohism.tool.LunarSpore.ID) { plugin.lunarSpore.createItem() }
-            }
-            Menu.BACK_SLOT -> openMain(player, upgraded)
+        val entries = toolEntries(player, effectiveLevel(player, upgraded))
+        val slots = Menu.centeredRow(entries.size)
+        val index = slots.indexOf(rawSlot)
+        if (index in entries.indices) {
+            entries[index].onClick()
+            return
         }
+        if (rawSlot == Menu.backSlotAfter(slots)) openMain(player, upgraded)
     }
 
     // ---- Actions -----------------------------------------------------------
@@ -327,10 +346,7 @@ class Greenhouse(private val plugin: Lycohism) {
         private const val SLOT_TOOLS = 12
         private const val SLOT_STATUS = 14
         private const val SLOT_UPGRADE = 16
-        private const val SLOT_TOOL_SHEARS = 11
-        private const val SLOT_TOOL_BALM = 13
-        private const val SLOT_TOOL_FERTILE = 15
-        private const val SLOT_TOOL_SPORE = 10
+        // 器物頁的工具改由 toolEntries + Menu.centeredRow 動態置中，不再用固定 slot 常數。
         // Up to four inner rows so 花脈 + v0.5 苔華 + Lv2 進階培育 all stay visible (LARGE menu).
         private val CONTENT_SLOTS = listOf(
             10, 11, 12, 13, 14, 15, 16,

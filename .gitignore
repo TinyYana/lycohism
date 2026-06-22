@@ -20,5 +20,8 @@ hs_err_pid*
 # Common working directory
 run
 
+# Release / scratch working directory
+.tmp/
+
 HANDOFF.md
 docs/PROJECT_PLAN.md

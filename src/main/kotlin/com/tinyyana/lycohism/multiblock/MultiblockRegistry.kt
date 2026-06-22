@@ -30,6 +30,7 @@ class MultiblockRegistry(private val plugin: Lycohism) {
         register(studyTier2())
         register(greenhouseTier2())
         register(eclipseDial())
+        register(attunementEngine())
         plugin.logger.info("Loaded ${structures.size} multiblock templates.")
     }
 
@@ -206,6 +207,25 @@ class MultiblockRegistry(private val plugin: Lycohism) {
             listOf("DDD", "DDD", "DDD"),
             listOf("G A", " B ", "A G"),
             listOf("   ", " X ", "   "),
+        ),
+    )
+
+    /**
+     * 自動調律機（v0.9.1 自動化）：銅基座、四角燈籠、中央高爐為控制器。右鍵高爐認領；每個週期從正上方
+     * 容器（玩家自放的箱子）取出原料、消耗附近核心輝能、放回加工成品。見 [com.tinyyana.lycohism.energy.AutomationManager]。
+     */
+    private fun attunementEngine(): Multiblock = Multiblock.fromLayers(
+        id = "attunement_engine",
+        legend = mapOf(
+            'P' to Material.WAXED_CUT_COPPER,
+            'B' to Material.WAXED_CHISELED_COPPER,
+            'L' to Material.LANTERN,
+            'X' to Material.BLAST_FURNACE,
+        ),
+        controllerChar = 'X',
+        layers = listOf(
+            listOf("PPP", "PBP", "PPP"),
+            listOf("L L", " X ", "L L"),
         ),
     )
 

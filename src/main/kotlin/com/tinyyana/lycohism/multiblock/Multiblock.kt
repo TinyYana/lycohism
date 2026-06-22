@@ -58,12 +58,16 @@ class Multiblock(
         rotatedBlocks(rotation).forEach { world.getBlockAt(ox + it.dx, oy + it.dy, oz + it.dz).type = it.material }
     }
 
-    /** Shows a five-second, player-only stained-glass model without changing the real world. */
+    /**
+     * Shows a five-second, player-only preview of the *actual* blocks the structure is made of (not a
+     * generic glass shell) so a blueprint reads like the finished build — same idea as the 石工槌 preview.
+     * Green/red dust still flags which blocks are already in place vs. still missing.
+     */
     fun showGhost(plugin: Plugin, world: World, ox: Int, oy: Int, oz: Int, rotation: Rotation, player: Player) {
         val locations = rotatedBlocks(rotation).map {
             val location = world.getBlockAt(ox + it.dx, oy + it.dy, oz + it.dz).location
             val correct = location.block.type == it.material
-            player.sendBlockChange(location, (if (correct) Material.LIME_STAINED_GLASS else Material.LIGHT_BLUE_STAINED_GLASS).createBlockData())
+            player.sendBlockChange(location, it.material.createBlockData())
             player.spawnParticle(Particle.DUST, location.toCenterLocation(), 3, 0.3, 0.3, 0.3, 0.0, if (correct) PRESENT_DUST else MISSING_DUST)
             location
         }

@@ -105,9 +105,12 @@ expeditions:
     terrain-style: eclipse
     world-name: lycohism_eclipse_realm
     always-night: true
-    # 解鎖條件：沿用踏入地獄門檻；實玩後可改成更後期的進度（例如打完日月雙塔）。
+    # 解鎖條件：暮蝕之境是日月兩線的收束點，必須先走過「日」的潮汐深淵與「月」的永夜荒原。
+    # 用 Lycohism 進度線鏡像的 advancement（完成該章節即達成），與 progression.yml 的
+    # eclipse_realm（requires tidal_depths + moonless_waste）一致，BOSS 召喚也需雙核心。
     requires-advancements:
-      - minecraft:story/enter_the_nether
+      - lycohism:progression/tidal_depths
+      - lycohism:progression/lunar_waste
     biomes:
       - eroded_badlands
       - dark_forest

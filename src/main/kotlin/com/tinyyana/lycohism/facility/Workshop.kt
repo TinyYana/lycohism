@@ -106,13 +106,14 @@ class Workshop(private val plugin: Lycohism) {
             inv.setItem(SLOT_MATERIALS, button(Material.STONECUTTER, Texts.line("gui.workshop.materials-leaf"), Texts.lines("gui.workshop.materials-lore")))
             inv.setItem(SLOT_STATUS, button(Material.LECTERN, Texts.line("gui.workshop.status"), Texts.renderLines("gui.workshop.status-lore", "level" to stored.toString())))
             if (stored in 1 until FacilityUpgrade.MAX_LEVEL) inv.setItem(SLOT_UPGRADE, FacilityUi.upgradeButton(plugin, "workshop", stored))
+            else inv.setItem(SLOT_UPGRADE, FacilityUi.maxedButton())
         }
         player.openInventory(inv)
     }
 
     /** Highest tool slot shown at [effective] level; the menu sizes itself to fit it plus a back row. */
     private fun toolsMaxSlot(effective: Int): Int =
-        if (effective >= 2) maxOf(SLOT_TOOL_REPAIR, SLOT_TOOL_HAMMER_TIER_2, SLOT_TOOL_SOLAR) else SLOT_TOOL_REPAIR
+        if (effective >= 2) maxOf(SLOT_TOOL_REPAIR, SLOT_TOOL_HAMMER_TIER_2, SLOT_TOOL_SOLAR, SLOT_TOOL_ENGINE_BP) else SLOT_TOOL_REPAIR
 
     private fun openTools(player: Player, upgraded: Boolean) {
         val effective = effectiveLevel(player, upgraded)
@@ -136,6 +137,7 @@ class Workshop(private val plugin: Lycohism) {
         if (effective >= 2) {
             putCraftButton(inv, SLOT_TOOL_HAMMER_TIER_2, player, plugin.stoneworkHammer.createItem(reinforced = true), plugin.stoneworkHammer.reinforcedCost)
             putCraftButton(inv, SLOT_TOOL_SOLAR, player, plugin.solarPick.createItem(), plugin.solarPick.craftCost)
+            putCraftButton(inv, SLOT_TOOL_ENGINE_BP, player, plugin.blueprint.createItem(ENGINE_STRUCTURE_ID), ENGINE_BLUEPRINT_COST)
         }
         val mendingRequirements = Cost.parse(toolMendingCost, plugin)
         // Lv2：修補同時附耐久 III。Lv3（蝕輝）：再附一個對應的戰鬥附魔（武器鋒利／護甲保護／工具效率），均衡口味的「戰鬥向」強化。
@@ -246,6 +248,7 @@ class Workshop(private val plugin: Lycohism) {
                     plugin.stoneworkHammer.createItem(reinforced = true)
                 }
             }
+            SLOT_TOOL_ENGINE_BP -> if (effective >= 2) giveEngineBlueprint(player)
             SLOT_TOOL_REPAIR -> repairHeldTool(player, effective)
         }
     }
@@ -309,6 +312,28 @@ class Workshop(private val plugin: Lycohism) {
         plugin.playerDataManager.discover(player.uniqueId, discoveryId)
         Messages.send(player, Texts.render("messages.facility.workshop-crafted", "item" to Texts.line("content-names.$discoveryId")))
         player.playSound(player.location, org.bukkit.Sound.BLOCK_AMETHYST_BLOCK_CHIME, 0.6f, 1.2f)
+    }
+
+    /** Workshop Lv2: hands out the 自動調律機 blueprint so automation has a normal obtain path (v0.9.2 #1). */
+    private fun giveEngineBlueprint(player: Player) {
+        if (level(player) < 1) {
+            Messages.send(player, Texts.line("messages.facility.workshop-required"))
+            return
+        }
+        val reqs = Cost.parse(ENGINE_BLUEPRINT_COST, plugin)
+        if (!recipeUnlocked(player, reqs)) {
+            Messages.send(player, Texts.line("messages.common.recipe-locked"))
+            return
+        }
+        if (!Cost.hasAll(player, reqs)) {
+            sendMissing(player, reqs)
+            return
+        }
+        Cost.consume(player, reqs)
+        Items.give(player, plugin.blueprint.createItem(ENGINE_STRUCTURE_ID))
+        com.tinyyana.lycohism.util.Audit.log(player, "blueprint-craft", "$ENGINE_STRUCTURE_ID (workshop)")
+        Messages.send(player, Texts.render("messages.facility.blueprint-crafted", "item" to Texts.line("content-names.$ENGINE_STRUCTURE_ID")))
+        player.playSound(player.location, org.bukkit.Sound.ITEM_BOOK_PAGE_TURN, 0.7f, 1.2f)
     }
 
     private fun convert(player: Player, conversion: Conversion, multiplier: Int) {
@@ -446,6 +471,10 @@ class Workshop(private val plugin: Lycohism) {
         private const val SLOT_TOOL_CRYSTAL = 12
         private const val SLOT_TOOL_SOLAR = 20
         private const val SLOT_TOOL_HAMMER_TIER_2 = 19
+        // v0.9.2 #1：工房 Lv2 製作自動調律機藍圖，給自動化設備一個正常取得途徑（先前只能手蓋／admin）。
+        private const val SLOT_TOOL_ENGINE_BP = 21
+        private val ENGINE_BLUEPRINT_COST = listOf("radiant_ore:2", "REDSTONE:4", "PAPER:1")
+        private const val ENGINE_STRUCTURE_ID = "attunement_engine"
 
         private val MATERIAL_SLOTS = listOf(10, 11, 12, 13, 14, 15, 16)
         private const val DISCOVERY_TOOL_REPAIR = "tool_repair"

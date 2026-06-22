@@ -68,6 +68,17 @@ object StructureActivation {
             true
         }
 
+        "attunement_engine" -> {
+            if (!plugin.automationManager.register(block, player.uniqueId)) {
+                false
+            } else {
+                plugin.playerDataManager.discover(player.uniqueId, "attunement_engine")
+                label(block, id)
+                plugin.structureLocator.record(id, block.location)
+                true
+            }
+        }
+
         else -> false
     }
 
@@ -126,6 +137,14 @@ object StructureActivation {
             .forEach { node ->
                 if (plugin.multiblockRegistry.get("energy_relay")?.detectRotation(world, node.x, node.y, node.z) == null) {
                     plugin.nexusManager.removeRelay(node)
+                }
+            }
+
+        plugin.automationManager.all()
+            .filter { it.world == world.name && near(bx, by, bz, it.x, it.y, it.z) }
+            .forEach { engine ->
+                if (plugin.multiblockRegistry.get("attunement_engine")?.detectRotation(world, engine.x, engine.y, engine.z) == null) {
+                    plugin.automationManager.removeAt(engine.world, engine.x, engine.y, engine.z)
                 }
             }
     }

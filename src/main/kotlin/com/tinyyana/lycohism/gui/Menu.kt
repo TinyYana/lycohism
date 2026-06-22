@@ -62,6 +62,24 @@ object Menu {
     fun sizeFor(maxContentSlot: Int): Int =
         ((maxContentSlot / 9 + 2) * 9).coerceIn(ROOT_SIZE, LARGE_SIZE)
 
+    /**
+     * Evenly-centred slots for [count] buttons in the content row (the row below the header).
+     * Single source of truth so a leaf's buttons stay centred as upgrades add entries, instead
+     * of sitting at fixed positions that look right at one level and lopsided at another.
+     * 1..5 spread with a one-slot gap; 6..7 pack contiguously. Leaves with more than a row use
+     * an explicit multi-row slot list instead.
+     */
+    fun centeredRow(count: Int): List<Int> {
+        require(count in 1..7) { "centeredRow supports 1..7 buttons; got $count." }
+        return if (count <= 5) {
+            val start = 9 + (9 - (count * 2 - 1)) / 2
+            (0 until count).map { start + it * 2 }
+        } else {
+            val start = 9 + (9 - count) / 2
+            (0 until count).map { start + it }
+        }
+    }
+
     /** A breadcrumb-style title, e.g. "工房 ▸ 工具製作". */
     fun title(vararg crumbs: String): String = crumbs.joinToString(SEPARATOR)
 

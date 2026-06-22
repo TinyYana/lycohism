@@ -4,6 +4,7 @@ import com.tinyyana.lycohism.admin.AdminPanel
 import com.tinyyana.lycohism.boss.EclipseBoss
 import com.tinyyana.lycohism.command.LycohismCommand
 import com.tinyyana.lycohism.data.PlayerDataManager
+import com.tinyyana.lycohism.energy.AutomationManager
 import com.tinyyana.lycohism.energy.EnergyManager
 import com.tinyyana.lycohism.energy.EnergyService
 import com.tinyyana.lycohism.energy.EnergyTowers
@@ -82,6 +83,9 @@ class Lycohism : JavaPlugin() {
         private set
 
     lateinit var nexusManager: NexusManager
+        private set
+
+    lateinit var automationManager: AutomationManager
         private set
 
     lateinit var energyCrystal: EnergyCrystal
@@ -209,6 +213,7 @@ class Lycohism : JavaPlugin() {
         energyManager = EnergyManager(this)
         energyTowers = EnergyTowers(this)
         nexusManager = NexusManager(this)
+        automationManager = AutomationManager(this)
         energyService = EnergyService(this)
         energyCrystal = EnergyCrystal(this)
         radiantFocus = RadiantFocus(this)
@@ -269,6 +274,9 @@ class Lycohism : JavaPlugin() {
         if (::nexusManager.isInitialized) {
             nexusManager.save()
         }
+        if (::automationManager.isInitialized) {
+            automationManager.save()
+        }
         if (::playerDataManager.isInitialized) {
             playerDataManager.saveAll()
         }
@@ -286,6 +294,7 @@ class Lycohism : JavaPlugin() {
         energyManager.load()
         energyTowers.load()
         nexusManager.load()
+        automationManager.load()
         energyService.load()
         energyCrystal.load()
         radiantFocus.load()

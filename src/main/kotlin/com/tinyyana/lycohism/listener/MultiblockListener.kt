@@ -112,6 +112,18 @@ class MultiblockListener(private val plugin: Lycohism) : Listener {
                     player.playSound(player.location, Sound.BLOCK_AMETHYST_BLOCK_CHIME, 0.6f, 1.2f)
                 }
             }
+
+            "attunement_engine" -> {
+                val registered = plugin.automationManager.register(block, player.uniqueId)
+                Messages.send(player, Texts.line(if (registered) "messages.automation.engine-registered" else "messages.automation.engine-exists"))
+                if (registered) {
+                    plugin.playerDataManager.discover(player.uniqueId, "attunement_engine")
+                    com.tinyyana.lycohism.multiblock.StructureActivation.label(block, "attunement_engine")
+                    plugin.structureLocator.record("attunement_engine", block.location)
+                    com.tinyyana.lycohism.util.Audit.log(player, "automation-register", "at ${block.x},${block.y},${block.z}")
+                    player.playSound(player.location, Sound.BLOCK_BEACON_ACTIVATE, 0.6f, 1.2f)
+                }
+            }
         }
     }
 

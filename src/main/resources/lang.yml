@@ -40,6 +40,11 @@ gui:
       - "<gray>結晶來自在<white>暮蝕之境</white>召喚並擊敗<white>蝕影守望者</white>。</gray>"
       - "<gray>消耗核心 <gold>日輝 {sun}</gold>／<aqua>月輝 {moon}</aqua>。</gray>"
     upgrade-action: "<yellow>站在升級結構旁＝升級；Lv3 則只要備齊蝕輝結晶與輝能即可。</yellow>"
+    # 設施已達最高階（Lv3）時，升級按鈕位置改放這個屏障提示（v0.9.2 #2）。
+    maxed: "<gradient:#ffd86b:#b07cff>已達最高階 — Lv3</gradient>"
+    maxed-lore:
+      - "<gray>這座設施已經調律到頂，沒有更高的階級了。</gray>"
+      - "<dark_gray>三階的內容在升級結構旁（或用指令）才存取得到。</dark_gray>"
 
   workshop:
     root: "<dark_aqua>工房</dark_aqua>"
@@ -155,6 +160,11 @@ gui:
     gate-locked-lore:
       - "<gray>雨痕還很微弱，入口尚未解鎖。</gray>"
       - "<gray>踏入<white>地獄</white>之後，再回來試試。</gray>"
+    # 暮蝕之境是日月兩線的收束點，鎖住時要明說解法，否則玩家不知道要先走完兩條遠征線。
+    gate-locked-lore-eclipse_realm:
+      - "<gray>日與月尚未在此相蝕，入口仍闔著。</gray>"
+      - "<gray>先走過<gold>潮汐深淵</gold>（日）與<aqua>永夜荒原</aqua>（月）兩線，</gray>"
+      - "<gray>兩道調律齊備，蝕境之門才會顯現。</gray>"
     status: "<aqua>書房狀態</aqua>"
     status-lore:
       - "<gray>等級 <white>{level}</white> / 3</gray>"
@@ -335,6 +345,7 @@ content-names:
   tidal_warden: "<gradient:#2a9bd6:#a8f0e0>潮汐守望者</gradient>"
   eclipse_dial: "<gradient:#ffd86b:#b07cff>日月儀</gradient>"
   eclipse_warden: "<gradient:#ffcf66:#b07cff>蝕影守望者</gradient>"
+  attunement_engine: "<gradient:#ffd98a:#a8c8ff>自動調律機</gradient>"
 
 structures:
   tidal-shrine:
@@ -621,6 +632,14 @@ progression:
         - "<gray>升級＝蓋出設施的「升級結構」＋消耗核心輝能。</gray>"
         - "<gray>之後在升級結構旁或用指令開啟，即享 Lv2 完整功能。</gray>"
       hint: "<gray>把工房／書房／溫室蓋進對應的升級結構，在旁邊開設施頁點「升級」（或 /lycohism upgrade）。</gray>"
+    attunement_engine:
+      title: "<white>自動調律機</white>"
+      lore:
+        - "<gray>讓基地接手重複的建材加工。</gray>"
+      details:
+        - "<gray>在輝能核心附近蓋出自動調律機（藍圖於工房 Lv2 製作），右鍵中央高爐認領。</gray>"
+        - "<gray>正上方放箱子當原料倉；它每隔幾秒取一份原料、耗核心日輝、把成品放回箱子。</gray>"
+      hint: "<gray>到工房 Lv2 製作「自動調律機藍圖」，在核心 48 格內蓋好、右鍵高爐認領，正上方放個箱子丟入圓石。</gray>"
 
     eclipse_realm:
       title: "<gradient:#5a3a6a:#ffd86b>暮蝕之境</gradient>"
@@ -753,6 +772,7 @@ messages:
     workshop-required: "<red>需要先修復工房。</red>"
     workshop-repaired: "<green>工房回應了自然之物，已修復。</green>"
     workshop-crafted: "<green>工房製作了 {item}。</green>"
+    blueprint-crafted: "<green>工房畫出了 <white>{item}</white> 的藍圖。</green> <gray>右鍵看半透明輪廓，潛行右鍵扣材料蓋好（記得蓋在輝能核心附近）。</gray>"
     workshop-status:
       - "<gray>工房等級：<white>{level}</white> / 3。</gray>"
       - "<gray>Lv1：工具製作、建材加工、雨息附魔。</gray>"
@@ -856,6 +876,9 @@ messages:
     shared: "<green>已把核心存取分享給 <white>{player}</white>。</green>"
     unshared: "<green>已取消 <white>{player}</white> 的核心存取。</green>"
     share-noop: "<gray>沒有變化（對方本來就{state}）。</gray>"
+  automation:
+    engine-registered: "<green>自動調律機已啟動。</green> <gray>在它正上方放一個箱子當原料倉；每隔幾秒會取一份原料、消耗附近<aqua>輝能核心</aqua>的日輝，把加工成品放回箱子。</gray>"
+    engine-exists: "<gray>這台自動調律機已經在運作了。</gray>"
 
 commands:
   root: "<gray>Lycohism <white>v{version}</white> — 自然調律生存擴充。輸入 <yellow>/{label} help</yellow> 查看指令。</gray>"
@@ -1127,6 +1150,28 @@ books:
           - ""
           - "<black>蓄能晶蓄能、立起日／月輝塔，</black>"
           - "<black>用中繼器把能量送進核心。</black>"
+      # 自動調律機教學頁（v0.9.2 #1）：有了核心（已接觸輝能網）後顯示，講清楚用途與用法。
+      - requires: [ energy_nexus ]
+        title: "自動調律機"
+        done:
+          - "<dark_green><bold>✔ 自動調律機</bold></dark_green>"
+          - ""
+          - "<black>讓基地接手</black><gold>建材加工</gold><black>，</black>"
+          - "<black>不用在工房一格格點。</black>"
+          - ""
+          - "<black>在</black><dark_aqua>輝能核心</dark_aqua><black> 48 格內蓋好它</black>"
+          - "<black>（藍圖在工房 Lv2 製作），</black>"
+          - "<black>右鍵中央高爐認領。</black>"
+          - "<black>正上方放一個箱子當原料倉，</black>"
+          - "<black>丟入圓石等建材即可。</black>"
+          - ""
+          - "<black>它會每隔幾秒取一份原料、</black>"
+          - "<black>耗一點核心日輝、把成品放回箱子。</black>"
+        hint:
+          - "<dark_gray>· 自動調律機</dark_gray>"
+          - ""
+          - "<black>先把輝能核心立起來；</black>"
+          - "<black>之後基地能自己接手加工。</black>"
 
   compendium:
     title: "<dark_aqua>自然圖鑑</dark_aqua>"

@@ -49,6 +49,17 @@ object FacilityUi {
     }
 
     /**
+     * Shown in the upgrade slot once a facility is fully upgraded (v0.9.2 #2): a barrier with a short
+     * "already at max" note, so the slot reads as intentional instead of an empty filler pane.
+     */
+    fun maxedButton(): ItemStack = ItemStack(Material.BARRIER).apply {
+        editMeta { meta ->
+            meta.displayName(Messages.parse(Texts.line("gui.facility.maxed")).decoration(TextDecoration.ITALIC, false))
+            meta.lore(Texts.lines("gui.facility.maxed-lore").map { Messages.parse(it).decoration(TextDecoration.ITALIC, false) })
+        }
+    }
+
+    /**
      * Upgrade-button click: if the player is at a complete upgrade structure, upgrade; otherwise hand
      * them the structure's 藍圖 (once) so they can ghost-preview and build it (v0.7.5 #2 — players, and
      * frankly the dev, couldn't tell how to build the upgrade structure).
