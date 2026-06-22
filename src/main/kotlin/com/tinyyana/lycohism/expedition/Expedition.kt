@@ -27,6 +27,8 @@ data class Expedition(
     val energyMultiplier: Double,
     /** Biomes to force on the world for atmosphere; empty keeps vanilla biome placement. */
     val biomes: List<Biome>,
+    /** Custom terrain pass layered over vanilla generation for this expedition. */
+    val terrainStyle: ExpeditionTerrainStyle,
     /**
      * Vanilla advancements the player must have completed before they may enter (or craft the
      * gate to) this expedition. Empty means no gate. Pushes the expedition later in progression

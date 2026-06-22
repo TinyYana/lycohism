@@ -54,6 +54,14 @@ object Menu {
         return slot
     }
 
+    /**
+     * Smallest valid menu size that holds content up through [maxContentSlot] plus a back-button row
+     * below it. This is the single source of truth so any menu grows itself as upgrades add buttons
+     * (instead of staying a fixed 27 and cramming new buttons against the back button).
+     */
+    fun sizeFor(maxContentSlot: Int): Int =
+        ((maxContentSlot / 9 + 2) * 9).coerceIn(ROOT_SIZE, LARGE_SIZE)
+
     /** A breadcrumb-style title, e.g. "工房 ▸ 工具製作". */
     fun title(vararg crumbs: String): String = crumbs.joinToString(SEPARATOR)
 

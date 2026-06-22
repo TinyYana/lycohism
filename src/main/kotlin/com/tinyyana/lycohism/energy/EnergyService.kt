@@ -132,19 +132,37 @@ class EnergyService(private val plugin: Lycohism) {
     }
 
     private fun engaged(player: Player): Boolean {
-        if (plugin.energyManager.get(player, EnergyType.SUN) > 0) return true
-        if (plugin.energyManager.get(player, EnergyType.MOON) > 0) return true
-        if (plugin.playerDataManager.get(player.uniqueId).hasDiscovered(EnergyCrystal.ID)) return true
-        return player.inventory.contents.any { Items.idOf(it) == EnergyCrystal.ID }
+        return Items.idOf(player.inventory.itemInMainHand) != null ||
+            Items.idOf(player.inventory.itemInOffHand) != null
     }
 
     private fun towerAura(tower: EnergyTowers.Tower) {
         val world = plugin.server.getWorld(tower.world) ?: return
         if (!world.isChunkLoaded(tower.x shr 4, tower.z shr 4)) return
-        val near = world.players.any { it.location.distanceSquared(centre(world, tower)) <= AURA_RANGE_SQ }
-        if (!near) return
-        val particle = if (tower.type == EnergyType.SUN) Particle.END_ROD else Particle.WITCH
-        world.spawnParticle(particle, tower.x + 0.5, tower.y + 0.5, tower.z + 0.5, 16, 0.45, 0.8, 0.45, 0.01)
+        val centre = centre(world, tower)
+        val nearby = world.players.filter { it.location.distanceSquared(centre) <= AURA_RANGE_SQ }
+        if (nearby.isEmpty()) return
+        // Finding a tower (natural or built) reveals it, so the 調律之路 progresses by exploration now
+        // that towers can't be hand-activated (v0.7.5 #1). discover() is a no-op once already known.
+        val towerId = if (tower.type == EnergyType.SUN) "sun_tower" else "moon_tower"
+        nearby.forEach { plugin.playerDataManager.discover(it.uniqueId, towerId) }
+
+        // Thicker aura (v0.7.5 #7): a dense crown burst, a rising light column up the spire, and a
+        // slow swirl ring so the tower reads as actively channelling energy.
+        val crown = if (tower.type == EnergyType.SUN) Particle.END_ROD else Particle.WITCH
+        val accent = if (tower.type == EnergyType.SUN) Particle.WAX_ON else Particle.WAX_OFF
+        val cx = tower.x + 0.5; val cz = tower.z + 0.5
+        world.spawnParticle(crown, cx, tower.y + 0.6, cz, 40, 0.5, 0.9, 0.5, 0.02)
+        // Light column up the 15-block spire.
+        for (dy in -TOWER_CORE_HEIGHT..1 step 2) {
+            world.spawnParticle(crown, cx, tower.y + dy + 0.5, cz, 2, 0.12, 0.25, 0.12, 0.0)
+        }
+        // Swirl ring around the crown.
+        val phase = (world.fullTime % 40L) / 40.0 * Math.PI * 2
+        for (i in 0 until 6) {
+            val a = phase + i * Math.PI / 3
+            world.spawnParticle(accent, cx + Math.cos(a) * 1.4, tower.y + 0.8, cz + Math.sin(a) * 1.4, 1, 0.0, 0.0, 0.0, 0.0)
+        }
     }
 
     private fun centre(world: World, tower: EnergyTowers.Tower) =
@@ -163,5 +181,6 @@ class EnergyService(private val plugin: Lycohism) {
     private companion object {
         const val INTERVAL = 20L
         const val AURA_RANGE_SQ = 48.0 * 48.0
+        const val TOWER_CORE_HEIGHT = 15 // crown sits this far above the tower base
     }
 }

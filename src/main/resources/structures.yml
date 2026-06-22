@@ -1,27 +1,40 @@
 # 新生成區塊中的 Lycohism 獎勵結構。已生成的舊區塊不會補放。
+# v0.7.3：獎勵結構整體調稀（原本太常見），數值仍可依實玩口味再調。
 structures:
+  radiant-ore:
+    enabled: true
+    chance-per-chunk: 0.35
+    min-y: 16
+    max-y: 96
+
   moss-altar:
     enabled: true
-    # 每個新區塊 1.25%，約每 80 個合適區塊出現一座。
-    chance-per-chunk: 0.0125
+    # 約每 200 個合適區塊出現一座。
+    chance-per-chunk: 0.02
     min-y: 60
     max-y: 130
+  # 潮汐神殿：潮汐深淵專屬，海床上的稜鏡神殿，內有日輝核心寶箱與潮汐守望者（強化遠古守衛）。
+  tidal-shrine:
+    enabled: true
+    chance-per-chunk: 0.03
+    min-y: 30
+    max-y: 62
   dew-well:
     enabled: true
-    # 主世界限定；約每 125 個合適的新區塊一座。
-    chance-per-chunk: 0.008
+    # 主世界限定；約每 250 個合適的新區塊一座。
+    chance-per-chunk: 0.004
     min-y: 60
     max-y: 130
   wind-circle:
     enabled: true
     # 主世界與遠征世界都會出現。
-    chance-per-chunk: 0.008
+    chance-per-chunk: 0.012
     min-y: 70
     max-y: 180
   rainfall-dungeon:
     enabled: true
-    # 雨後森林限定的小型低難度地窖；約每 80 個合適的新區塊一座。
-    chance-per-chunk: 0.012
+    # 雨後森林限定的小型低難度地窖；約每 160 個合適的新區塊一座。
+    chance-per-chunk: 0.04
     min-y: 55
     max-y: 120
   moondial:
@@ -35,6 +48,6 @@ structures:
     enabled: true
     # 日晷（日輝塔）：明亮砂岩階梯＋發光石尖塔＋金頂光柱。主世界限定。
     # 靠近會提高日輝蓄積並有粒子光環。寶箱給蓄能晶，讓玩家自然接觸輝能系統。
-    chance-per-chunk: 0.01
+    chance-per-chunk: 0.004
     min-y: 60
     max-y: 140

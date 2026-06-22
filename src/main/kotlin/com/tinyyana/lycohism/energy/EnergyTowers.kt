@@ -44,6 +44,14 @@ class EnergyTowers(private val plugin: Lycohism) {
         save()
     }
 
+    /** Forgets a tower (its multiblock was dismantled); stops its aura/production. */
+    @Synchronized
+    fun remove(world: String, x: Int, y: Int, z: Int): Boolean {
+        val removed = towers.removeIf { it.world == world && it.x == x && it.y == y && it.z == z }
+        if (removed) save()
+        return removed
+    }
+
     fun all(): List<Tower> = towers.toList()
 
     fun exists(world: String, x: Int, y: Int, z: Int): Boolean =

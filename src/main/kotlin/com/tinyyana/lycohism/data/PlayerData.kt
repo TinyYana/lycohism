@@ -28,6 +28,9 @@ class PlayerData(val uuid: UUID) {
     /** Warn before Lycohism materials are consumed by a vanilla crafting recipe. */
     var confirmVanillaCrafts: Boolean = true
 
+    /** Warn before breaking a block that belongs to a complete Lycohism multiblock. */
+    var confirmStructureBreaks: Boolean = true
+
     /** 日輝 pool: radiant energy gathered under a daytime sky, spent by sun-attuned abilities. */
     var sunEnergy: Int = 0
 

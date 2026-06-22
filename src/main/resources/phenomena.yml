@@ -234,6 +234,25 @@ phenomena:
       MAGMA_CUBE: 0.12
     first-hint: "<white>地獄的餘燼回應了你，掌心凝出一縷燼華。</white>"
 
+  # 輝脈晶：只生成於新地獄區塊中的金紋黑石礦脈；這是 Lycohism 的第一種專屬礦物。
+  radiant_ore:
+    name: "<gradient:#ffcf66:#d8b8ff>輝脈晶</gradient>"
+    item-material: RAW_GOLD
+    lore:
+      - "<gray>地獄岩層中凝成的日月輝結晶。</gray>"
+      - "<dark_gray>二階工具與祭壇造物的核心礦材。</dark_gray>"
+    source-blocks:
+      - GILDED_BLACKSTONE
+    time:
+      start: 0
+      end: 24000
+    weather: ANY
+    environment: NETHER
+    requires-advancements:
+      - minecraft:story/enter_the_nether
+    chance: 1.0
+    first-hint: "<white>金紋黑石裂開，一枚輝脈晶落入手中。</white>"
+
   # 月輝核心：v0.6 第二遠征地「永夜荒原」的專屬素材。worlds 限定只在永夜世界掉落，
   # 是製作輝能之鏡（月之力）的關鍵，也是遠征的「非去不可」理由之一。
   # 永夜荒原永遠是夜晚，因此也是穩定累積月輝的唯一實用地點（見蓄能晶 EnergyCrystal）。
@@ -268,3 +287,50 @@ phenomena:
       ZOMBIE: 0.2
       SPIDER: 0.2
     first-hint: "<white>永夜回應了你，指間凝出一點月輝核心。</white>"
+
+  # 日輝核心：v0.8.1 海洋遠征「潮汐深淵」的專屬素材，是「日」支線對位永夜荒原月輝核心的產物。
+  # 只在潮汐深淵掉落（白晝的暖海）。與月輝核心一起，是召喚蝕影守望者的兩半之一。
+  sun_core:
+    name: "<gradient:#ffd76b:#fff3c0>日輝核心</gradient>"
+    item-material: OCHRE_FROGLIGHT
+    lore:
+      - "<gray>白晝的暖海裡，陽光凝成的一點金芒。</gray>"
+      - "<dark_gray>與月輝核心一起，可在暮蝕之境召喚蝕影守望者。</dark_gray>"
+    source-blocks:
+      - PRISMARINE
+      - PRISMARINE_BRICKS
+      - SEA_LANTERN
+      - KELP
+      - KELP_PLANT
+      - TUBE_CORAL_BLOCK
+      - BRAIN_CORAL_BLOCK
+    time:
+      start: 0
+      end: 24000
+    weather: ANY
+    environment: NORMAL
+    worlds:
+      - lycohism_tidal_depths
+    chance: 0.25
+    mob-drops:
+      DROWNED: 0.5
+      GUARDIAN: 0.5
+      ELDER_GUARDIAN: 1.0
+    first-hint: "<white>暖海回應了你，指間凝出一點日輝核心。</white>"
+
+  # 蝕輝結晶：v0.8 BOSS「蝕影守望者」的專屬掉落，是設施升到三階的唯一鑰匙。
+  # 刻意沒有自然來源（source-blocks 空、chance 0）——只能靠在暮蝕之境召喚並擊敗 BOSS 取得。
+  # 掉落由 EclipseBoss 在程式裡直接給予，這裡只定義它的外觀與身份。
+  eclipse_crystal:
+    name: "<gradient:#ffd86b:#b07cff>蝕輝結晶</gradient>"
+    item-material: HEART_OF_THE_SEA
+    lore:
+      - "<gray>日與月在蝕中相觸，凝成的一顆結晶。</gray>"
+      - "<dark_gray>設施升至三階的鑰匙。</dark_gray>"
+    time:
+      start: 0
+      end: 24000
+    weather: ANY
+    environment: NORMAL
+    chance: 0.0
+    first-hint: "<white>蝕落下時，一顆蝕輝結晶留在了你手中。</white>"

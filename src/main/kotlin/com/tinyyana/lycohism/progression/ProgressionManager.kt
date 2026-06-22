@@ -206,6 +206,7 @@ class ProgressionManager(private val plugin: Lycohism) {
             requiredFacilities = parseFacilities(requires),
             preview = node.getBoolean("preview", false),
             advancementParent = node.getString("advancement-parent")?.trim()?.takeIf { it.isNotEmpty() },
+            advancementSound = node.getString("advancement-sound")?.trim()?.takeIf { it.isNotEmpty() },
         )
     }
 
@@ -231,7 +232,7 @@ class ProgressionManager(private val plugin: Lycohism) {
         award(player, ROOT_KEY, true)
         award(player, INTRO_KEY, true)
         statuses(player).forEach { (stage, status) ->
-            if (!stage.preview) award(player, key(stage.id), status == StageStatus.DONE)
+            if (!stage.preview) award(player, key(stage.id), status == StageStatus.DONE, stage.advancementSound)
         }
     }
 
@@ -292,14 +293,16 @@ class ProgressionManager(private val plugin: Lycohism) {
             .onFailure { plugin.logger.warning("Could not load advancement '$key': ${it.message}") }
     }
 
-    private fun award(player: Player, key: NamespacedKey, complete: Boolean) {
+    private fun award(player: Player, key: NamespacedKey, complete: Boolean, sound: String? = null) {
         val advancement = Bukkit.getAdvancement(key) ?: return
         val progress = player.getAdvancementProgress(advancement)
+        val wasDone = progress.isDone
         if (complete) {
             progress.remainingCriteria.forEach(progress::awardCriteria)
         } else {
             progress.awardedCriteria.forEach(progress::revokeCriteria)
         }
+        if (complete && !wasDone && sound != null) player.playSound(player.location, sound, 0.8f, 1.0f)
     }
 
     private fun advancementJson(

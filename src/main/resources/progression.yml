@@ -47,11 +47,19 @@ progression:
     # 進度線在這裡跟原版地獄掛鉤（也是書房遠征入口的門檻）。
     nether_gate:
       icon: FLINT_AND_STEEL
+      advancement-sound: minecraft:block.portal.travel
       requires:
         advancements: [ minecraft:story/enter_the_nether ]
 
+    radiant_vein:
+      icon: RAW_GOLD
+      advancement-sound: minecraft:block.amethyst_block.resonate
+      requires:
+        discoveries: [ radiant_ore ]
+
     expedition:
       icon: FILLED_MAP
+      advancement-sound: minecraft:item.goat_horn.sound.0
       requires:
         discoveries: [ rainfall_forest ]
 
@@ -66,21 +74,35 @@ progression:
       requires:
         discoveries: [ energy_crystal ]
 
-    # 從 radiance 分成日／月兩支：兩章的 advancement-parent 都指向 radiance，
-    # 在原版進度樹上形成可見的「日與月」分岔。
+    # 從 radiance 分成日／月兩支。v0.8.2 #3：兩支現在「一碗水端平」，形狀完全對稱——
+    # 塔 → 專屬遠征（核心）→ 調律（力量）；輝能網路／據點拆成中立支線，不再偏在日線。
+    # ── 日線：日輝塔 → 潮汐深淵（日輝核心）→ 日之調律（日炎鎬）─────────────
     solar_tower:
       icon: GOLD_BLOCK
       advancement-parent: radiance
       requires:
         discoveries: [ sun_tower ]
 
+    tidal_depths:
+      icon: HEART_OF_THE_SEA
+      advancement-sound: minecraft:item.goat_horn.sound.0
+      advancement-parent: solar_tower
+      requires:
+        discoveries: [ tidal_depths ]
+
+    solar_attunement:
+      icon: GOLDEN_PICKAXE
+      advancement-parent: tidal_depths
+      requires:
+        discoveries: [ solar_pick ]
+
+    # ── 月線：月輝塔 → 永夜荒原（月輝核心）→ 月之調律（輝能之鏡）─────────────
     lunar_tower:
       icon: AMETHYST_BLOCK
       advancement-parent: radiance
       requires:
         discoveries: [ moon_tower ]
 
-    # 月之支線：永夜荒原 → 月之力
     lunar_waste:
       icon: ECHO_SHARD
       advancement-parent: lunar_tower
@@ -93,12 +115,19 @@ progression:
       requires:
         discoveries: [ radiant_focus ]
 
-    # 日之支線：據點核心 → 輝能網路
+    # ── 中立：輝能網路／據點（不偏日月）：核心 → 祭壇 → 中繼網 → 設施升級 ──────
     radiant_nexus:
       icon: BEACON
-      advancement-parent: solar_tower
+      advancement-parent: radiance
       requires:
         discoveries: [ energy_nexus ]
+
+    energy_altar:
+      icon: ENCHANTING_TABLE
+      advancement-sound: minecraft:block.enchantment_table.use
+      advancement-parent: radiant_nexus
+      requires:
+        discoveries: [ energy_altar ]
 
     energy_grid:
       icon: LIGHTNING_ROD
@@ -106,9 +135,34 @@ progression:
       requires:
         discoveries: [ energy_relay ]
 
-    # 設施升級：消耗核心輝能把設施提升到 Lv2（/lycohism upgrade）。日之支線的終點。
     facility_growth:
       icon: SCAFFOLDING
+      advancement-sound: minecraft:entity.player.levelup
       advancement-parent: energy_grid
       requires:
         facilities: { workshop: 2 }
+
+    # ── v0.8 蝕：日月兩支線在此收束 ───────────────────────────────
+    # 暮蝕之境：要走過「日」的潮汐深淵與「月」的永夜荒原兩條線，蝕的章節才開啟（v0.8.1 #5）。
+    eclipse_realm:
+      icon: CRYING_OBSIDIAN
+      advancement-sound: minecraft:item.goat_horn.sound.0
+      advancement-parent: facility_growth
+      requires:
+        discoveries: [ tidal_depths, moonless_waste, eclipse_realm ]
+
+    # 蝕影守望者：召喚並擊敗 BOSS，取得蝕輝結晶。
+    eclipse_warden:
+      icon: NETHER_STAR
+      advancement-sound: minecraft:entity.wither.death
+      advancement-parent: eclipse_realm
+      requires:
+        discoveries: [ eclipse_warden ]
+
+    # 三階設施：用蝕輝結晶把設施升到 Lv3。v0.8 的終點。
+    facility_growth_3:
+      icon: HEART_OF_THE_SEA
+      advancement-sound: minecraft:block.beacon.power_select
+      advancement-parent: eclipse_warden
+      requires:
+        facilities: { workshop: 3 }

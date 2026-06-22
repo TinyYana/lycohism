@@ -33,6 +33,7 @@ object StructureActivation {
                 plugin.energyTowers.record(block.world.name, block.x, cy, block.z, type)
                 plugin.playerDataManager.discover(player.uniqueId, id)
                 label(block, id)
+                plugin.structureLocator.record(id, block.location)
                 true
             }
         }
@@ -44,6 +45,7 @@ object StructureActivation {
                 plugin.nexusManager.claimNexus(player, block)
                 plugin.playerDataManager.discover(player.uniqueId, "energy_nexus")
                 label(block, id)
+                plugin.structureLocator.record(id, block.location)
                 true
             }
         }
@@ -54,12 +56,15 @@ object StructureActivation {
             } else {
                 plugin.playerDataManager.discover(player.uniqueId, "energy_relay")
                 label(block, id)
+                plugin.structureLocator.record(id, block.location)
                 true
             }
         }
 
         "energy_altar" -> {
+            plugin.playerDataManager.discover(player.uniqueId, "energy_altar")
             label(block, id)
+            plugin.structureLocator.record(id, block.location)
             true
         }
 
@@ -86,6 +91,48 @@ object StructureActivation {
             )
         }
     }
+
+    /**
+     * Drops any tower / nexus / relay registration whose structure no longer validates after a block
+     * near [around] broke, so a dismantled structure stops producing & transmitting energy (and its
+     * particle beams/aura die with it). Works off the live registries, not labels, so it also covers
+     * naturally-generated towers that never had a label. Cheap: a box pre-filter, then [Multiblock]
+     * re-validation only for the handful of structures next to the break.
+     */
+    fun pruneBroken(plugin: Lycohism, around: Location) {
+        val world = around.world ?: return
+        val bx = around.blockX; val by = around.blockY; val bz = around.blockZ
+
+        // Towers are registered at the crown (base + TOWER_CORE_HEIGHT); re-check at the base controller.
+        plugin.energyTowers.all()
+            .filter { it.world == world.name && near(bx, by, bz, it.x, it.y, it.z) }
+            .forEach { tower ->
+                val id = if (tower.type == EnergyType.SUN) "sun_tower" else "moon_tower"
+                if (plugin.multiblockRegistry.get(id)?.detectRotation(world, tower.x, tower.y - TOWER_CORE_HEIGHT, tower.z) == null) {
+                    plugin.energyTowers.remove(tower.world, tower.x, tower.y, tower.z)
+                }
+            }
+
+        plugin.nexusManager.allNexuses()
+            .filter { it.world == world.name && near(bx, by, bz, it.x, it.y, it.z) }
+            .forEach { nexus ->
+                if (plugin.multiblockRegistry.get("energy_nexus")?.detectRotation(world, nexus.x, nexus.y, nexus.z) == null) {
+                    plugin.nexusManager.removeNexus(nexus)
+                }
+            }
+
+        plugin.nexusManager.allRelays()
+            .filter { it.world == world.name && near(bx, by, bz, it.x, it.y, it.z) }
+            .forEach { node ->
+                if (plugin.multiblockRegistry.get("energy_relay")?.detectRotation(world, node.x, node.y, node.z) == null) {
+                    plugin.nexusManager.removeRelay(node)
+                }
+            }
+    }
+
+    /** Generous box around a structure's anchor: ±2 horizontally (tower footprint), ±18 vertically. */
+    private fun near(bx: Int, by: Int, bz: Int, x: Int, y: Int, z: Int): Boolean =
+        kotlin.math.abs(bx - x) <= 2 && kotlin.math.abs(bz - z) <= 2 && kotlin.math.abs(by - y) <= 18
 
     /** Removes labels whose tagged multiblock no longer matches after a nearby block breaks. */
     fun removeBrokenLabels(plugin: Lycohism, around: Location) {

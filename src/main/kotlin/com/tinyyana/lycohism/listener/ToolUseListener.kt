@@ -4,6 +4,7 @@ import com.tinyyana.lycohism.Lycohism
 import com.tinyyana.lycohism.expedition.RainGate
 import com.tinyyana.lycohism.phenomenon.RainTending
 import com.tinyyana.lycohism.tool.Blueprint
+import com.tinyyana.lycohism.tool.BuildingWand
 import com.tinyyana.lycohism.tool.DewLight
 import com.tinyyana.lycohism.tool.EnergyCrystal
 import com.tinyyana.lycohism.tool.FlowerBookmark
@@ -106,12 +107,44 @@ class ToolUseListener(private val plugin: Lycohism) : Listener {
                 )
             }
 
-            StoneworkHammer.ID -> {
+            StoneworkHammer.ID, StoneworkHammer.REINFORCED_ID -> {
                 if (event.action != Action.RIGHT_CLICK_BLOCK) return
+                // Damping: ignore the rapid follow-up clicks so a held/spammed right-click doesn't
+                // re-fire mid-confirm. The cooldown also shows the vanilla hotbar sweep as feedback.
+                if (player.getCooldown(item.type) > 0) { event.isCancelled = true; return }
                 val block = event.clickedBlock ?: return
-                if (plugin.stoneworkHammer.tryCycle(player, block, item)) {
-                    event.isCancelled = true
+                when (plugin.stoneworkHammer.tryCycle(player, block, event.blockFace, item)) {
+                    StoneworkHammer.Result.PREVIEW -> {
+                        event.isCancelled = true
+                        player.setCooldown(item.type, TOOL_COOLDOWN_TICKS)
+                        Messages.actionBar(player, Texts.line("messages.tools.hammer-preview"))
+                    }
+                    StoneworkHammer.Result.CHANGED -> {
+                        event.isCancelled = true
+                        player.setCooldown(item.type, TOOL_COOLDOWN_TICKS)
+                    }
+                    StoneworkHammer.Result.INVALID -> Unit
                 }
+            }
+
+            BuildingWand.ID, BuildingWand.TIER_2_ID -> {
+                // Mode switch: sneak + right-click anywhere (air or block) so it's discoverable
+                // without needing to aim at a block.
+                if (player.isSneaking && id == BuildingWand.TIER_2_ID) {
+                    if (!rightClick) return
+                    event.isCancelled = true
+                    val mode = plugin.buildingWand.cycleMode(item)
+                    player.inventory.setItemInMainHand(item)
+                    Messages.actionBar(player, Texts.render("messages.tools.wand-mode", "mode" to Texts.line("terms.wand-mode.${mode.name.lowercase()}")))
+                    return
+                }
+                if (event.action != Action.RIGHT_CLICK_BLOCK) return
+                event.isCancelled = true
+                if (player.getCooldown(item.type) > 0) return
+                val result = plugin.buildingWand.use(player, event.clickedBlock ?: return, event.blockFace, item)
+                player.setCooldown(item.type, TOOL_COOLDOWN_TICKS)
+                if (!result.preview && result.amount > 0) plugin.playerDataManager.discover(player.uniqueId, id)
+                Messages.actionBar(player, Texts.render(if (result.preview) "messages.tools.wand-preview" else "messages.tools.building-wand", "amount" to result.amount.toString(), "mode" to Texts.line("terms.wand-mode.${result.mode.name.lowercase()}")))
             }
 
             FlowerVeinShears.ID -> {
@@ -200,6 +233,7 @@ class ToolUseListener(private val plugin: Lycohism) : Listener {
                 } else {
                     plugin.blueprint.preview(player, item)
                     Messages.actionBar(player, Texts.line("messages.tools.blueprint-preview"))
+                    Messages.send(player, Texts.render("messages.tools.blueprint-materials", "materials" to plugin.blueprint.materialSummary(item)))
                 }
             }
 
@@ -235,5 +269,8 @@ class ToolUseListener(private val plugin: Lycohism) : Listener {
         /** Phenomenon id for 燼華; cracking it grants brief Fire Resistance. */
         const val EMBER_BLOOM_ID = "ember_bloom"
         const val FIRE_RESISTANCE_TICKS = 600 // 30s
+
+        /** Short post-action cooldown that gives the build tools "阻尼感" and stops click spam re-firing. */
+        const val TOOL_COOLDOWN_TICKS = 4
     }
 }

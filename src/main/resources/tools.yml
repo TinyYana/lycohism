@@ -34,6 +34,15 @@ tools:
       - "morning_dew:2"
       - "COBBLESTONE:3"
       - "STICK:2"
+      - "IRON_INGOT:2"
+    reinforced-cost:
+      - "stonework_hammer:1"
+      - "radiant_ore:4"
+      - "IRON_INGOT:4"
+
+  building_wand:
+    length: 5
+    tier-2-length: 8
 
   # 雨紋繃帶：於工房製作，消耗品。只恢復少量生命，不取代食物與藥水。
   rain_bandage:

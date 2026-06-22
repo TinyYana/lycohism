@@ -90,6 +90,7 @@ class LycohismCommand(private val plugin: Lycohism) : TabExecutor {
             "give" -> handleGive(sender, label, args)
             "build" -> handleBuild(sender, label, args)
             "blueprint" -> handleBlueprint(sender, label, args)
+            "locate" -> handleLocate(sender, label, args)
             "nexus" -> handleNexus(sender, label, args)
             "upgrade" -> handleUpgrade(sender, label, args)
             else -> Messages.send(sender, Texts.render("commands.unknown", "label" to label))
@@ -124,6 +125,9 @@ class LycohismCommand(private val plugin: Lycohism) : TabExecutor {
         }
         if (args.size == 2 && args[0].equals("blueprint", ignoreCase = true)) {
             return plugin.multiblockRegistry.ids().filter { it.startsWith(args[1].lowercase()) }
+        }
+        if (args.size == 2 && args[0].equals("locate", ignoreCase = true)) {
+            return plugin.structureLocator.ids().filter { it.startsWith(args[1].lowercase()) }
         }
         if (args.size == 2 && args[0].equals("nexus", ignoreCase = true)) {
             return listOf("share", "unshare").filter { it.startsWith(args[1].lowercase()) }
@@ -208,9 +212,10 @@ class LycohismCommand(private val plugin: Lycohism) : TabExecutor {
         }
         val result = com.tinyyana.lycohism.facility.FacilityUpgrade.upgrade(plugin, player, facility)
         val key = when (result) {
-            com.tinyyana.lycohism.facility.FacilityUpgrade.Result.UPGRADED -> "messages.upgrade.done"
+            com.tinyyana.lycohism.facility.FacilityUpgrade.Result.SUCCESS -> "messages.upgrade.done"
             com.tinyyana.lycohism.facility.FacilityUpgrade.Result.NOT_REPAIRED -> "messages.upgrade.not-repaired"
             com.tinyyana.lycohism.facility.FacilityUpgrade.Result.ALREADY_MAX -> "messages.upgrade.already"
+            com.tinyyana.lycohism.facility.FacilityUpgrade.Result.NO_STRUCTURE -> "messages.upgrade.no-structure"
             com.tinyyana.lycohism.facility.FacilityUpgrade.Result.NO_NEXUS -> "messages.upgrade.no-nexus"
             com.tinyyana.lycohism.facility.FacilityUpgrade.Result.MISSING_MATERIALS -> "messages.upgrade.missing-materials"
             com.tinyyana.lycohism.facility.FacilityUpgrade.Result.MISSING_ENERGY -> "messages.upgrade.missing-energy"
@@ -273,18 +278,39 @@ class LycohismCommand(private val plugin: Lycohism) : TabExecutor {
                         cancel()
                         return
                     }
-                    multiblock.showGhost(world, target.x, target.y, target.z, Rotation.NONE, player)
+                    multiblock.showGhost(plugin, world, target.x, target.y, target.z, Rotation.NONE, player)
                     elapsed += GHOST_INTERVAL_TICKS
                 }
             }.runTaskTimer(plugin, 0L, GHOST_INTERVAL_TICKS)
             Messages.send(sender, Texts.render("commands.build-ghost", "id" to multiblock.id))
         } else {
             multiblock.place(world, target.x, target.y, target.z, Rotation.NONE)
+            plugin.structureLocator.record(multiblock.id, target.location)
             // Placing also activates it (registers the tower/relay/nexus and floats its label), so a
             // /build tower actually produces — previously it only stamped blocks and stayed inert.
             com.tinyyana.lycohism.multiblock.StructureActivation.activate(plugin, player, multiblock.id, world.getBlockAt(target.x, target.y, target.z))
             Messages.send(sender, Texts.render("commands.build-done", "id" to multiblock.id))
         }
+    }
+
+    private fun handleLocate(sender: CommandSender, label: String, args: Array<out String>) {
+        if (!requireAdmin(sender)) return
+        val player = sender as? Player ?: run {
+            Messages.send(sender, Texts.line("commands.player-only"))
+            return
+        }
+        val id = args.getOrNull(1)?.lowercase()
+        if (id == null || id !in plugin.structureLocator.ids()) {
+            Messages.send(sender, Texts.render("commands.locate-usage", "label" to label, "items" to plugin.structureLocator.ids().joinToString(Texts.line("terms.list-separator"))))
+            return
+        }
+        val location = plugin.structureLocator.nearest(id, player)
+        if (location == null) {
+            Messages.send(sender, Texts.render("commands.locate-none", "id" to id))
+            return
+        }
+        player.compassTarget = location
+        Messages.send(sender, Texts.render("commands.locate-done", "id" to id, "x" to location.blockX.toString(), "y" to location.blockY.toString(), "z" to location.blockZ.toString()))
     }
 
     private fun sendHelp(sender: CommandSender, label: String) {
@@ -306,6 +332,6 @@ class LycohismCommand(private val plugin: Lycohism) : TabExecutor {
         private const val PERMISSION_ADMIN = "lycohism.admin"
         private const val GHOST_INTERVAL_TICKS = 10L
         private const val GHOST_DURATION_TICKS = 300L
-        private val SUBCOMMANDS = listOf("help", "version", "workshop", "study", "greenhouse", "progress", "nexus", "upgrade", "admin", "expedition", "stage", "reload", "debug", "give", "build", "blueprint")
+        private val SUBCOMMANDS = listOf("help", "version", "workshop", "study", "greenhouse", "progress", "nexus", "upgrade", "admin", "expedition", "stage", "reload", "debug", "give", "build", "blueprint", "locate")
     }
 }

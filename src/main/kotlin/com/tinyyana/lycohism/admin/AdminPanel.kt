@@ -6,6 +6,7 @@ import com.tinyyana.lycohism.gui.BackedHolder
 import com.tinyyana.lycohism.gui.Menu
 import com.tinyyana.lycohism.progression.StageStatus
 import com.tinyyana.lycohism.tool.DewLight
+import com.tinyyana.lycohism.tool.BuildingWand
 import com.tinyyana.lycohism.tool.EnergyCrystal
 import com.tinyyana.lycohism.tool.FlowerBookmark
 import com.tinyyana.lycohism.tool.FlowerVeinShears
@@ -48,6 +49,9 @@ class AdminPanel(private val plugin: Lycohism) : Listener {
             TuningManual.ID -> plugin.tuningManual.createItem()
             FlowerBookmark.ID -> plugin.flowerBookmark.createItem()
             StoneworkHammer.ID -> plugin.stoneworkHammer.createItem()
+            StoneworkHammer.REINFORCED_ID -> plugin.stoneworkHammer.createItem(reinforced = true)
+            BuildingWand.ID -> plugin.buildingWand.createItem()
+            BuildingWand.TIER_2_ID -> plugin.buildingWand.createItem(tier2 = true)
             FlowerVeinShears.ID -> plugin.flowerVeinShears.createItem()
             RainBandage.ID -> plugin.rainBandage.createItem(amount)
             WindVane.ID -> plugin.windVane.createItem()
@@ -82,8 +86,49 @@ class AdminPanel(private val plugin: Lycohism) : Listener {
         inv.setItem(SLOT_STAGES, Menu.button(Material.COMPASS, Texts.line("gui.admin.stages"), Texts.lines("gui.admin.stages-lore")))
         inv.setItem(SLOT_EXPEDITION, Menu.button(Material.FILLED_MAP, Texts.line("gui.admin.expedition"), Texts.lines("gui.admin.expedition-lore")))
         inv.setItem(SLOT_RELOAD, Menu.button(Material.REPEATER, Texts.line("gui.admin.reload"), Texts.lines("gui.admin.reload-lore")))
+        inv.setItem(SLOT_FACILITIES, Menu.button(Material.CRAFTING_TABLE, Texts.line("gui.admin.facilities"), Texts.lines("gui.admin.facilities-lore")))
         inv.setItem(SLOT_SOUNDS, Menu.button(Material.NOTE_BLOCK, Texts.line("gui.admin.sounds"), Texts.lines("gui.admin.sounds-lore")))
         player.openInventory(inv)
+    }
+
+    /** Cycles each facility level (0→1→2→0) for the admin, to test repair / upgrade / Lv2 content. */
+    private fun openFacilities(player: Player) {
+        val inv = Menu.create(AdminHolder(AdminPage.FACILITIES), Menu.title(Texts.line("gui.admin.title"), Texts.line("gui.admin.facilities")))
+        inv.setItem(Menu.HEADER_SLOT, Menu.header(Texts.line("gui.admin.facilities"), *Texts.lines("gui.admin.facilities-header-lore").toTypedArray()))
+        val data = plugin.playerDataManager.get(player.uniqueId)
+        FACILITY_SLOTS.forEachIndexed { index, slot ->
+            val facility = com.tinyyana.lycohism.facility.FacilityUpgrade.FACILITIES[index]
+            val level = when (facility) {
+                "workshop" -> data.workshopLevel
+                "study" -> data.studyLevel
+                else -> data.greenhouseLevel
+            }
+            inv.setItem(slot, Menu.button(
+                FACILITY_ICONS[index],
+                Texts.line("content-names.$facility", facility),
+                listOf(Texts.render("gui.admin.facility-level", "level" to level.toString()), Texts.line("gui.admin.click-facility")),
+            ))
+        }
+        inv.setItem(Menu.BACK_SLOT, Menu.back())
+        player.openInventory(inv)
+    }
+
+    private fun handleFacilities(player: Player, slot: Int) {
+        if (slot == Menu.BACK_SLOT) {
+            openMain(player)
+            return
+        }
+        val index = FACILITY_SLOTS.indexOf(slot)
+        if (index < 0) return
+        val facility = com.tinyyana.lycohism.facility.FacilityUpgrade.FACILITIES[index]
+        plugin.playerDataManager.update(player.uniqueId) { data ->
+            when (facility) {
+                "workshop" -> data.workshopLevel = (data.workshopLevel + 1) % 3
+                "study" -> data.studyLevel = (data.studyLevel + 1) % 3
+                else -> data.greenhouseLevel = (data.greenhouseLevel + 1) % 3
+            }
+        }
+        openFacilities(player)
     }
 
     private fun openItems(player: Player, page: AdminPage, ids: List<String>) {
@@ -106,18 +151,18 @@ class AdminPanel(private val plugin: Lycohism) : Listener {
         val stages = plugin.progressionManager.stageIds()
         val current = plugin.progressionManager.statuses(player)
             .firstOrNull { it.second == StageStatus.CURRENT }?.first?.id
-        val inv = Menu.create(AdminHolder(AdminPage.STAGES), Menu.title(Texts.line("gui.admin.title"), Texts.line("gui.admin.stages")), Menu.EXTENDED_SIZE)
+        val inv = Menu.create(AdminHolder(AdminPage.STAGES), Menu.title(Texts.line("gui.admin.title"), Texts.line("gui.admin.stages")), Menu.LARGE_SIZE)
         inv.setItem(Menu.HEADER_SLOT, Menu.header(Texts.line("gui.admin.stages"), *Texts.lines("gui.admin.stages-header-lore").toTypedArray()))
-        stages.take(ITEM_SLOTS.size).forEachIndexed { index, id ->
+        stages.take(STAGE_SLOTS.size).forEachIndexed { index, id ->
             val item = Menu.button(
                 Material.COMPASS,
                 Texts.line("progression.stages.$id.title", id),
                 listOf(Texts.render("gui.admin.stage-id", "id" to id), Texts.line("gui.admin.click-stage")),
             )
             if (id == current) item.editMeta { it.setEnchantmentGlintOverride(true) }
-            inv.setItem(ITEM_SLOTS[index], item)
+            inv.setItem(STAGE_SLOTS[index], item)
         }
-        inv.setItem(EXTENDED_BACK_SLOT, Menu.back())
+        inv.setItem(STAGE_BACK_SLOT, Menu.back())
         player.openInventory(inv)
     }
 
@@ -181,6 +226,7 @@ class AdminPanel(private val plugin: Lycohism) : Listener {
             AdminPage.TOOLS -> handleItems(player, event.rawSlot, TOOL_IDS)
             AdminPage.STAGES -> handleStages(player, event.rawSlot)
             AdminPage.EXPEDITION -> handleExpeditions(player, event.rawSlot)
+            AdminPage.FACILITIES -> handleFacilities(player, event.rawSlot)
             AdminPage.SOUNDS -> handleSounds(player, event.rawSlot)
         }
     }
@@ -201,6 +247,7 @@ class AdminPanel(private val plugin: Lycohism) : Listener {
                 Messages.send(player, Texts.line("commands.reloaded"))
                 openMain(player)
             }
+            SLOT_FACILITIES -> openFacilities(player)
             SLOT_SOUNDS -> openSounds(player)
         }
     }
@@ -219,11 +266,11 @@ class AdminPanel(private val plugin: Lycohism) : Listener {
     }
 
     private fun handleStages(player: Player, slot: Int) {
-        if (slot == EXTENDED_BACK_SLOT) {
+        if (slot == STAGE_BACK_SLOT) {
             openMain(player)
             return
         }
-        val id = plugin.progressionManager.stageIds().getOrNull(ITEM_SLOTS.indexOf(slot)) ?: return
+        val id = plugin.progressionManager.stageIds().getOrNull(STAGE_SLOTS.indexOf(slot)) ?: return
         if (plugin.progressionManager.setCurrentStage(player, id)) {
             Messages.send(player, Texts.render("commands.stage-done", "stage" to id))
             openStages(player)
@@ -245,7 +292,7 @@ class AdminPanel(private val plugin: Lycohism) : Listener {
         override lateinit var backing: Inventory
     }
 
-    private enum class AdminPage { MAIN, MATERIALS, TOOLS, STAGES, EXPEDITION, SOUNDS }
+    private enum class AdminPage { MAIN, MATERIALS, TOOLS, STAGES, EXPEDITION, FACILITIES, SOUNDS }
 
     private companion object {
         const val PERMISSION_ADMIN = "lycohism.admin"
@@ -254,18 +301,27 @@ class AdminPanel(private val plugin: Lycohism) : Listener {
         const val SLOT_STAGES = 13
         const val SLOT_EXPEDITION = 15
         const val SLOT_RELOAD = 17
+        const val SLOT_FACILITIES = 20
         const val SLOT_SOUNDS = 22
         val SOUND_SLOTS = listOf(10, 12, 14, 16)
+        val FACILITY_SLOTS = listOf(11, 13, 15)
+        val FACILITY_ICONS = listOf(Material.CRAFTING_TABLE, Material.BOOKSHELF, Material.FLOWER_POT)
         val ITEM_SLOTS = listOf(10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25)
         val ADMIN_ITEM_SLOTS = ITEM_SLOTS + listOf(28, 29, 30, 31, 32, 33, 34)
+        // Stages grew past one EXTENDED page (day/moon branch + altar + facility growth) → LARGE grid.
+        val STAGE_SLOTS = ADMIN_ITEM_SLOTS + listOf(37, 38, 39, 40, 41, 42, 43)
         val EXTENDED_BACK_SLOT = Menu.backSlotAfter(ITEM_SLOTS)
         val ADMIN_ITEM_BACK_SLOT = Menu.backSlotAfter(ADMIN_ITEM_SLOTS)
+        val STAGE_BACK_SLOT = Menu.backSlotAfter(STAGE_SLOTS)
         const val EXPEDITION_RETURN_SLOT = 33
         val TOOL_IDS = listOf(
             DewLight.ID,
             TuningManual.ID,
             FlowerBookmark.ID,
             StoneworkHammer.ID,
+            StoneworkHammer.REINFORCED_ID,
+            BuildingWand.ID,
+            BuildingWand.TIER_2_ID,
             FlowerVeinShears.ID,
             RainBandage.ID,
             WindVane.ID,

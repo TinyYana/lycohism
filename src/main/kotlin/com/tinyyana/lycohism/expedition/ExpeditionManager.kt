@@ -157,6 +157,10 @@ class ExpeditionManager(private val plugin: Lycohism) {
         val world = existing ?: createWorld(expedition)
         if (expedition.alwaysRaining) lockRain(world)
         if (expedition.alwaysNight) lockNight(world)
+        // 暮蝕之境：在出生點蓋好 BOSS 戰場與日月儀祭壇（一次性、冪等）。
+        if (expedition.id == com.tinyyana.lycohism.boss.EclipseBoss.ECLIPSE_WORLD_ID) {
+            com.tinyyana.lycohism.boss.EclipseArena.ensure(plugin, world)
+        }
         return world
     }
 
@@ -171,6 +175,9 @@ class ExpeditionManager(private val plugin: Lycohism) {
         val creator = WorldCreator(expedition.worldName).environment(World.Environment.NORMAL)
         if (expedition.biomes.isNotEmpty()) {
             creator.biomeProvider(RainfallBiomeProvider(expedition.biomes))
+        }
+        if (expedition.terrainStyle != ExpeditionTerrainStyle.VANILLA) {
+            creator.generator(ExpeditionTerrainGenerator(expedition.terrainStyle))
         }
         return creator.createWorld()
             ?: error("Could not create expedition world '${expedition.worldName}'")
@@ -231,6 +238,12 @@ class ExpeditionManager(private val plugin: Lycohism) {
         alwaysNight = node.getBoolean("always-night", false),
         energyMultiplier = node.getDouble("energy-multiplier", 1.0).coerceIn(0.0, 10.0),
         biomes = parseBiomes(id, node),
+        terrainStyle = runCatching {
+            ExpeditionTerrainStyle.valueOf(node.getString("terrain-style", "vanilla")!!.trim().uppercase())
+        }.getOrElse {
+            plugin.logger.warning("Expedition '$id': unknown terrain-style; using vanilla.")
+            ExpeditionTerrainStyle.VANILLA
+        },
         requiresAdvancements = parseAdvancements(id, node),
         hazard = parseHazard(id, node),
         firstHint = Texts.line("messages.expedition.first-hint.$id", ""),

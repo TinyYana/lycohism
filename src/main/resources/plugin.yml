@@ -1,5 +1,5 @@
 name: lycohism
-description: $description
+description: '$description'
 prefix: Lycohism
 version: '${version}'
 

@@ -7,7 +7,6 @@ import com.tinyyana.lycohism.gui.WorkshopMenu
 import com.tinyyana.lycohism.tool.EnergyCrystal
 import com.tinyyana.lycohism.tool.FlowerBookmark
 import com.tinyyana.lycohism.tool.LeylineProbe
-import com.tinyyana.lycohism.tool.RadiantFocus
 import com.tinyyana.lycohism.tool.RainBandage
 import com.tinyyana.lycohism.tool.StoneworkHammer
 import com.tinyyana.lycohism.util.Items
@@ -28,12 +27,12 @@ import org.bukkit.inventory.ItemStack
  */
 class Workshop(private val plugin: Lycohism) {
 
+    /** One material conversion: [amount] of [output] per click; [lv2] entries need the upgraded workshop. */
+    private data class Conversion(val input: Material, val output: Material, val amount: Int, val lv2: Boolean)
+
     private var repairCost: List<String> = listOf("morning_dew:4", "OAK_PLANKS:8", "COBBLESTONE:8")
-    private var conversions: List<Pair<Material, Material>> = listOf(
-        Material.COBBLESTONE to Material.STONE,
-        Material.STONE to Material.STONE_BRICKS,
-        Material.SAND to Material.SANDSTONE,
-    )
+    private var conversions: List<Conversion> = defaultConversions()
+    private var conversionBonus = 2
     private var toolMendingCost: List<String> = listOf("rain_breath:8", "moon_dew:4", "BOOK:1")
     private var toolMendingLevelCost = 15
 
@@ -45,26 +44,43 @@ class Workshop(private val plugin: Lycohism) {
         val node = ConfigFiles.load(plugin, FILE_NAME).getConfigurationSection("workshop") ?: return
 
         repairCost = node.getStringList("repair-cost").ifEmpty { repairCost }
-        val parsed = node.getStringList("conversions").mapNotNull { token ->
-            val parts = token.split(">")
-            val input = parts.getOrNull(0)?.let { Material.matchMaterial(it.trim()) }
-            val output = parts.getOrNull(1)?.let { Material.matchMaterial(it.trim()) }
-            if (input != null && output != null) input to output else null
-        }
-        if (parsed.isNotEmpty()) conversions = parsed
+        val base = node.getStringList("conversions").mapNotNull { parseConversion(it, lv2 = false) }
+        val lv2 = node.getStringList("conversions-2").mapNotNull { parseConversion(it, lv2 = true) }
+        conversions = (base.ifEmpty { defaultConversions() } + lv2)
+        conversionBonus = node.getInt("conversion-bonus", conversionBonus).coerceAtLeast(1)
         toolMendingCost = node.getStringList("tool-mending-cost").ifEmpty { toolMendingCost }
         toolMendingLevelCost = node.getInt("tool-mending-level-cost", toolMendingLevelCost).coerceAtLeast(1)
     }
 
-    fun open(player: Player) = openMain(player)
+    /** Parses "INPUT>OUTPUT" or "INPUT>OUTPUT:n" into a [Conversion]. */
+    private fun parseConversion(token: String, lv2: Boolean): Conversion? {
+        val parts = token.split(">")
+        val input = parts.getOrNull(0)?.let { Material.matchMaterial(it.trim()) } ?: return null
+        val outParts = parts.getOrNull(1)?.trim()?.split(":") ?: return null
+        val output = Material.matchMaterial(outParts[0].trim()) ?: return null
+        val amount = outParts.getOrNull(1)?.trim()?.toIntOrNull()?.coerceAtLeast(1) ?: 1
+        return Conversion(input, output, amount, lv2)
+    }
+
+    private fun defaultConversions(): List<Conversion> = listOf(
+        Conversion(Material.COBBLESTONE, Material.STONE, 1, false),
+        Conversion(Material.STONE, Material.STONE_BRICKS, 1, false),
+        Conversion(Material.SAND, Material.SANDSTONE, 1, false),
+    )
+
+    /** Content level actually exposed: Lv2 perks need the upgraded structure (or command). */
+    private fun effectiveLevel(player: Player, upgraded: Boolean): Int =
+        if (upgraded) level(player) else level(player).coerceAtMost(1)
+
+    fun open(player: Player, upgraded: Boolean = true) = openMain(player, upgraded)
 
     // ---- Menus -------------------------------------------------------------
 
-    private fun openMain(player: Player) {
-        val level = level(player)
-        val broken = level < 1
+    private fun openMain(player: Player, upgraded: Boolean) {
+        val stored = level(player)
+        val broken = stored < 1
         val title = Texts.line(if (broken) "gui.workshop.broken" else "gui.workshop.root")
-        val inv = create(WorkshopMenu.MAIN, title)
+        val inv = create(WorkshopMenu.MAIN, title, upgraded)
 
         val headerLore = if (broken) {
             Texts.lines("gui.workshop.header-broken-lore")
@@ -73,7 +89,7 @@ class Workshop(private val plugin: Lycohism) {
         }
         inv.setItem(Menu.HEADER_SLOT, Menu.header(Texts.line("gui.workshop.header-main"), *headerLore.toTypedArray()))
 
-        if (level < 1) {
+        if (stored < 1) {
             inv.setItem(
                 SLOT_REPAIR,
                 button(Material.CRACKED_STONE_BRICKS, Texts.line("gui.workshop.repair"), buildList {
@@ -88,15 +104,23 @@ class Workshop(private val plugin: Lycohism) {
         } else {
             inv.setItem(SLOT_TOOLS, button(Material.GLASS_BOTTLE, Texts.line("gui.workshop.tools-leaf"), Texts.lines("gui.workshop.tools-lore")))
             inv.setItem(SLOT_MATERIALS, button(Material.STONECUTTER, Texts.line("gui.workshop.materials-leaf"), Texts.lines("gui.workshop.materials-lore")))
-            inv.setItem(SLOT_STATUS, button(Material.LECTERN, Texts.line("gui.workshop.status"), Texts.renderLines("gui.workshop.status-lore", "level" to level.toString())))
+            inv.setItem(SLOT_STATUS, button(Material.LECTERN, Texts.line("gui.workshop.status"), Texts.renderLines("gui.workshop.status-lore", "level" to stored.toString())))
+            if (stored in 1 until FacilityUpgrade.MAX_LEVEL) inv.setItem(SLOT_UPGRADE, FacilityUi.upgradeButton(plugin, "workshop", stored))
         }
         player.openInventory(inv)
     }
 
-    private fun openTools(player: Player) {
+    /** Highest tool slot shown at [effective] level; the menu sizes itself to fit it plus a back row. */
+    private fun toolsMaxSlot(effective: Int): Int =
+        if (effective >= 2) maxOf(SLOT_TOOL_REPAIR, SLOT_TOOL_HAMMER_TIER_2, SLOT_TOOL_SOLAR) else SLOT_TOOL_REPAIR
+
+    private fun openTools(player: Player, upgraded: Boolean) {
+        val effective = effectiveLevel(player, upgraded)
         val inv = create(
             WorkshopMenu.TOOLS,
             Menu.title(Texts.line("gui.workshop.root"), Texts.line("gui.workshop.tools-leaf")),
+            upgraded,
+            Menu.sizeFor(toolsMaxSlot(effective)),
         )
         inv.setItem(
             Menu.HEADER_SLOT,
@@ -108,43 +132,61 @@ class Workshop(private val plugin: Lycohism) {
         putCraftButton(inv, SLOT_TOOL_DEWLIGHT, player, plugin.dewLight.createItem(), plugin.dewLight.cost)
         putCraftButton(inv, SLOT_TOOL_LEYLINE_PROBE, player, plugin.leylineProbe.createItem(), plugin.leylineProbe.cost)
         putCraftButton(inv, SLOT_TOOL_CRYSTAL, player, plugin.energyCrystal.createItem(), plugin.energyCrystal.cost)
-        putCraftButton(inv, SLOT_TOOL_FOCUS, player, plugin.radiantFocus.createItem(), plugin.radiantFocus.cost)
-        if (level(player) >= 2) {
+        // 輝能之鏡改在輝能祭壇煉製（見 altars.yml），工房不再提供。
+        if (effective >= 2) {
+            putCraftButton(inv, SLOT_TOOL_HAMMER_TIER_2, player, plugin.stoneworkHammer.createItem(reinforced = true), plugin.stoneworkHammer.reinforcedCost)
             putCraftButton(inv, SLOT_TOOL_SOLAR, player, plugin.solarPick.createItem(), plugin.solarPick.craftCost)
         }
         val mendingRequirements = Cost.parse(toolMendingCost, plugin)
+        // Lv2：修補同時附耐久 III。Lv3（蝕輝）：再附一個對應的戰鬥附魔（武器鋒利／護甲保護／工具效率），均衡口味的「戰鬥向」強化。
+        val mendingLorePath = when {
+            effective >= 3 -> "gui.workshop.mending-lore-3"
+            effective >= 2 -> "gui.workshop.mending-lore-2"
+            else -> "gui.workshop.mending-lore"
+        }
         inv.setItem(
             SLOT_TOOL_REPAIR, FacilityUi.withCost(
-                button(Material.ENCHANTED_BOOK, Texts.line("gui.workshop.mending"), Texts.renderLines("gui.workshop.mending-lore", "levels" to toolMendingLevelCost.toString())),
+                button(Material.ENCHANTED_BOOK, Texts.line("gui.workshop.mending"), Texts.renderLines(mendingLorePath, "levels" to toolMendingLevelCost.toString())),
                 mendingRequirements,
                 "gui.common.click-enchant",
                 plugin.playerDataManager.rememberInventoryMaterials(player),
             ),
         )
-        inv.setItem(SLOT_BACK, backButton())
+        inv.setItem(Menu.backSlotAfter(listOf(toolsMaxSlot(effective))), backButton())
         player.openInventory(inv)
     }
 
-    private fun openMaterials(player: Player) {
+    /** Material slots actually filled at [effective] level, used for adaptive sizing + back placement. */
+    private fun materialSlots(effective: Int): List<Int> {
+        val shownCount = (if (effective >= 2) conversions else conversions.filterNot { it.lv2 }).size
+        return MATERIAL_SLOTS.take(shownCount.coerceIn(1, MATERIAL_SLOTS.size))
+    }
+
+    private fun openMaterials(player: Player, upgraded: Boolean) {
+        val effective = effectiveLevel(player, upgraded)
+        val shown = if (effective >= 2) conversions else conversions.filterNot { it.lv2 }
         val inv = create(
             WorkshopMenu.MATERIALS,
             Menu.title(Texts.line("gui.workshop.root"), Texts.line("gui.workshop.materials-leaf")),
+            upgraded,
+            Menu.sizeFor(materialSlots(effective).maxOrNull() ?: Menu.HEADER_SLOT),
         )
         inv.setItem(
             Menu.HEADER_SLOT,
-            Menu.header(Texts.line("gui.workshop.materials-leaf"), *Texts.lines("gui.workshop.header-materials-lore").toTypedArray()),
+            Menu.header(Texts.line("gui.workshop.materials-leaf"), *Texts.lines(if (effective >= 2) "gui.workshop.header-materials-lore-2" else "gui.workshop.header-materials-lore").toTypedArray()),
         )
-        conversions.forEachIndexed { index, (input, output) ->
+        shown.forEachIndexed { index, conv ->
             if (index >= MATERIAL_SLOTS.size) return@forEachIndexed
+            val yield = conv.amount * (if (effective >= 2) conversionBonus else 1)
             inv.setItem(
                 MATERIAL_SLOTS[index],
-                button(output, Texts.render("gui.workshop.output-name", "item" to prettyName(output)), listOf(
-                    Texts.render("gui.workshop.conversion", "input" to prettyName(input), "output" to prettyName(output)),
+                button(conv.output, Texts.render("gui.workshop.output-name", "item" to prettyName(conv.output)), listOf(
+                    Texts.render("gui.workshop.conversion-n", "input" to prettyName(conv.input), "output" to prettyName(conv.output), "amount" to yield.toString()),
                     Texts.line("gui.workshop.conversion-action"),
                 )),
             )
         }
-        inv.setItem(SLOT_BACK, backButton())
+        inv.setItem(Menu.backSlotAfter(materialSlots(effective)), backButton())
         player.openInventory(inv)
     }
 
@@ -152,25 +194,31 @@ class Workshop(private val plugin: Lycohism) {
 
     fun handleClick(player: Player, holder: WorkshopHolder, rawSlot: Int) {
         when (holder.menu) {
-            WorkshopMenu.MAIN -> handleMain(player, rawSlot)
-            WorkshopMenu.TOOLS -> handleTools(player, rawSlot)
-            WorkshopMenu.MATERIALS -> handleMaterials(player, rawSlot)
+            WorkshopMenu.MAIN -> handleMain(player, rawSlot, holder.upgraded)
+            WorkshopMenu.TOOLS -> handleTools(player, rawSlot, holder.upgraded)
+            WorkshopMenu.MATERIALS -> handleMaterials(player, rawSlot, holder.upgraded)
         }
     }
 
-    private fun handleMain(player: Player, rawSlot: Int) {
+    private fun handleMain(player: Player, rawSlot: Int, upgraded: Boolean) {
         if (level(player) < 1) {
-            if (rawSlot == SLOT_REPAIR) repair(player)
+            if (rawSlot == SLOT_REPAIR) repair(player, upgraded)
             return
         }
         when (rawSlot) {
-            SLOT_TOOLS -> openTools(player)
-            SLOT_MATERIALS -> openMaterials(player)
+            SLOT_TOOLS -> openTools(player, upgraded)
+            SLOT_MATERIALS -> openMaterials(player, upgraded)
             SLOT_STATUS -> showStatus(player)
+            SLOT_UPGRADE -> if (level(player) in 1 until FacilityUpgrade.MAX_LEVEL) doUpgrade(player, upgraded)
         }
     }
 
-    private fun handleTools(player: Player, rawSlot: Int) {
+    private fun handleTools(player: Player, rawSlot: Int, upgraded: Boolean) {
+        val effective = effectiveLevel(player, upgraded)
+        if (rawSlot == Menu.backSlotAfter(listOf(toolsMaxSlot(effective)))) {
+            openMain(player, upgraded)
+            return
+        }
         when (rawSlot) {
             SLOT_TOOL_BOOKMARK -> craftTool(player, plugin.flowerBookmark.cost, FlowerBookmark.ID) {
                 plugin.flowerBookmark.createItem()
@@ -190,29 +238,32 @@ class Workshop(private val plugin: Lycohism) {
             SLOT_TOOL_CRYSTAL -> craftTool(player, plugin.energyCrystal.cost, EnergyCrystal.ID) {
                 plugin.energyCrystal.createItem()
             }
-            SLOT_TOOL_FOCUS -> craftTool(player, plugin.radiantFocus.cost, RadiantFocus.ID) {
-                plugin.radiantFocus.createItem()
-            }
-            SLOT_TOOL_SOLAR -> if (level(player) >= 2) {
+            SLOT_TOOL_SOLAR -> if (effective >= 2) {
                 craftTool(player, plugin.solarPick.craftCost, com.tinyyana.lycohism.tool.SolarPick.ID) { plugin.solarPick.createItem() }
             }
-            SLOT_TOOL_REPAIR -> repairHeldTool(player)
-            SLOT_BACK -> openMain(player)
+            SLOT_TOOL_HAMMER_TIER_2 -> if (effective >= 2) {
+                craftTool(player, plugin.stoneworkHammer.reinforcedCost, StoneworkHammer.REINFORCED_ID) {
+                    plugin.stoneworkHammer.createItem(reinforced = true)
+                }
+            }
+            SLOT_TOOL_REPAIR -> repairHeldTool(player, effective)
         }
     }
 
-    private fun handleMaterials(player: Player, rawSlot: Int) {
-        if (rawSlot == SLOT_BACK) {
-            openMain(player)
+    private fun handleMaterials(player: Player, rawSlot: Int, upgraded: Boolean) {
+        val effective = effectiveLevel(player, upgraded)
+        if (rawSlot == Menu.backSlotAfter(materialSlots(effective))) {
+            openMain(player, upgraded)
             return
         }
+        val shown = if (effective >= 2) conversions else conversions.filterNot { it.lv2 }
         val index = MATERIAL_SLOTS.indexOf(rawSlot)
-        if (index in conversions.indices) convert(player, conversions[index])
+        if (index in shown.indices) convert(player, shown[index], if (effective >= 2) conversionBonus else 1)
     }
 
     // ---- Actions -----------------------------------------------------------
 
-    private fun repair(player: Player) {
+    private fun repair(player: Player, upgraded: Boolean) {
         val reqs = Cost.parse(repairCost, plugin)
         if (!Cost.hasAll(player, reqs)) {
             sendMissing(player, reqs)
@@ -225,7 +276,12 @@ class Workshop(private val plugin: Lycohism) {
         }
         Messages.send(player, Texts.line("messages.facility.workshop-repaired"))
         player.playSound(player.location, org.bukkit.Sound.BLOCK_BEACON_ACTIVATE, 0.6f, 1.5f)
-        openMain(player)
+        openMain(player, upgraded)
+    }
+
+    /** Lv1→Lv2: upgrade at the structure, else hand out its blueprint to build (FacilityUi). */
+    private fun doUpgrade(player: Player, upgraded: Boolean) {
+        FacilityUi.upgradeClick(plugin, player, "workshop") { openMain(player, upgraded) }
     }
 
     private inline fun craftTool(
@@ -255,18 +311,20 @@ class Workshop(private val plugin: Lycohism) {
         player.playSound(player.location, org.bukkit.Sound.BLOCK_AMETHYST_BLOCK_CHIME, 0.6f, 1.2f)
     }
 
-    private fun convert(player: Player, conversion: Pair<Material, Material>) {
-        val (input, output) = conversion
-        val removed = removePlain(player, input, MAX_CONVERT)
+    private fun convert(player: Player, conversion: Conversion, multiplier: Int) {
+        val removed = removePlain(player, conversion.input, MAX_CONVERT)
         if (removed <= 0) {
-            Messages.send(player, Texts.render("messages.facility.conversion-empty", "item" to prettyName(input)))
+            Messages.send(player, Texts.render("messages.facility.conversion-empty", "item" to prettyName(conversion.input)))
             return
         }
-        Items.give(player, ItemStack(output, removed))
-        Messages.send(player, Texts.render("messages.facility.conversion-done", "amount" to removed.toString(), "item" to prettyName(output)))
+        val produced = removed * conversion.amount * multiplier
+        Items.give(player, ItemStack(conversion.output, produced))
+        Messages.send(player, Texts.render("messages.facility.conversion-done", "amount" to produced.toString(), "item" to prettyName(conversion.output)))
     }
 
-    private fun repairHeldTool(player: Player) {
+    private fun repairHeldTool(player: Player, effective: Int) {
+        val lv2 = effective >= 2
+        val lv3 = effective >= 3
         val reqs = Cost.parse(toolMendingCost, plugin)
         if (!recipeUnlocked(player, reqs)) {
             Messages.send(player, Texts.line("messages.common.recipe-locked"))
@@ -293,11 +351,29 @@ class Workshop(private val plugin: Lycohism) {
         Cost.consume(player, reqs)
         player.level -= toolMendingLevelCost
         meta.addEnchant(Enchantment.MENDING, 1, false)
+        // 升級工房：順手附加耐久 III（強化裝備，#4）。
+        if (lv2 && Enchantment.UNBREAKING.canEnchantItem(item) && !meta.hasEnchant(Enchantment.UNBREAKING)) {
+            meta.addEnchant(Enchantment.UNBREAKING, 3, true)
+        }
+        // 三階（蝕輝）：再附一個對應裝備類型的戰鬥附魔，均衡口味的「戰鬥向」三階強化。
+        if (lv3) combatEnchant(item)?.let { (enchant, level) ->
+            if (enchant.canEnchantItem(item) && !meta.hasEnchant(enchant)) meta.addEnchant(enchant, level, true)
+        }
         item.itemMeta = meta
         player.inventory.setItemInMainHand(item)
         plugin.playerDataManager.discover(player.uniqueId, DISCOVERY_TOOL_REPAIR)
-        Messages.send(player, Texts.line("messages.facility.mending-applied"))
+        val msg = when { lv3 -> "messages.facility.mending-applied-3"; lv2 -> "messages.facility.mending-applied-2"; else -> "messages.facility.mending-applied" }
+        Messages.send(player, Texts.line(msg))
         player.playSound(player.location, org.bukkit.Sound.BLOCK_ANVIL_USE, 0.5f, 1.5f)
+    }
+
+    /** The type-appropriate combat/utility enchant the Lv3 mending bench adds, or null if none fits. */
+    private fun combatEnchant(item: ItemStack): Pair<Enchantment, Int>? = when {
+        Enchantment.SHARPNESS.canEnchantItem(item) -> Enchantment.SHARPNESS to 3
+        Enchantment.POWER.canEnchantItem(item) -> Enchantment.POWER to 3
+        Enchantment.PROTECTION.canEnchantItem(item) -> Enchantment.PROTECTION to 4
+        Enchantment.EFFICIENCY.canEnchantItem(item) -> Enchantment.EFFICIENCY to 4
+        else -> null
     }
 
     private fun showStatus(player: Player) {
@@ -326,8 +402,8 @@ class Workshop(private val plugin: Lycohism) {
 
     private fun level(player: Player): Int = plugin.playerDataManager.get(player.uniqueId).workshopLevel
 
-    private fun create(menu: WorkshopMenu, title: String, size: Int = Menu.COMPACT_SIZE): Inventory =
-        Menu.create(WorkshopHolder(menu), title, size)
+    private fun create(menu: WorkshopMenu, title: String, upgraded: Boolean, size: Int = Menu.COMPACT_SIZE): Inventory =
+        Menu.create(WorkshopHolder(menu, upgraded), title, size)
 
     private fun button(material: Material, name: String, lore: List<String>): ItemStack =
         Menu.button(material, name, lore)
@@ -354,10 +430,12 @@ class Workshop(private val plugin: Lycohism) {
         private const val FILE_NAME = "facilities.yml"
         private const val MAX_CONVERT = 64
 
+        // Main menu: evenly spaced (10/12/14/16) so it reads cleanly with or without the upgrade button.
         private const val SLOT_REPAIR = 13
-        private const val SLOT_TOOLS = 11
-        private const val SLOT_MATERIALS = 13
-        private const val SLOT_STATUS = 15
+        private const val SLOT_TOOLS = 10
+        private const val SLOT_MATERIALS = 12
+        private const val SLOT_STATUS = 14
+        private const val SLOT_UPGRADE = 16
 
         private const val SLOT_TOOL_BOOKMARK = 11
         private const val SLOT_TOOL_HAMMER = 13
@@ -366,10 +444,9 @@ class Workshop(private val plugin: Lycohism) {
         private const val SLOT_TOOL_LEYLINE_PROBE = 14
         private const val SLOT_TOOL_REPAIR = 16
         private const val SLOT_TOOL_CRYSTAL = 12
-        private const val SLOT_TOOL_FOCUS = 19
         private const val SLOT_TOOL_SOLAR = 20
+        private const val SLOT_TOOL_HAMMER_TIER_2 = 19
 
-        private val SLOT_BACK = Menu.BACK_SLOT
         private val MATERIAL_SLOTS = listOf(10, 11, 12, 13, 14, 15, 16)
         private const val DISCOVERY_TOOL_REPAIR = "tool_repair"
     }

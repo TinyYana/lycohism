@@ -15,12 +15,20 @@ workshop:
     - "morning_dew:4"
     - "OAK_PLANKS:8"
     - "COBBLESTONE:8"
-  # 建材加工：點擊將背包中整組 INPUT 轉換為 OUTPUT（一次最多 64）
+  # 建材加工：點擊將背包中整組 INPUT 轉換為 OUTPUT（一次最多 64）。可選 ">OUTPUT:n" 指定產量倍率。
   conversions:
     - "COBBLESTONE>STONE"
     - "STONE>STONE_BRICKS"
     - "SAND>SANDSTONE"
-  # 高成本替主手工具附加經驗修補；玩家還需要支付經驗等級。
+  # 升級工房（Lv2）才開放的額外加工。工房建材頁共 7 格，base 3＋這裡 4＝7，剛好不溢位。
+  conversions-2:
+    - "DEEPSLATE>DEEPSLATE_BRICKS"
+    - "GRANITE>POLISHED_GRANITE"
+    - "DIORITE>POLISHED_DIORITE"
+    - "ANDESITE>POLISHED_ANDESITE"
+  # 升級工房：所有加工產量 ×conversion-bonus。
+  conversion-bonus: 2
+  # 高成本替主手工具附加經驗修補；玩家還需要支付經驗等級。升級工房會順手附加耐久 III。
   tool-mending-cost:
     - "rain_breath:8"
     - "moon_dew:4"
@@ -59,3 +67,10 @@ greenhouse:
     # 微光苔：苔華培育成發光苔蘚（原版方塊，免絲綢之觸刮洞穴）。
     # v0.5.3：原本的具名「微光苔」物品退回成單純培育產物（純插件不上資源包做不出獨特方塊）。
     - "moss_bloom:2>GLOW_LICHEN:4"
+  # 升級溫室（Lv2）才開放的進階培育：更稀有的植物產物。
+  cultivations-2:
+    - "flower_vein:4>BIG_DRIPLEAF:2"
+    - "flower_vein:5>CACTUS:3"
+    - "moss_bloom:3>AZALEA:2"
+    - "moss_bloom:4>FLOWERING_AZALEA:2"
+    - "moss_bloom:5>SWEET_BERRIES:3"

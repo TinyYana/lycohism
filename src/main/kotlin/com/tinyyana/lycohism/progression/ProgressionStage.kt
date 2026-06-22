@@ -34,6 +34,8 @@ data class ProgressionStage(
      * 月 chapter both pointing at the same earlier chapter create a visible day/moon branch.
      */
     val advancementParent: String?,
+    /** Optional namespaced sound played only when this chapter first becomes complete. */
+    val advancementSound: String?,
 )
 
 /** A chapter's state for one player: walked through, standing here, ahead, or a future teaser. */

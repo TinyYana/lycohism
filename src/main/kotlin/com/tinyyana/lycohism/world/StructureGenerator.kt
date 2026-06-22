@@ -31,6 +31,8 @@ class StructureGenerator(private val plugin: Lycohism) : Listener {
     private var rainfallDungeon = Settings(true, 0.012, 55, 120)
     private var moondial = Settings(true, 0.01, 60, 140)
     private var sundial = Settings(true, 0.01, 60, 140)
+    private var radiantOre = Settings(true, 0.35, 16, 96)
+    private var tidalShrine = Settings(true, 0.03, 30, 62)
 
     init {
         load()
@@ -44,28 +46,49 @@ class StructureGenerator(private val plugin: Lycohism) : Listener {
         rainfallDungeon = settings(root, "rainfall-dungeon", rainfallDungeon)
         moondial = settings(root, "moondial", moondial)
         sundial = settings(root, "sundial", sundial)
+        radiantOre = settings(root, "radiant-ore", radiantOre)
+        tidalShrine = settings(root, "tidal-shrine", tidalShrine)
     }
 
     @EventHandler
     fun onChunkPopulate(event: ChunkPopulateEvent) {
         val chunk = event.chunk
+        if (chunk.world.environment == World.Environment.NETHER) {
+            if (roll(chunk, radiantOre, ORE_SALT)) radiantOre(chunk)
+            return
+        }
         val expedition = plugin.expeditionManager.expeditionAt(chunk.world)
         val mainWorld = chunk.world == plugin.server.worlds.firstOrNull()
         if (!mainWorld && expedition == null) return
 
-        when {
-            expedition?.id == "rainfall_forest" && roll(chunk, rainfallDungeon, DUNGEON_SALT) ->
-                findSite(chunk, 4, rainfallDungeon, DUNGEON_SALT, 2)?.let(::rainfallDungeon)
-            roll(chunk, mossAltar, ALTAR_SALT) ->
-                findSite(chunk, 2, mossAltar, ALTAR_SALT, 2)?.let { mossAltar(it, expedition != null) }
-            mainWorld && roll(chunk, dewWell, WELL_SALT) ->
-                findSite(chunk, 3, dewWell, WELL_SALT, 2)?.let(::dewWell)
-            roll(chunk, windCircle, CIRCLE_SALT) ->
-                findSite(chunk, 3, windCircle, CIRCLE_SALT, 3)?.let(::windCircle)
-            roll(chunk, moondial, MOONDIAL_SALT) ->
-                findSite(chunk, 2, moondial, MOONDIAL_SALT, 2)?.let { moondial(it, expedition != null) }
-            mainWorld && roll(chunk, sundial, SUNDIAL_SALT) ->
-                findSite(chunk, 2, sundial, SUNDIAL_SALT, 2)?.let(::sundial)
+        // 潮汐深淵 is dimension-exclusive: only its own 潮汐神殿 (+ 潮汐守望者 mini-boss) spawns here —
+        // none of the shared towers/altars from other worlds (v0.8.2 #1).
+        if (expedition?.id == "tidal_depths") {
+            if (roll(chunk, tidalShrine, SHRINE_SALT)) findSite(chunk, 4, tidalShrine, SHRINE_SALT, 5)?.let { tidalShrine(it) }
+            return
+        }
+
+        if (expedition?.id == "rainfall_forest" && roll(chunk, rainfallDungeon, DUNGEON_SALT)) {
+            findSite(chunk, 4, rainfallDungeon, DUNGEON_SALT, 4)?.let { rainfallDungeon(it); return }
+        }
+        if (roll(chunk, mossAltar, ALTAR_SALT)) findSite(chunk, 2, mossAltar, ALTAR_SALT, 3)?.let { mossAltar(it, expedition != null); return }
+        if (mainWorld && roll(chunk, dewWell, WELL_SALT)) findSite(chunk, 3, dewWell, WELL_SALT, 3)?.let { dewWell(it); return }
+        if (roll(chunk, windCircle, CIRCLE_SALT)) findSite(chunk, 3, windCircle, CIRCLE_SALT, 4)?.let { windCircle(it); return }
+        if (roll(chunk, moondial, MOONDIAL_SALT)) findSite(chunk, 2, moondial, MOONDIAL_SALT, 3)?.let { moondial(it, expedition != null); return }
+        if (mainWorld && roll(chunk, sundial, SUNDIAL_SALT)) findSite(chunk, 2, sundial, SUNDIAL_SALT, 3)?.let(::sundial)
+    }
+
+    /** Generates two small, visible gilded-blackstone veins; breaking them yields radiant_ore. */
+    private fun radiantOre(chunk: Chunk) {
+        val random = Random(StructureRoll.seed(chunk.world.seed xor ORE_SALT, chunk.x, chunk.z))
+        repeat(2) {
+            val cx = (chunk.x shl 4) + 2 + random.nextInt(12)
+            val cz = (chunk.z shl 4) + 2 + random.nextInt(12)
+            val cy = radiantOre.minY + random.nextInt(radiantOre.maxY - radiantOre.minY + 1)
+            repeat(3 + random.nextInt(3)) {
+                val block = chunk.world.getBlockAt(cx + random.nextInt(3) - 1, cy + random.nextInt(3) - 1, cz + random.nextInt(3) - 1)
+                if (block.type in ORE_REPLACEABLE) block.type = Material.GILDED_BLACKSTONE
+            }
         }
     }
 
@@ -80,6 +103,7 @@ class StructureGenerator(private val plugin: Lycohism) : Listener {
             phenomenon(rewardId, 3),
             ItemStack(Material.BONE_MEAL, 6),
         ))
+        plugin.structureLocator.record("moss-altar", org.bukkit.Location(site.world, site.x.toDouble(), site.y.toDouble(), site.z.toDouble()))
     }
 
     private fun dewWell(site: Site) {
@@ -96,6 +120,7 @@ class StructureGenerator(private val plugin: Lycohism) : Listener {
             phenomenon("morning_dew", 4),
             ItemStack(Material.GLASS_BOTTLE, 3),
         ))
+        plugin.structureLocator.record("dew-well", org.bukkit.Location(site.world, site.x.toDouble(), site.y.toDouble(), site.z.toDouble()))
     }
 
     private fun windCircle(site: Site) {
@@ -110,6 +135,7 @@ class StructureGenerator(private val plugin: Lycohism) : Listener {
             phenomenon("wind_trace", 3),
             ItemStack(Material.FEATHER, 6),
         ))
+        plugin.structureLocator.record("wind-circle", org.bukkit.Location(site.world, site.x.toDouble(), site.y.toDouble(), site.z.toDouble()))
     }
 
     private fun rainfallDungeon(site: Site) {
@@ -144,6 +170,7 @@ class StructureGenerator(private val plugin: Lycohism) : Listener {
             plugin.mossBalm.createItem(1),
             plugin.rainBandage.createItem(1),
         ))
+        plugin.structureLocator.record("rainfall-dungeon", org.bukkit.Location(site.world, site.x.toDouble(), site.y.toDouble(), site.z.toDouble()))
     }
 
     /**
@@ -160,6 +187,9 @@ class StructureGenerator(private val plugin: Lycohism) : Listener {
             listOf(ItemStack(Material.AMETHYST_SHARD, 6), ItemStack(Material.AMETHYST_CLUSTER, 1))
         }
         placeChest(site, 2, 1, 0, "structures.moondial.chest-name", rewards)
+        val location = org.bukkit.Location(site.world, site.x.toDouble(), site.y.toDouble(), site.z.toDouble())
+        plugin.structureLocator.record("moondial", location)
+        plugin.structureLocator.record("moon_tower", location)
     }
 
     /**
@@ -174,6 +204,49 @@ class StructureGenerator(private val plugin: Lycohism) : Listener {
             plugin.energyCrystal.createItem(1),
             ItemStack(Material.GLOWSTONE_DUST, 4),
         ))
+        val location = org.bukkit.Location(site.world, site.x.toDouble(), site.y.toDouble(), site.z.toDouble())
+        plugin.structureLocator.record("sundial", location)
+        plugin.structureLocator.record("sun_tower", location)
+    }
+
+    /**
+     * 潮汐神殿 (v0.8.2 #1): the 海洋 dimension's own structure — a sunken prismarine shrine guarding a
+     * 日輝核心 chest, watched over by 潮汐守望者, a buffed Elder Guardian mini-boss. Replaces the generic
+     * towers/altars so 潮汐深淵 feels like its own place, not a re-skin.
+     */
+    private fun tidalShrine(site: Site) {
+        foundation(site, 3) { dx, dz -> if (abs(dx) == 3 || abs(dz) == 3) Material.PRISMARINE_BRICKS else Material.DARK_PRISMARINE }
+        for (dx in -3..3) for (dz in -3..3) {
+            if (abs(dx) == 3 || abs(dz) == 3) for (dy in 1..3) {
+                site.world.getBlockAt(site.x + dx, site.y + dy, site.z + dz).type = Material.PRISMARINE
+            }
+        }
+        listOf(-3 to -3, -3 to 3, 3 to -3, 3 to 3).forEach { (dx, dz) ->
+            site.world.getBlockAt(site.x + dx, site.y + 4, site.z + dz).type = Material.SEA_LANTERN
+        }
+        site.world.getBlockAt(site.x, site.y + 1, site.z).type = Material.SEA_LANTERN
+        placeChest(site, 2, 1, 0, "structures.tidal-shrine.chest-name", listOfNotNull(
+            phenomenon("sun_core", 2),
+            ItemStack(Material.PRISMARINE_CRYSTALS, 6),
+            ItemStack(Material.HEART_OF_THE_SEA, 1),
+        ))
+        plugin.structureLocator.record("tidal-shrine", org.bukkit.Location(site.world, site.x.toDouble(), site.y.toDouble(), site.z.toDouble()))
+
+        // The mini-boss is spawned next tick (spawning entities mid chunk-population is unsafe).
+        val gx = site.x; val gy = site.y + 2; val gz = site.z
+        val world = site.world
+        plugin.server.scheduler.runTask(plugin, Runnable {
+            if (!world.isChunkLoaded(gx shr 4, gz shr 4)) return@Runnable
+            val loc = org.bukkit.Location(world, gx + 0.5, gy.toDouble(), gz + 0.5)
+            val guardian = world.spawnEntity(loc, EntityType.ELDER_GUARDIAN) as? org.bukkit.entity.ElderGuardian ?: return@Runnable
+            guardian.customName(Messages.parse(Texts.line("content-names.tidal_warden")))
+            guardian.isCustomNameVisible = true
+            guardian.removeWhenFarAway = false
+            guardian.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH)?.let {
+                it.baseValue = TIDAL_WARDEN_HEALTH
+                guardian.health = TIDAL_WARDEN_HEALTH
+            }
+        })
     }
 
     private fun placeChest(site: Site, dx: Int, dy: Int, dz: Int, namePath: String, rewards: List<ItemStack>) {
@@ -209,7 +282,7 @@ class StructureGenerator(private val plugin: Lycohism) : Listener {
             val centerZ = (chunk.z shl 4) + radius + 1 + random.nextInt(span)
             val surface = buildMap {
                 for (dx in -radius..radius) for (dz in -radius..radius) {
-                    put(dx to dz, chunk.world.getHighestBlockYAt(centerX + dx, centerZ + dz, HeightMap.MOTION_BLOCKING_NO_LEAVES))
+                    put(dx to dz, solidGroundY(chunk.world, centerX + dx, centerZ + dz))
                 }
             }
             val y = surface.values.maxOrNull() ?: return@repeat
@@ -225,6 +298,11 @@ class StructureGenerator(private val plugin: Lycohism) : Listener {
     private fun roll(chunk: Chunk, settings: Settings, salt: Long): Boolean =
         settings.enabled && StructureRoll.shouldGenerate(chunk.world.seed xor salt, chunk.x, chunk.z, settings.chance)
 
+    private fun solidGroundY(world: World, x: Int, z: Int): Int {
+        val top = world.getHighestBlockYAt(x, z, HeightMap.MOTION_BLOCKING_NO_LEAVES)
+        return (top downTo world.minHeight).firstOrNull { world.getBlockAt(x, it, z).type.isSolid } ?: world.minHeight
+    }
+
     private fun settings(root: org.bukkit.configuration.file.YamlConfiguration, id: String, fallback: Settings): Settings {
         val node = root.getConfigurationSection("structures.$id") ?: return fallback
         return Settings(
@@ -237,12 +315,16 @@ class StructureGenerator(private val plugin: Lycohism) : Listener {
 
     private companion object {
         const val FILE_NAME = "structures.yml"
-        const val SITE_ATTEMPTS = 8
+        const val SITE_ATTEMPTS = 24
         const val ALTAR_SALT = 101L
         const val WELL_SALT = 211L
         const val CIRCLE_SALT = 307L
         const val DUNGEON_SALT = 401L
         const val MOONDIAL_SALT = 509L
         const val SUNDIAL_SALT = 613L
+        const val ORE_SALT = 719L
+        const val SHRINE_SALT = 827L
+        const val TIDAL_WARDEN_HEALTH = 200.0
+        val ORE_REPLACEABLE = setOf(Material.NETHERRACK, Material.BLACKSTONE, Material.BASALT)
     }
 }

@@ -76,6 +76,14 @@ class NexusManager(private val plugin: Lycohism) {
     fun relayExists(block: Block): Boolean =
         relays.any { it.world == block.world.name && it.x == block.x && it.y == block.y && it.z == block.z }
 
+    // ---- Removal (structure dismantled) ------------------------------------
+
+    fun allNexuses(): List<Nexus> = nexuses.toList()
+    fun allRelays(): List<Node> = relays.toList()
+
+    fun removeNexus(nexus: Nexus): Boolean = nexuses.remove(nexus).also { if (it) markDirty() }
+    fun removeRelay(node: Node): Boolean = relays.remove(node).also { if (it) markDirty() }
+
     // ---- Access / members --------------------------------------------------
 
     /** The nearest nexus in [location]'s world the player may use, within network range. */

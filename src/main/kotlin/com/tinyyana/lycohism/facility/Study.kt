@@ -37,14 +37,19 @@ class Study(private val plugin: Lycohism) {
         repairCost = node.getStringList("repair-cost").ifEmpty { repairCost }
     }
 
-    fun open(player: Player) = openMain(player)
+    fun open(player: Player, upgraded: Boolean = true) = openMain(player, upgraded)
+
+    /** Content level actually exposed: Lv2 perks need the upgraded structure (or command). */
+    private fun effectiveLevel(player: Player, upgraded: Boolean): Int =
+        if (upgraded) level(player) else level(player).coerceAtMost(1)
 
     // ---- Menus -------------------------------------------------------------
 
-    private fun openMain(player: Player) {
-        val sealed = level(player) <= 0
+    private fun openMain(player: Player, upgraded: Boolean) {
+        val stored = level(player)
+        val sealed = stored <= 0
         val title = Texts.line(if (sealed) "gui.study.sealed" else "gui.study.root")
-        val inv = create(StudyMenu.MAIN, title)
+        val inv = create(StudyMenu.MAIN, title, upgraded)
 
         val headerLore = if (sealed) {
             Texts.lines("gui.study.header-sealed-lore")
@@ -70,13 +75,14 @@ class Study(private val plugin: Lycohism) {
             inv.setItem(SLOT_TOOLS, Menu.button(Material.COMPASS, Texts.line("gui.study.tools-leaf"), Texts.lines("gui.study.tools-lore")))
             inv.setItem(SLOT_PROGRESS, Menu.button(Material.NETHER_STAR, Texts.line("gui.study.progress-leaf"), Texts.lines("gui.study.progress-lore")))
             inv.setItem(SLOT_EXPEDITION, Menu.button(Material.FILLED_MAP, Texts.line("gui.study.expedition-leaf"), Texts.lines("gui.study.expedition-lore")))
-            inv.setItem(SLOT_STATUS, Menu.button(Material.LECTERN, Texts.line("gui.study.status"), Texts.renderLines("gui.study.status-lore", "level" to level(player).toString())))
+            inv.setItem(SLOT_STATUS, Menu.button(Material.LECTERN, Texts.line("gui.study.status"), Texts.renderLines("gui.study.status-lore", "level" to stored.toString())))
+            if (stored in 1 until FacilityUpgrade.MAX_LEVEL) inv.setItem(SLOT_UPGRADE, FacilityUi.upgradeButton(plugin, "study", stored))
         }
         player.openInventory(inv)
     }
 
-    private fun openBooks(player: Player) {
-        val inv = create(StudyMenu.BOOKS, Menu.title(Texts.line("gui.study.root"), Texts.line("gui.study.books-leaf")))
+    private fun openBooks(player: Player, upgraded: Boolean) {
+        val inv = create(StudyMenu.BOOKS, Menu.title(Texts.line("gui.study.root"), Texts.line("gui.study.books-leaf")), upgraded)
         inv.setItem(Menu.HEADER_SLOT, Menu.header(Texts.line("gui.study.books-leaf"), *Texts.lines("gui.study.header-books-lore").toTypedArray()))
         inv.setItem(SLOT_MANUAL, Menu.button(Material.BOOK, Texts.line("gui.study.manual"), Texts.lines("gui.study.manual-lore")))
         inv.setItem(SLOT_COMPENDIUM, Menu.button(Material.WRITTEN_BOOK, Texts.line("gui.study.compendium"), Texts.lines("gui.study.compendium-lore")))
@@ -85,20 +91,36 @@ class Study(private val plugin: Lycohism) {
         player.openInventory(inv)
     }
 
-    private fun openTools(player: Player) {
-        val inv = create(StudyMenu.TOOLS, Menu.title(Texts.line("gui.study.root"), Texts.line("gui.study.tools-leaf")))
+    /** Highest tool slot shown at [effective] level; the menu sizes itself to fit it plus a back row. */
+    private fun toolsMaxSlot(effective: Int): Int = if (effective >= 3) SLOT_FORECAST else SLOT_STAR_COMPASS
+
+    private fun openTools(player: Player, upgraded: Boolean) {
+        val effective = effectiveLevel(player, upgraded)
+        val inv = create(
+            StudyMenu.TOOLS,
+            Menu.title(Texts.line("gui.study.root"), Texts.line("gui.study.tools-leaf")),
+            upgraded,
+            Menu.sizeFor(toolsMaxSlot(effective)),
+        )
         inv.setItem(Menu.HEADER_SLOT, Menu.header(Texts.line("gui.study.tools-leaf"), *Texts.lines("gui.study.header-tools-lore").toTypedArray()))
         putCraftButton(inv, SLOT_WIND_VANE, player, plugin.windVane.createItem(), plugin.windVane.cost)
         putCraftButton(inv, SLOT_MOON_POUCH, player, plugin.moonPouch.createItem(), plugin.moonPouch.cost)
-        if (level(player) >= 2) {
-            putCraftButton(inv, SLOT_STAR_COMPASS, player, plugin.starCompass.createItem(), plugin.starCompass.craftCost)
+        // 星圖羅盤提早到書房 Lv1（#1：原本要塔產能升 Lv2 才能做，但它正是用來找塔的，邏輯倒置）。
+        putCraftButton(inv, SLOT_STAR_COMPASS, player, plugin.starCompass.createItem(), plugin.starCompass.craftCost)
+        // Lv2（升級結構）：標記最近能量塔到一張鎖定地圖（QoL，#4）。
+        if (effective >= 2) {
+            inv.setItem(SLOT_MAP_MARK, Menu.button(Material.FILLED_MAP, Texts.line("gui.study.map-mark"), Texts.lines("gui.study.map-mark-lore")))
         }
-        inv.setItem(Menu.BACK_SLOT, Menu.back())
+        // Lv3（蝕輝）：全境預報——讀出此刻此地所有可採集的自然現象，均衡口味的「探索向」三階強化。
+        if (effective >= 3) {
+            inv.setItem(SLOT_FORECAST, Menu.button(Material.SPYGLASS, Texts.line("gui.study.forecast"), Texts.lines("gui.study.forecast-lore")))
+        }
+        inv.setItem(Menu.backSlotAfter(listOf(toolsMaxSlot(effective))), Menu.back())
         player.openInventory(inv)
     }
 
-    private fun openExpedition(player: Player) {
-        val inv = create(StudyMenu.EXPEDITION, Menu.title(Texts.line("gui.study.root"), Texts.line("gui.study.expedition-leaf")))
+    private fun openExpedition(player: Player, upgraded: Boolean) {
+        val inv = create(StudyMenu.EXPEDITION, Menu.title(Texts.line("gui.study.root"), Texts.line("gui.study.expedition-leaf")), upgraded)
         inv.setItem(Menu.HEADER_SLOT, Menu.header(Texts.line("gui.study.expedition-leaf"), *Texts.lines("gui.study.header-expedition-lore").toTypedArray()))
         if (plugin.expeditionManager.expeditionAt(player.world) != null) {
             // Inside any expedition world: a single button returns home.
@@ -132,50 +154,70 @@ class Study(private val plugin: Lycohism) {
 
     fun handleClick(player: Player, holder: StudyHolder, slot: Int) {
         when (holder.menu) {
-            StudyMenu.MAIN -> handleMain(player, slot)
-            StudyMenu.BOOKS -> handleBooks(player, slot)
-            StudyMenu.TOOLS -> handleTools(player, slot)
-            StudyMenu.EXPEDITION -> handleExpedition(player, slot)
+            StudyMenu.MAIN -> handleMain(player, slot, holder.upgraded)
+            StudyMenu.BOOKS -> handleBooks(player, slot, holder.upgraded)
+            StudyMenu.TOOLS -> handleTools(player, slot, holder.upgraded)
+            StudyMenu.EXPEDITION -> handleExpedition(player, slot, holder.upgraded)
         }
     }
 
-    private fun handleMain(player: Player, slot: Int) {
+    private fun handleMain(player: Player, slot: Int, upgraded: Boolean) {
         if (level(player) <= 0) {
-            if (slot == SLOT_REPAIR) repair(player)
+            if (slot == SLOT_REPAIR) repair(player, upgraded)
             return
         }
         when (slot) {
-            SLOT_BOOKS -> openBooks(player)
-            SLOT_TOOLS -> openTools(player)
+            SLOT_BOOKS -> openBooks(player, upgraded)
+            SLOT_TOOLS -> openTools(player, upgraded)
             SLOT_PROGRESS -> plugin.progressionManager.open(player)
-            SLOT_EXPEDITION -> openExpedition(player)
+            SLOT_EXPEDITION -> openExpedition(player, upgraded)
             SLOT_STATUS -> showStatus(player)
+            SLOT_UPGRADE -> if (level(player) in 1 until FacilityUpgrade.MAX_LEVEL) FacilityUi.upgradeClick(plugin, player, "study") { openMain(player, upgraded) }
         }
     }
 
-    private fun handleBooks(player: Player, slot: Int) {
+    private fun handleBooks(player: Player, slot: Int, upgraded: Boolean) {
         when (slot) {
             SLOT_MANUAL -> openBookNextTick(player) { plugin.tuningManual.open(player) }
             SLOT_COMPENDIUM -> openBookNextTick(player) { plugin.studyBooks.openCompendium(player) }
             SLOT_RECORD -> openBookNextTick(player) { plugin.studyBooks.openDiscoveryRecord(player) }
-            Menu.BACK_SLOT -> openMain(player)
+            Menu.BACK_SLOT -> openMain(player, upgraded)
         }
     }
 
-    private fun handleTools(player: Player, slot: Int) {
+    private fun handleTools(player: Player, slot: Int, upgraded: Boolean) {
+        val effective = effectiveLevel(player, upgraded)
+        if (slot == Menu.backSlotAfter(listOf(toolsMaxSlot(effective)))) {
+            openMain(player, upgraded)
+            return
+        }
         when (slot) {
             SLOT_WIND_VANE -> craftTool(player, plugin.windVane.cost, WindVane.ID) { plugin.windVane.createItem() }
             SLOT_MOON_POUCH -> craftTool(player, plugin.moonPouch.cost, MoonPouch.ID) { plugin.moonPouch.createItem() }
-            SLOT_STAR_COMPASS -> if (level(player) >= 2) {
-                craftTool(player, plugin.starCompass.craftCost, com.tinyyana.lycohism.tool.StarCompass.ID) { plugin.starCompass.createItem() }
-            }
-            Menu.BACK_SLOT -> openMain(player)
+            SLOT_STAR_COMPASS -> craftTool(player, plugin.starCompass.craftCost, com.tinyyana.lycohism.tool.StarCompass.ID) { plugin.starCompass.createItem() }
+            SLOT_MAP_MARK -> if (effective >= 2) markNearestTower(player)
+            SLOT_FORECAST -> if (effective >= 3) forecastAll(player)
         }
     }
 
-    private fun handleExpedition(player: Player, slot: Int) {
+    /** Lv3 全境預報: lists every natural phenomenon collectable here and now. */
+    private fun forecastAll(player: Player) {
+        val available = plugin.phenomenonManager.available(player.location, player)
+            .filter { it.chance > 0.0 }
+        if (available.isEmpty()) {
+            Messages.send(player, Texts.line("messages.facility.forecast-none"))
+            return
+        }
+        Messages.send(player, Texts.line("messages.facility.forecast-header"))
+        available.forEach { phenomenon ->
+            Messages.send(player, Texts.render("messages.facility.forecast-line", "name" to Texts.line("content-names.${phenomenon.id}", phenomenon.displayName)))
+        }
+        player.playSound(player.location, Sound.ITEM_SPYGLASS_USE, 0.7f, 1.2f)
+    }
+
+    private fun handleExpedition(player: Player, slot: Int, upgraded: Boolean) {
         if (slot == Menu.BACK_SLOT) {
-            openMain(player)
+            openMain(player, upgraded)
             return
         }
         // Inside an expedition world the single OAK_DOOR (SLOT_GATE) returns home.
@@ -199,7 +241,7 @@ class Study(private val plugin: Lycohism) {
         plugin.server.scheduler.runTask(plugin, Runnable { action() })
     }
 
-    private fun repair(player: Player) {
+    private fun repair(player: Player, upgraded: Boolean) {
         val requirements = Cost.parse(repairCost, plugin)
         if (!Cost.hasAll(player, requirements)) {
             sendMissing(player, requirements)
@@ -213,7 +255,37 @@ class Study(private val plugin: Lycohism) {
         }
         Messages.send(player, Texts.line("messages.facility.study-repaired"))
         player.playSound(player.location, Sound.BLOCK_ENCHANTMENT_TABLE_USE, 0.7f, 1.2f)
-        open(player)
+        open(player, upgraded)
+    }
+
+    /** Lv2 QoL: hands the player a locked map centred on the nearest 輝能塔 (#4 「地圖標記塔」). */
+    private fun markNearestTower(player: Player) {
+        val loc = player.location
+        val nearest = plugin.energyTowers.all()
+            .filter { it.world == player.world.name }
+            .minByOrNull { val dx = it.x - loc.x; val dz = it.z - loc.z; dx * dx + dz * dz }
+        if (nearest == null) {
+            Messages.send(player, Texts.line("messages.tools.compass-none"))
+            return
+        }
+        val view = plugin.server.createMap(player.world)
+        view.centerX = nearest.x
+        view.centerZ = nearest.z
+        view.scale = org.bukkit.map.MapView.Scale.NORMAL
+        // A persistent target marker at the tower (like a vanilla explorer map) so it's useful even
+        // before the terrain is rendered; left unlocked so the map fills in as the player travels.
+        view.addRenderer(TowerMarkerRenderer(towerCursorType()))
+        val towerName = Texts.line("content-names.${if (nearest.type == com.tinyyana.lycohism.energy.EnergyType.SUN) "sun_tower" else "moon_tower"}")
+        val map = ItemStack(Material.FILLED_MAP).apply {
+            editMeta(org.bukkit.inventory.meta.MapMeta::class.java) { meta ->
+                meta.mapView = view
+                meta.displayName(Messages.parse(Texts.render("gui.study.map-mark-name", "name" to towerName)).decoration(net.kyori.adventure.text.format.TextDecoration.ITALIC, false))
+            }
+        }
+        Items.give(player, map)
+        com.tinyyana.lycohism.util.Audit.log(player, "tower-map", "${nearest.x},${nearest.z}")
+        Messages.send(player, Texts.render("messages.facility.tower-marked", "x" to nearest.x.toString(), "z" to nearest.z.toString()))
+        player.playSound(player.location, Sound.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, 0.7f, 1.2f)
     }
 
     private inline fun craftTool(
@@ -259,19 +331,34 @@ class Study(private val plugin: Lycohism) {
 
     private fun level(player: Player): Int = plugin.playerDataManager.get(player.uniqueId).studyLevel
 
-    private fun create(menu: StudyMenu, title: String, size: Int = Menu.COMPACT_SIZE): Inventory =
-        Menu.create(StudyHolder(menu), title, size)
+    private fun create(menu: StudyMenu, title: String, upgraded: Boolean, size: Int = Menu.COMPACT_SIZE): Inventory =
+        Menu.create(StudyHolder(menu, upgraded), title, size)
+
+    /** Best-effort target-cursor type (enum names vary across versions). */
+    private fun towerCursorType(): org.bukkit.map.MapCursor.Type =
+        listOf("TARGET_POINT", "RED_X", "RED_MARKER").firstNotNullOfOrNull { name ->
+            runCatching { org.bukkit.map.MapCursor.Type.valueOf(name) }.getOrNull()
+        } ?: org.bukkit.map.MapCursor.Type.values().first()
+
+    /** Paints a single persistent marker at the map's centre (the tower it was made for). */
+    private class TowerMarkerRenderer(private val type: org.bukkit.map.MapCursor.Type) : org.bukkit.map.MapRenderer() {
+        override fun render(map: org.bukkit.map.MapView, canvas: org.bukkit.map.MapCanvas, player: Player) {
+            if (canvas.cursors.size() > 0) return
+            canvas.cursors.addCursor(org.bukkit.map.MapCursor(0.toByte(), 0.toByte(), 0.toByte(), type, true))
+        }
+    }
 
     companion object {
         private const val FILE_NAME = "facilities.yml"
 
-        // MAIN
+        // MAIN — six entries sit consecutively (11–16) for a clean row; upgrade takes 16 when shown.
         private const val SLOT_REPAIR = 13
-        private const val SLOT_BOOKS = 10
-        private const val SLOT_TOOLS = 11
+        private const val SLOT_BOOKS = 11
+        private const val SLOT_TOOLS = 12
         private const val SLOT_PROGRESS = 13
-        private const val SLOT_EXPEDITION = 15
-        private const val SLOT_STATUS = 16
+        private const val SLOT_EXPEDITION = 14
+        private const val SLOT_STATUS = 15
+        private const val SLOT_UPGRADE = 16
 
         // 書冊 leaf
         private const val SLOT_MANUAL = 11
@@ -282,6 +369,8 @@ class Study(private val plugin: Lycohism) {
         private const val SLOT_WIND_VANE = 12
         private const val SLOT_MOON_POUCH = 14
         private const val SLOT_STAR_COMPASS = 16
+        private const val SLOT_MAP_MARK = 10
+        private const val SLOT_FORECAST = 19
 
         // 遠征 leaf
         private const val SLOT_GATE = 13

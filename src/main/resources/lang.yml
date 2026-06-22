@@ -26,6 +26,21 @@ gui:
     click-enchant: "<yellow>點擊附加經驗修補。</yellow>"
     click-cultivate: "<dark_gray>點擊培育。</dark_gray>"
 
+  # 設施升級按鈕（三個設施共用）。
+  facility:
+    upgrade: "<gradient:#ffe9a8:#c0a8ff>升級這座設施 → Lv{level}</gradient>"
+    # {structure} 升級結構名、{sun}/{moon} 核心輝能消耗。
+    upgrade-lore:
+      - "<gray>把設施蓋進它的<white>{structure}</white>剛性結構，才能升到 Lv2。</gray>"
+      - "<gray>流程：<gold>日／月輝塔</gold>→<yellow>中繼器</yellow>→<aqua>輝能核心</aqua>→在此升級。</gray>"
+      - "<gray>消耗核心 <gold>日輝 {sun}</gold>／<aqua>月輝 {moon}</aqua>。</gray>"
+    # Lv2→Lv3：用蝕影守望者掉落的蝕輝結晶開啟，不需升級結構。{sun}/{moon} 核心輝能消耗。
+    upgrade-lore-3:
+      - "<gray>用<gradient:#ffd86b:#b07cff>蝕輝結晶</gradient>把設施升到 Lv3 — 三階。</gray>"
+      - "<gray>結晶來自在<white>暮蝕之境</white>召喚並擊敗<white>蝕影守望者</white>。</gray>"
+      - "<gray>消耗核心 <gold>日輝 {sun}</gold>／<aqua>月輝 {moon}</aqua>。</gray>"
+    upgrade-action: "<yellow>站在升級結構旁＝升級；Lv3 則只要備齊蝕輝結晶與輝能即可。</yellow>"
+
   workshop:
     root: "<dark_aqua>工房</dark_aqua>"
     broken: "<dark_gray>工房（損壞）</dark_gray>"
@@ -40,14 +55,24 @@ gui:
       - "<gray>工房需要修復才能運作。</gray>"
     status: "<aqua>工房狀態</aqua>"
     status-lore:
-      - "<gray>等級 <white>{level}</white> / 2</gray>"
+      - "<gray>等級 <white>{level}</white> / 3</gray>"
       - "<gray>可用：工具製作、建材加工、經驗修補。</gray>"
       - "<dark_gray>點擊在聊天欄查看完整內容。</dark_gray>"
     mending: "<gradient:#8fd3ff:#ffffff>雨息附魔</gradient>"
     mending-lore:
       - "<gray>替主手工具永久附加經驗修補。</gray>"
       - "<gray>另需消耗 <white>{levels}</white> 個經驗等級。</gray>"
+    mending-lore-2:
+      - "<gray>替主手工具永久附加經驗修補<gold>＋耐久 III</gold>。</gray>"
+      - "<gray>另需消耗 <white>{levels}</white> 個經驗等級。</gray>"
+      - "<dark_gray>升級工房強化。</dark_gray>"
+    mending-lore-3:
+      - "<gray>替主手工具永久附加經驗修補<gold>＋耐久 III</gold>。</gray>"
+      - "<gray>再依類型附上<red>鋒利／力量／保護／效率</red>。</gray>"
+      - "<gray>另需消耗 <white>{levels}</white> 個經驗等級。</gray>"
+      - "<dark_gray>三階工房（蝕輝）戰鬥向強化。</dark_gray>"
     conversion: "<gray>{input} → {output}</gray>"
+    conversion-n: "<gray>{input} → {output} ×{amount}</gray>"
     conversion-action: "<dark_gray>點擊轉換背包中的整組。</dark_gray>"
     output-name: "<aqua>{item}</aqua>"
     header-main: "<aqua>工房</aqua>"
@@ -61,6 +86,9 @@ gui:
       - "<gray>用自然之物製作生活工具。</gray>"
     header-materials-lore:
       - "<gray>把背包裡的建材整組轉換。</gray>"
+    header-materials-lore-2:
+      - "<gray>把背包裡的建材整組轉換。</gray>"
+      - "<gold>升級工房：產量加倍，並解鎖更多加工。</gold>"
 
   study:
     root: "<dark_aqua>書房</dark_aqua>"
@@ -82,6 +110,15 @@ gui:
     tools-leaf: "<light_purple>記憶器物</light_purple>"
     tools-lore:
       - "<gray>製作觀測與整理用的工具。</gray>"
+    map-mark: "<gradient:#aaccff:#e0f0ff>標記最近能量塔</gradient>"
+    map-mark-lore:
+      - "<gray>給你一張鎖定的地圖，中心對準最近的能量塔。</gray>"
+      - "<dark_gray>升級書房解鎖。</dark_gray>"
+    map-mark-name: "<gradient:#aaccff:#e0f0ff>{name} 位置圖</gradient>"
+    forecast: "<gradient:#ffd86b:#b07cff>全境預報</gradient>"
+    forecast-lore:
+      - "<gray>讀出此刻此地所有可採集的自然現象。</gray>"
+      - "<dark_gray>三階書房（蝕輝）探索向強化。</dark_gray>"
     progress-leaf: "<aqua>調律之路</aqua>"
     progress-lore:
       - "<gray>回顧走過的路，看見下一步。</gray>"
@@ -120,7 +157,7 @@ gui:
       - "<gray>踏入<white>地獄</white>之後，再回來試試。</gray>"
     status: "<aqua>書房狀態</aqua>"
     status-lore:
-      - "<gray>等級 <white>{level}</white> / 2</gray>"
+      - "<gray>等級 <white>{level}</white> / 3</gray>"
       - "<gray>分類：書冊、記憶器物、遠征。</gray>"
       - "<dark_gray>點擊在聊天欄查看完整內容。</dark_gray>"
   greenhouse:
@@ -137,7 +174,7 @@ gui:
       - "<gray>讓荒蕪的溫室重新適合生長。</gray>"
     status: "<green>溫室狀態</green>"
     status-lore:
-      - "<gray>等級 <white>{level}</white> / 2</gray>"
+      - "<gray>等級 <white>{level}</white> / 3</gray>"
       - "<gray>可用：花脈與苔華培育、花脈剪、苔露膏與苔肥。</gray>"
       - "<dark_gray>點擊在聊天欄查看完整內容。</dark_gray>"
     output-name: "<green>{item} x{amount}</green>"
@@ -174,6 +211,13 @@ gui:
     reload: "<green>重新載入設定</green>"
     reload-lore:
       - "<gray>重新讀取設定、內容與進度。</gray>"
+    facilities: "<aqua>設施等級</aqua>"
+    facilities-lore:
+      - "<gray>快速設定你自己的設施等級，測試修復／升級／Lv2 內容。</gray>"
+    facilities-header-lore:
+      - "<gray>點擊循環該設施等級（0→1→2→0）。</gray>"
+    facility-level: "<gray>目前等級：<white>{level}</white> / 3</gray>"
+    click-facility: "<yellow>點擊切換等級。</yellow>"
     sounds: "<aqua>音效測試集</aqua>"
     sounds-lore:
       - "<gray>試聽四組音階盒旋律。</gray>"
@@ -207,6 +251,7 @@ gui:
     header: "<gold>輝能核心</gold>"
     header-lore:
       - "<gray>據點的輝能倉。</gray>"
+      - "<gray>流程：<gold>日／月輝塔</gold>→<yellow>中繼器</yellow>→<aqua>核心</aqua>→升級設施。</gray>"
       - "<gray>擁有者：<white>{owner}</white>｜成員：<white>{members}</white></gray>"
       - "<dark_gray>用 /lycohism nexus share <玩家> 分享存取。</dark_gray>"
     sun: "<gold>☀ 日輝</gold>"
@@ -239,6 +284,7 @@ gui:
     upcoming-name: "<dark_gray>⌛ {title}</dark_gray>"
 
 content-names:
+  eclipse_crystal: "<gradient:#ffd86b:#b07cff>蝕輝結晶</gradient>"
   morning_dew: "<gradient:#cfe8ff:#ffffff>晨露</gradient>"
   rain_breath: "<gradient:#8fd3ff:#d9f3ff>雨息</gradient>"
   flower_vein: "<gradient:#ff9ed6:#ffd9ef>花脈</gradient>"
@@ -248,6 +294,9 @@ content-names:
   dew_light: "<gradient:#fff6c0:#ffffff>露光瓶</gradient>"
   flower_bookmark: "<gradient:#ffd6e8:#ffffff>花籤</gradient>"
   stonework_hammer: "<gradient:#cfd6df:#ffffff>石工槌</gradient>"
+  stonework_hammer_tier_2: "<gradient:#ffe08a:#ffffff>二階石工槌</gradient>"
+  building_wand: "<gradient:#d8b8ff:#ffe8a8>築造杖</gradient>"
+  building_wand_tier_2: "<gradient:#8fe8ff:#ffe08a>二階築造杖</gradient>"
   rain_bandage: "<gradient:#8fd3ff:#ffffff>雨紋繃帶</gradient>"
   flower_vein_shears: "<gradient:#ff9ed6:#ffffff>花脈剪</gradient>"
   wind_vane: "<gradient:#b8e6ff:#ffffff>風標</gradient>"
@@ -261,6 +310,7 @@ content-names:
   moss_balm: "<gradient:#7fd6a0:#d8ffe8>苔露膏</gradient>"
   moss_fertile: "<gradient:#9ad17f:#e6ffcf>苔肥</gradient>"
   ember_bloom: "<gradient:#ff9d5c:#ffe0a3>燼華</gradient>"
+  radiant_ore: "<gradient:#ffcf66:#d8b8ff>輝脈晶</gradient>"
   energy_crystal: "<gradient:#ffe9a8:#a8c8ff>蓄能晶</gradient>"
   radiant_focus: "<gradient:#ffd98a:#c0a8ff>輝能之鏡</gradient>"
   moon_core: "<gradient:#a89cff:#e6e0ff>月輝核心</gradient>"
@@ -269,13 +319,26 @@ content-names:
   moon_tower: "<gradient:#c0a8ff:#e6e0ff>月輝塔</gradient>"
   energy_nexus: "<gradient:#ffe9a8:#c0a8ff>輝能核心</gradient>"
   energy_altar: "<gradient:#c0a8ff:#ffd98a>輝能祭壇</gradient>"
+  workshop_tier_2: "<gradient:#ffd98a:#ffb24a>二階工房</gradient>"
+  study_tier_2: "<gradient:#c0a8ff:#e6e0ff>二階書房</gradient>"
+  greenhouse_tier_2: "<gradient:#9ad17f:#e6ffcf>二階溫室</gradient>"
   solar_pick: "<gradient:#ffe07a:#ffb24a>日炎鎬</gradient>"
   star_compass: "<gradient:#aaccff:#e0f0ff>星圖羅盤</gradient>"
   lunar_spore: "<gradient:#d8b8ff:#f0e0ff>月華灑</gradient>"
   moonless_waste: "<gradient:#3a3a5a:#9a8fd6>永夜荒原</gradient>"
   night_shade: "<gradient:#4a4466:#8a7fbf>夜魅</gradient>"
+  eclipse_realm: "<gradient:#5a3a6a:#ffd86b>暮蝕之境</gradient>"
+  eclipse_shade: "<gradient:#4a3a5a:#b07cff>蝕影殘響</gradient>"
+  tidal_depths: "<gradient:#2a9bd6:#bfeeff>潮汐深淵</gradient>"
+  tide_shade: "<gradient:#1f6f99:#7fc4e0>潮汐殘響</gradient>"
+  sun_core: "<gradient:#ffd76b:#fff3c0>日輝核心</gradient>"
+  tidal_warden: "<gradient:#2a9bd6:#a8f0e0>潮汐守望者</gradient>"
+  eclipse_dial: "<gradient:#ffd86b:#b07cff>日月儀</gradient>"
+  eclipse_warden: "<gradient:#ffcf66:#b07cff>蝕影守望者</gradient>"
 
 structures:
+  tidal-shrine:
+    chest-name: "<aqua>潮汐神殿的祭品</aqua>"
   moss-altar:
     chest-name: "<dark_green>苔生調律壇的供物</dark_green>"
   dew-well:
@@ -304,7 +367,23 @@ items:
     name: "<gradient:#cfd6df:#ffffff>石工槌</gradient>"
     lore:
       - "<gray>讓石材加工更方便。</gray>"
-      - "<dark_gray>右鍵石材方塊循環變體。</dark_gray>"
+      - "<dark_gray>第一次右鍵預覽，5 秒內再次右鍵確認。</dark_gray>"
+  stonework_hammer_tier_2:
+    name: "<gradient:#ffe08a:#ffffff>二階石工槌</gradient>"
+    lore:
+      - "<gray>右鍵石材，一次塑形相連平面的 3×3 範圍。</gray>"
+      - "<dark_gray>第一次右鍵預覽，再次右鍵確認 3×3 塑形。</dark_gray>"
+  building_wand:
+    name: "<gradient:#d8b8ff:#ffe8a8>築造杖</gradient>"
+    lore:
+      - "<gray>第一次右鍵預覽，5 秒內再次右鍵確認直線放置。</gray>"
+      - "<dark_gray>從背包消耗相同的原版方塊；在輝能祭壇煉成。</dark_gray>"
+  building_wand_tier_2:
+    name: "<gradient:#8fe8ff:#ffe08a>二階築造杖</gradient>"
+    lore:
+      - "<gray>第一次右鍵預覽，再次右鍵確認放置。</gray>"
+      - "<gray>潛行右鍵（對空亦可）切換：直線／牆面／地板／柱列。</gray>"
+      - "<dark_gray>從背包消耗相同的原版方塊。</dark_gray>"
   rain_bandage:
     name: "<gradient:#8fd3ff:#ffffff>雨紋繃帶</gradient>"
     lore:
@@ -357,7 +436,7 @@ items:
     lore:
       - "<gray>右鍵引動<gold>日輝</gold>：抗火與力量的日之祝福。</gray>"
       - "<gray>潛行右鍵引動<aqua>月輝</aqua>：夜視與緩降的月之祝福。</gray>"
-      - "<dark_gray>需要永夜荒原的月輝核心才能製作。</dark_gray>"
+      - "<dark_gray>在輝能祭壇以金錠＋月輝核心＋蓄能晶煉成。</dark_gray>"
   solar_pick:
     name: "<gradient:#ffe07a:#ffb24a>日炎鎬</gradient>"
     lore:
@@ -367,7 +446,7 @@ items:
     name: "<gradient:#aaccff:#e0f0ff>星圖羅盤</gradient>"
     lore:
       - "<gray>右鍵指出最近<aqua>能量塔</aqua>的方向與距離。</gray>"
-      - "<dark_gray>書房 Lv2 解鎖。</dark_gray>"
+      - "<dark_gray>書房（Lv1）製作。</dark_gray>"
   lunar_spore:
     name: "<gradient:#d8b8ff:#f0e0ff>月華灑</gradient>"
     lore:
@@ -379,6 +458,8 @@ items:
       - "<gray>看向地面右鍵：顯示<green>幽靈輪廓</green>（綠=有、紅=缺）。</gray>"
       - "<gray>潛行右鍵：用背包材料<white>直接建造</white>。</gray>"
       - "<dark_gray>建造 {structure} 的設計圖。</dark_gray>"
+    materials: "<white>需要方塊：</white>"
+    material-line: "<gray>• {material} ×{count}</gray>"
 
 # 調律之路各章節文案（對應 progression.yml 的 stage id）。
 progression:
@@ -439,6 +520,13 @@ progression:
       details:
         - "<gray>書房中的雨後森林入口。</gray>"
       hint: "<gray>踏入地獄一次，書房的遠征入口便會解鎖。</gray>"
+    radiant_vein:
+      title: "<gold>地獄輝脈</gold>"
+      lore:
+        - "<gray>金紋黑石裡，藏著本世界沒有的結晶。</gray>"
+      details:
+        - "<gray>輝脈晶：Lycohism 專屬礦物，用於二階工具與祭壇造物。</gray>"
+      hint: "<gray>探索新生成的地獄區塊，挖掘岩層中的金紋黑石礦脈。</gray>"
     expedition:
       title: "<white>第一次遠征</white>"
       lore:
@@ -463,17 +551,17 @@ progression:
     solar_tower:
       title: "<gold>日之塔</gold>"
       lore:
-        - "<gray>循著日光，立起第一座高塔。</gray>"
+        - "<gray>循著日光，尋找第一座高塔。</gray>"
       details:
-        - "<gray>日輝塔：高聳的剛性結構，為附近供應日輝。</gray>"
-      hint: "<gray>建造日輝塔並右鍵塔基核心啟動（管理員可 /lycohism build sun_tower）。</gray>"
+        - "<gray>日輝塔：高聳的剛性地標，白天見天時供應日輝。</gray>"
+      hint: "<gray>在世界各地尋找自然生成的<gold>日晷（日輝塔）</gold>；靠近它就會被記錄。（管理員可 /lycohism build sun_tower 生成）</gray>"
     lunar_tower:
       title: "<aqua>月之塔</aqua>"
       lore:
-        - "<gray>循著月色，立起對應的高塔。</gray>"
+        - "<gray>循著月色，尋找對應的高塔。</gray>"
       details:
-        - "<gray>月輝塔：與日輝塔對稱，為附近供應月輝。</gray>"
-      hint: "<gray>建造月輝塔並右鍵塔基核心啟動。</gray>"
+        - "<gray>月輝塔：與日輝塔對稱，夜晚見天時供應月輝。</gray>"
+      hint: "<gray>尋找自然生成的<aqua>月晷（月輝塔）</aqua>，靠近它就會被記錄；永夜荒原與主世界都可能出現。</gray>"
     lunar_waste:
       title: "<white>踏入永夜</white>"
       lore:
@@ -481,34 +569,85 @@ progression:
       details:
         - "<gray>永夜荒原：整日可蓄月輝、月輝核心的產地。</gray>"
       hint: "<gray>從書房遠征介面前往永夜荒原。</gray>"
+    energy_altar:
+      title: "<white>輝能祭壇</white>"
+      lore:
+        - "<gray>立一座祭壇，高階煉製從此開始。</gray>"
+      details:
+        - "<gray>輝能祭壇：丟素材、手持催化物右鍵、消耗輝能煉成。</gray>"
+      hint: "<gray>建造輝能祭壇（中央附魔台＋一圈深板岩台座），空手右鍵祭壇可查看用法與配方。</gray>"
     moon_attunement:
       title: "<white>月之調律</white>"
       lore:
         - "<gray>把帶回的月輝核心，鍛成可用的力量。</gray>"
       details:
-        - "<gray>輝能之鏡：以日輝／月輝引動日月之祝福。</gray>"
-      hint: "<gray>帶月輝核心回工房，製作輝能之鏡。</gray>"
+        - "<gray>輝能之鏡：在祭壇以日輝／月輝引動日月之祝福。</gray>"
+      hint: "<gray>在輝能祭壇手持金錠、丟入月輝核心與蓄能晶，消耗日月輝煉成輝能之鏡。</gray>"
+    tidal_depths:
+      title: "<gradient:#2a9bd6:#bfeeff>潛入暖海</gradient>"
+      lore:
+        - "<gray>永晝的海，是日之力的源頭。</gray>"
+      details:
+        - "<gray>潮汐深淵：白天蓄日輝加倍、日輝核心的產地（對位永夜荒原）。</gray>"
+      hint: "<gray>從書房遠征介面前往潮汐深淵。</gray>"
+    solar_attunement:
+      title: "<gradient:#ffd76b:#fff3c0>日之調律</gradient>"
+      lore:
+        - "<gray>把帶回的日輝核心，鍛成可用的力量。</gray>"
+      details:
+        - "<gray>日炎鎬：以日輝引動急迫，日線與月之調律對位。</gray>"
+      hint: "<gray>升級工房後，在工房製作日炎鎬。</gray>"
     radiant_nexus:
       title: "<gold>輝能據點</gold>"
       lore:
         - "<gray>把流散的輝能，收攏進一座核心。</gray>"
       details:
         - "<gray>輝能核心：基地能量倉，可分享給夥伴。</gray>"
-      hint: "<gray>建造輝能核心並右鍵信標核心啟動認領。</gray>"
+        - "<gray>能量流向：<gold>日／月輝塔</gold>（產能）→<yellow>中繼器</yellow>（接力）→<aqua>核心</aqua>（儲存）。</gray>"
+      hint: "<gray>建造輝能核心並右鍵信標核心啟動認領；把它蓋在塔水平 48 格內，能量就會流進來（靠近會看到光束）。</gray>"
     energy_grid:
       title: "<yellow>輝能網路</yellow>"
       lore:
         - "<gray>用中繼器把塔與核心串成一張網。</gray>"
       details:
-        - "<gray>能量中繼器：延伸塔到核心的輸送距離。</gray>"
-      hint: "<gray>在塔與核心之間建造能量中繼器並右鍵啟動。</gray>"
+        - "<gray>能量中繼器：每段 48 格把塔的能量接力到更遠的核心。</gray>"
+        - "<gray>塔只在對應時段（日塔白天／月塔夜晚）＋見天時產能。</gray>"
+      hint: "<gray>塔離核心太遠時，在中間建造能量中繼器並右鍵啟動；靠近時會看到流動的光束代表能量在走。</gray>"
     facility_growth:
       title: "<white>設施的成長</white>"
       lore:
         - "<gray>把累積的輝能，回饋到基地本身。</gray>"
       details:
-        - "<gray>用核心輝能把設施升到 Lv2。</gray>"
-      hint: "<gray>在核心附近執行 /lycohism upgrade workshop。</gray>"
+        - "<gray>升級＝蓋出設施的「升級結構」＋消耗核心輝能。</gray>"
+        - "<gray>之後在升級結構旁或用指令開啟，即享 Lv2 完整功能。</gray>"
+      hint: "<gray>把工房／書房／溫室蓋進對應的升級結構，在旁邊開設施頁點「升級」（或 /lycohism upgrade）。</gray>"
+
+    eclipse_realm:
+      title: "<gradient:#5a3a6a:#ffd86b>暮蝕之境</gradient>"
+      lore:
+        - "<gray>日與月的兩條路，在蝕中交會。</gray>"
+      details:
+        - "<gray>走過「日」的潮汐深淵與「月」的永夜荒原，蝕的章節才開啟。</gray>"
+        - "<gray>第三遠征地：陰暗的黃昏，戰場與日月儀已自然成形。</gray>"
+      hint: "<gray>先走過潮汐深淵與永夜荒原，再從書房前往<white>暮蝕之境</white>。</gray>"
+
+    eclipse_warden:
+      title: "<gradient:#ffcf66:#b07cff>蝕影守望者</gradient>"
+      lore:
+        - "<gray>蝕落下時，守望者甦醒。</gray>"
+      details:
+        - "<gray>在暮蝕之境的日月儀，手持<gold>日輝核心</gold>＋<aqua>月輝核心</aqua>右鍵核心即可召喚。</gray>"
+        - "<gray>擊敗後掉落<gradient:#ffd86b:#b07cff>蝕輝結晶</gradient>——三階設施的鑰匙。</gray>"
+      hint: "<gray>在暮蝕之境召喚並擊敗蝕影守望者，取得蝕輝結晶。</gray>"
+
+    facility_growth_3:
+      title: "<gradient:#ffd86b:#b07cff>三階設施</gradient>"
+      lore:
+        - "<gray>蝕之輝光，灌注進基地的最後一層。</gray>"
+      details:
+        - "<gray>用蝕輝結晶把工房／書房／溫室升到 Lv3（不需升級結構）。</gray>"
+        - "<gray>Lv3：工房戰鬥附魔、書房全境預報、溫室產出翻倍。</gray>"
+      hint: "<gray>備齊蝕輝結晶與核心輝能，在設施頁點「升級 → Lv3」。</gray>"
 
 terms:
   none: "<dark_gray>無</dark_gray>"
@@ -517,6 +656,11 @@ terms:
   disabled: "<red>關閉</red>"
   shared: "已有存取"
   not-shared: "沒有存取"
+  wand-mode:
+    line: "直線"
+    wall: "牆面 3×3"
+    floor: "地板 5×5"
+    column: "柱列"
   period:
     morning: "清晨"
     day: "白天"
@@ -553,6 +697,9 @@ messages:
   crafting:
     confirm-vanilla: "<yellow>這個原版配方會消耗 Lycohism 道具。</yellow> <gray>10 秒內再點一次確認；Shift＋右鍵可永久不再詢問。</gray>"
     confirm-disabled: "<gray>已永久關閉原版合成提醒。</gray>"
+  structure-break:
+    confirm: "<yellow>這個方塊屬於 {structure}。</yellow> <gray>10 秒內再挖一次確認；潛行破壞可永久不再詢問。</gray>"
+    confirm-disabled: "<gray>已永久關閉多方塊結構拆除提醒。</gray>"
   tools:
     dew-light-used: "<white>露光瓶化成微光，照亮接下來兩分鐘。</white>"
     flower-shears-grown: "<white>花脈沿著莖葉流動，作物已經成熟。</white>"
@@ -591,10 +738,15 @@ messages:
     lunar-spore-empty: "<gray>這裡沒有可催長的植物，或月輝不足。</gray>"
     compass-reading: "<aqua>星圖</aqua> {name} <gray>·</gray> {arrow} <gray>·</gray> <white>{distance}</white> 格"
     compass-none: "<gray>附近沒有已登記的能量塔。</gray>"
-    blueprint-preview: "<gray>幽靈輪廓：<green>綠=已符合</green>、<red>紅=缺少</red>。潛行右鍵建造。</gray>"
+    blueprint-preview: "<gray>半透明預覽：<green>綠=已符合</green>、<aqua>淺藍=待放置</aqua>。潛行右鍵建造。</gray>"
+    blueprint-materials: "<gray>所需方塊：{materials}</gray>"
     blueprint-built: "<green>依藍圖建造完成。</green>"
     blueprint-missing: "<red>材料不足，無法依藍圖建造。</red>"
     blueprint-invalid: "<gray>這張藍圖沒有對應的結構。</gray>"
+    building-wand: "<gray>築造杖放置了 <white>{amount}</white> 個方塊。</gray>"
+    wand-preview: "<gray>預覽 <white>{mode}</white>，共 <white>{amount}</white> 格；5 秒內再次右鍵確認。</gray>"
+    wand-mode: "<gray>築造杖模式切換為：<white>{mode}</white>。</gray>"
+    hammer-preview: "<gray>已預覽下一種石材；5 秒內再次右鍵確認塑形。</gray>"
   discovery:
     manual-granted: "<gray>一本<white>調律手冊</white>出現在你的背包，右鍵翻閱。</gray>"
   facility:
@@ -602,63 +754,101 @@ messages:
     workshop-repaired: "<green>工房回應了自然之物，已修復。</green>"
     workshop-crafted: "<green>工房製作了 {item}。</green>"
     workshop-status:
-      - "<gray>工房等級：<white>{level}</white> / 2。</gray>"
-      - "<gray>已解鎖：工具製作、建材加工、雨息附魔。</gray>"
+      - "<gray>工房等級：<white>{level}</white> / 3。</gray>"
+      - "<gray>Lv1：工具製作、建材加工、雨息附魔。</gray>"
+      - "<gray>Lv2（蓋二階工房）：二階石工槌、日炎鎬、加工產量加倍＋更多配方、附魔順帶耐久 III。</gray>"
+      - "<gray>Lv3（蝕輝結晶）：附魔再附戰鬥附魔（鋒利／力量／保護／效率）。</gray>"
     conversion-empty: "<gray>背包裡沒有 {item}。</gray>"
     conversion-done: "<green>加工了 <white>{amount}</white> 個 {item}。</green>"
     mending-invalid: "<gray>請把可附魔的工具、武器或盔甲拿在主手。</gray>"
     mending-present: "<gray>這件物品已經有經驗修補。</gray>"
     mending-levels-missing: "<red>經驗不足。</red> <gray>需要 {levels} 個經驗等級。</gray>"
     mending-applied: "<green>雨息附著在工具上，形成了經驗修補。</green>"
+    mending-applied-2: "<green>雨息附著在工具上，形成了經驗修補<gold>與耐久 III</gold>。</green>"
+    mending-applied-3: "<green>雨息附著在工具上，形成經驗修補<gold>＋耐久 III</gold><red>＋戰鬥附魔</red>。</green>"
+    forecast-header: "<gradient:#ffd86b:#b07cff>全境預報</gradient><gray> — 此刻此地可採集：</gray>"
+    forecast-line: "<gray> ・</gray>{name}"
+    forecast-none: "<gray>此刻此地沒有可採集的自然現象。</gray>"
+    tower-marked: "<green>已標記能量塔位置（<white>{x}, {z}</white>）到一張地圖。</green>"
     greenhouse-required: "<red>需要先開墾溫室。</red>"
     greenhouse-repaired: "<green>溫室重新長出了生機。</green>"
     greenhouse-crafted: "<green>溫室製作了 {item}。</green>"
     greenhouse-status:
-      - "<gray>溫室等級：<white>{level}</white> / 2。</gray>"
-      - "<gray>已解鎖：花脈與苔華培育（含發光苔蘚）、花脈剪、苔露膏與苔肥。</gray>"
+      - "<gray>溫室等級：<white>{level}</white> / 3。</gray>"
+      - "<gray>Lv1：花脈與苔華培育（含發光苔蘚）、花脈剪、苔露膏與苔肥。</gray>"
+      - "<gray>Lv2（蓋升級溫室）：月華灑、更多進階培育產物。</gray>"
+      - "<gray>Lv3（蝕輝結晶）：培育產出翻倍。</gray>"
     cultivated: "<green>溫室培育出 <white>{amount}</white> 個 {item}。</green>"
     study-repaired: "<green>書房重新記起了你走過的路。</green>"
     study-crafted: "<green>書房整理出了 {item}。</green>"
     study-status:
-      - "<gray>書房等級：<white>{level}</white> / 2。</gray>"
-      - "<gray>已解鎖：手冊、圖鑑、發現紀錄、風標、月紗袋、遠征入口。</gray>"
+      - "<gray>書房等級：<white>{level}</white> / 3。</gray>"
+      - "<gray>Lv1：手冊、圖鑑、發現紀錄、風標、月紗袋、星圖羅盤、遠征入口。</gray>"
+      - "<gray>Lv2（蓋升級書房）：標記最近能量塔到地圖。</gray>"
+      - "<gray>Lv3（蝕輝結晶）：全境預報——列出此刻此地可採集的自然現象。</gray>"
   expedition:
     entered: "<white>你循著雨痕，踏入了 {name}。</white>"
     title:
       rainfall_forest: "<gradient:#8fd3ff:#d9f3ff>雨後森林</gradient>"
       moonless_waste: "<gradient:#3a3a5a:#9a8fd6>永夜荒原</gradient>"
+      eclipse_realm: "<gradient:#5a3a6a:#ffd86b>暮蝕之境</gradient>"
+      tidal_depths: "<gradient:#2a9bd6:#bfeeff>潮汐深淵</gradient>"
     subtitle:
       rainfall_forest: "<gray>雨聲深處，苔蘚正記住你的腳步。</gray>"
       moonless_waste: "<gray>沒有黎明的荒原，月色凝成可握的冷光。</gray>"
+      eclipse_realm: "<gray>日與月在此相蝕，守望者正在沉睡。</gray>"
+      tidal_depths: "<gray>永晝的暖海，陽光在浪下凝成金芒。</gray>"
     returned: "<white>雨痕收攏，你回到了出發的地方。</white>"
     none-configured: "<red>目前沒有可前往的遠征地。</red>"
     locked: "<gray>路徑還太微弱。<white>踏入過地獄</white>之後，書房入口才會解鎖。</gray>"
     first-hint:
       rainfall_forest: "<gray>雨一直下，林子裡似乎有別的東西。尋找<white>苔蘚與濕地植被</white>，採集<white>苔華</white>帶回溫室。</gray>"
       moonless_waste: "<gray>這裡沒有白天，怪物也更兇。在天空下站著就會持續蓄<aqua>月輝</aqua>；擊殺夜魅或採集陰暗植被取得<white>月輝核心</white>。</gray>"
+      tidal_depths: "<gray>永晝的暖海，怪物被海潮增幅而更兇。白天蓄<gold>日輝</gold>加倍；擊殺溺屍守衛或採集珊瑚與海燈取得<white>日輝核心</white>。</gray>"
+      eclipse_realm: "<gray>戰場與日月儀已在此成形。手持<gold>日輝核心</gold>＋<aqua>月輝核心</aqua>右鍵祭壇核心，召喚並擊敗<white>蝕影守望者</white>取得<gradient:#ffd86b:#b07cff>蝕輝結晶</gradient>。</gray>"
+  # v0.8 BOSS「蝕影守望者」相關訊息。
+  boss:
+    wrong-world: "<gray>日月儀只在<white>暮蝕之境</white>回應。先從書房前往那裡。</gray>"
+    need-core: "<gray>需要同時手持<gold>日輝核心</gold>與<aqua>月輝核心</aqua>各一枚才能觸發蝕。</gray>"
+    already: "<gray>蝕還未散去——附近已經有一位守望者。</gray>"
+    summoned: "<gradient:#5a3a6a:#ffd86b>蝕落下了。</gradient><gray> {player} 喚醒了蝕影守望者。</gray>"
+    phase-2: "<light_purple>守望者轉入月相，動作更快、更兇了。</light_purple>"
+    defeated: "<gradient:#ffd86b:#b07cff>蝕影守望者倒下，蝕輝結晶自殘光中凝成。</gradient>"
   energy:
     # 常駐能量條（boss bar）。{sun}/{sun_cap} 日輝、{moon}/{moon_cap} 月輝。
     bar: "<gold>☀ 日輝 {sun}/{sun_cap}</gold>   <aqua>☾ 月輝 {moon}/{moon_cap}</aqua>"
   altar:
     hold-catalyst: "<gray>手持催化物，把素材丟在祭壇周圍，再右鍵中央。</gray>"
     crafted: "<green>輝能匯聚，祭壇煉成了成品。</green>"
-    no-recipe: "<gray>沒有對應的祭壇配方（檢查手上的催化物）。</gray>"
+    no-recipe: "<gray>手上這個不是催化物。</gray>"
+    catalysts: "<gray>可用催化物：<white>{catalysts}</white>。手持其一再右鍵，空手右鍵看完整配方。</gray>"
     missing-ingredients: "<red>祭壇周圍的素材不足。</red>"
     missing-energy: "<red>你的輝能不足以驅動這次煉製。</red>"
+    # 空手右鍵祭壇時顯示的使用說明＋配方一覽。
+    guide:
+      - "<gradient:#c0a8ff:#ffd98a>── 輝能祭壇 ──</gradient>"
+      - "<gray>1. 把素材<white>丟</white>在祭壇周圍（約 2.5 格內）。</gray>"
+      - "<gray>2. <white>手持催化物</white>，右鍵中央附魔台。</gray>"
+      - "<gray>3. 消耗你身上的<gold>日輝</gold>／<aqua>月輝</aqua>煉成成品。</gray>"
+      - "<gray>目前配方：</gray>"
+    # {result} 成品、{catalyst} 催化物、{ingredients} 素材、{energy} 輝能消耗。
+    guide-recipe: "<white>• {result}</white> <gray>＝ 催化 {catalyst} ＋ {ingredients}<yellow>{energy}</yellow></gray>"
   upgrade:
-    usage: "<gray>用法：<yellow>/{label} upgrade <workshop|study|greenhouse></yellow>（站在你的輝能核心附近）</gray>"
-    done: "<green>{facility} 已升級到 Lv2。</green> <gray>消耗了核心的輝能與材料。</gray>"
+    usage: "<gray>用法：<yellow>/{label} upgrade <workshop|study|greenhouse></yellow>（站在該設施的升級結構＋輝能核心附近）</gray>"
+    done: "<green>{facility} 已升級到 Lv2。</green> <gray>消耗了核心的輝能與材料。之後用指令或在升級結構旁開啟即享完整功能。</gray>"
     not-repaired: "<red>要先把這個設施修復到 Lv1 才能升級。</red>"
     already: "<gray>這個設施已經是 Lv2 了。</gray>"
-    no-nexus: "<red>附近沒有你能存取的輝能核心。</red> <gray>先建造並認領一座核心。</gray>"
+    no-structure: "<red>還沒蓋出升級結構。</red> <gray>把設施蓋進對應的剛性結構（站到它旁邊再升級）。</gray>"
+    blueprint-hint: "<gray>給了你一張<white>升級結構藍圖</white>：右鍵看半透明輪廓，照著蓋好（潛行右鍵可扣材料秒蓋），再回設施頁升級。</gray>"
+    no-nexus: "<red>附近沒有你能存取的輝能核心。</red> <gray>流程：<gold>日／月輝塔</gold>→<yellow>中繼器</yellow>→<aqua>輝能核心</aqua>，再回來升級。</gray>"
     missing-materials: "<red>升級材料不足。</red>"
     missing-energy: "<red>核心的輝能不足。</red> <gray>讓日輝塔／月輝塔多產一些再來。</gray>"
   nexus:
-    claimed: "<green>輝能核心已啟動，你成為擁有者。</green> <gray>右鍵核心可查看存量。</gray>"
+    claimed: "<green>輝能核心已啟動，你成為擁有者。</green> <gray>右鍵核心可查看存量。下一步：用<yellow>中繼器</yellow>把<gold>日／月輝塔</gold>接進來供能。</gray>"
     not-allowed: "<red>這個輝能核心不屬於你，也未被分享。</red>"
-    relay-registered: "<green>能量中繼器已接入網路。</green>"
+    relay-registered: "<green>能量中繼器已接入網路。</green> <gray>它會把範圍內的塔與核心一段段串起來（靠近可見流動光束）。</gray>"
     relay-exists: "<gray>這個中繼器已經在網路裡了。</gray>"
-    tower-registered: "<green>能量塔已登記，開始為附近的核心供能。</green>"
+    tower-registered: "<green>能量塔已登記，開始供能。</green> <gray>下一步：在 48 格內蓋<aqua>輝能核心</aqua>，或用<yellow>中繼器</yellow>把能量接過去。</gray>"
     tower-exists: "<gray>這座能量塔已經登記過了。</gray>"
     share-usage: "<gray>用法：<yellow>/{label} nexus <share|unshare> <玩家></yellow>（站在你擁有的核心附近）</gray>"
     no-owned: "<red>附近沒有你擁有的輝能核心。</red>"
@@ -687,6 +877,9 @@ commands:
   build-unknown: "<red>未知結構：{id}</red>"
   build-ghost: "<gray>顯示 <white>{id}</white> 的幽靈輪廓（綠=已符合、紅=缺少）。</gray>"
   build-done: "<green>已建造多方塊結構 <white>{id}</white>。</green>"
+  locate-usage: "<gray>用法：<yellow>/{label} locate <結構></yellow> <dark_gray>可用：{items}</dark_gray></gray>"
+  locate-none: "<gray>目前尚未登記 <white>{id}</white>；舊版已生成但未建立索引的結構不會出現。</gray>"
+  locate-done: "<green>最近的 <white>{id}</white> 在 <white>{x}, {y}, {z}</white>；指南針已指向該處。</green>"
   no-permission: "<red>你沒有權限這麼做。</red>"
   help:
     player:
@@ -708,6 +901,7 @@ commands:
       - "<yellow>/{label} give <物品> [數量]</yellow> <gray>取得 Lycohism 物品（測試用）</gray>"
       - "<yellow>/{label} build <結構> [ghost]</yellow> <gray>秒放/預覽多方塊結構（測試用）</gray>"
       - "<yellow>/{label} blueprint <結構></yellow> <gray>取得結構藍圖（給玩家/福利）</gray>"
+      - "<yellow>/{label} locate <結構></yellow> <gray>定位最近已登記的插件結構</gray>"
 
 # ── 書本內容（淺底，請用深色文字）──────────────────────────────────────────
 books:
@@ -760,8 +954,9 @@ books:
         hint:
           - "<dark_gray>· 工房</dark_gray>"
           - ""
-          - "<gold>晨露×4</gold>"
-          - "<black>備齊木板與石材。</black>"
+          - "<gold>潛行＋空手右鍵工作台</gold>"
+          - "<black>開啟，備齊晨露×4＋</black>"
+          - "<black>木板石材即可修復。</black>"
           - "<black>再右鍵工作台。</black>"
       - requires: [ flower_bookmark, stonework_hammer ]
         title: "工房工具"
@@ -913,6 +1108,25 @@ books:
           - ""
           - "<gold>踏入地獄</gold><black>後回到書房。</black>"
           - "<black>從遠征介面進入森林。</black>"
+      # 能量網教學頁（#5）：接觸輝能系統後顯示，講清楚塔↔中繼↔核心↔升級怎麼串。
+      - requires: [ sun_tower, moon_tower, energy_crystal, energy_nexus ]
+        requires-any: true
+        title: "輝能網路"
+        done:
+          - "<dark_green><bold>✔ 輝能網路</bold></dark_green>"
+          - ""
+          - "<gold>日／月輝塔</gold><black>：白天／夜晚見天時產能。</black>"
+          - "<dark_red>中繼器</dark_red><black>：每段 48 格接力。</black>"
+          - "<dark_aqua>輝能核心</dark_aqua><black>：儲存，供升級設施。</black>"
+          - ""
+          - "<black>把核心蓋在塔 48 格內，</black>"
+          - "<black>或用中繼器接過去。靠近</black>"
+          - "<black>會看到流動光束＝能量在走。</black>"
+        hint:
+          - "<dark_gray>· 輝能網路</dark_gray>"
+          - ""
+          - "<black>蓄能晶蓄能、立起日／月輝塔，</black>"
+          - "<black>用中繼器把能量送進核心。</black>"
 
   compendium:
     title: "<dark_aqua>自然圖鑑</dark_aqua>"
@@ -1034,6 +1248,12 @@ books:
         label: "花籤"
       - id: stonework_hammer
         label: "石工槌"
+      - id: stonework_hammer_tier_2
+        label: "二階石工槌"
+      - id: building_wand
+        label: "築造杖"
+      - id: building_wand_tier_2
+        label: "二階築造杖"
       - id: rain_breath
         label: "雨息"
       - id: rain_tending
@@ -1072,6 +1292,8 @@ books:
         label: "苔肥"
       - id: ember_bloom
         label: "燼華"
+      - id: radiant_ore
+        label: "輝脈晶"
       - id: energy_crystal
         label: "蓄能晶"
       - id: radiant_focus
@@ -1088,6 +1310,8 @@ books:
         label: "輝能核心"
       - id: energy_relay
         label: "能量中繼器"
+      - id: energy_altar
+        label: "輝能祭壇"
       - id: solar_pick
         label: "日炎鎬"
       - id: star_compass

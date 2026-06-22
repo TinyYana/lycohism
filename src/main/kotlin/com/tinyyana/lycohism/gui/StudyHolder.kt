@@ -2,8 +2,11 @@ package com.tinyyana.lycohism.gui
 
 import org.bukkit.inventory.Inventory
 
-/** Tags an inventory as a 書房 menu and remembers which view it is, so clicks route correctly. */
-class StudyHolder(val menu: StudyMenu) : BackedHolder {
+/**
+ * Tags an inventory as a 書房 menu and remembers which view it is, so clicks route correctly.
+ * [upgraded] = opened from a complete 升級書房 structure (or via command); gates Lv2 content (v0.7.4 #3).
+ */
+class StudyHolder(val menu: StudyMenu, val upgraded: Boolean = true) : BackedHolder {
     override lateinit var backing: Inventory
 }
 

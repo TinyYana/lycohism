@@ -26,6 +26,10 @@ class MultiblockRegistry(private val plugin: Lycohism) {
         register(moonTower())
         register(energyNexus())
         register(energyAltar())
+        register(workshopTier2())
+        register(studyTier2())
+        register(greenhouseTier2())
+        register(eclipseDial())
         plugin.logger.info("Loaded ${structures.size} multiblock templates.")
     }
 
@@ -39,13 +43,17 @@ class MultiblockRegistry(private val plugin: Lycohism) {
         structures[multiblock.id] = multiblock
     }
 
+    // ponytail: waxed copper throughout the energy structures — plain copper oxidizes to EXPOSED/
+    // WEATHERED/OXIDIZED over time, which fails the exact-material validation and silently "breaks"
+    // a built tower/relay/nexus. Waxed copper never weathers, so the fix is the material, not code.
+
     /** 能量中繼器: a 3×3 copper base with a central pillar topped by a lightning-rod antenna. */
     private fun energyRelay(): Multiblock = Multiblock.fromLayers(
         id = "energy_relay",
         legend = mapOf(
-            'C' to Material.CUT_COPPER,
-            'P' to Material.COPPER_BLOCK,
-            'H' to Material.CHISELED_COPPER,
+            'C' to Material.WAXED_CUT_COPPER,
+            'P' to Material.WAXED_COPPER_BLOCK,
+            'H' to Material.WAXED_CHISELED_COPPER,
             'R' to Material.LIGHTNING_ROD,
             'X' to Material.LODESTONE,
         ),
@@ -64,8 +72,8 @@ class MultiblockRegistry(private val plugin: Lycohism) {
     private fun energyNexus(): Multiblock = Multiblock.fromLayers(
         id = "energy_nexus",
         legend = mapOf(
-            'C' to Material.CUT_COPPER,
-            'P' to Material.COPPER_BLOCK,
+            'C' to Material.WAXED_CUT_COPPER,
+            'P' to Material.WAXED_COPPER_BLOCK,
             'A' to Material.AMETHYST_BLOCK,
             'G' to Material.GOLD_BLOCK,
             'X' to Material.BEACON,
@@ -119,6 +127,86 @@ class MultiblockRegistry(private val plugin: Lycohism) {
         glow = Material.AMETHYST_BLOCK,
         cap = Material.AMETHYST_BLOCK,
         controller = Material.CHISELED_DEEPSLATE,
+    )
+
+    // ── 設施升級多方塊（v0.7.4，#3）────────────────────────────────────────
+    // 每個家用設施有一份「升級型」剛性結構。玩家第一次蓋出來、在旁邊開設施 → 才能升到 Lv2。
+    // 控制器＝該設施的存取方塊（工作台／書架／花盆），所以同一個互動就能開啟。造型刻意做成有機的
+    // 小角落（不是方塊堆）以兼顧美學。MultiblockListener 會跳過 *_tier_2 不攔截原版互動。
+    val FACILITY_TIER_2 = listOf("workshop_tier_2", "study_tier_2", "greenhouse_tier_2")
+
+    /** 升級工房：銅基鐵砧鍛造角落，工作台為核心。 */
+    private fun workshopTier2(): Multiblock = Multiblock.fromLayers(
+        id = "workshop_tier_2",
+        legend = mapOf(
+            'B' to Material.WAXED_CUT_COPPER,
+            'A' to Material.ANVIL,
+            'S' to Material.SMITHING_TABLE,
+            'P' to Material.WAXED_CUT_COPPER,
+            'L' to Material.LANTERN,
+            'X' to Material.CRAFTING_TABLE,
+        ),
+        controllerChar = 'X',
+        layers = listOf(
+            listOf("BBB", "BXB", "BBB"),
+            listOf("A.S", "...", "P.P"),
+            listOf("...", "...", "L.L"),
+        ),
+    )
+
+    /** 升級書房：深板岩基座、四角雕刻書櫃與燭光，書架為核心。 */
+    private fun studyTier2(): Multiblock = Multiblock.fromLayers(
+        id = "study_tier_2",
+        legend = mapOf(
+            'D' to Material.DEEPSLATE_BRICKS,
+            'H' to Material.CHISELED_BOOKSHELF,
+            'C' to Material.CANDLE,
+            'X' to Material.BOOKSHELF,
+        ),
+        controllerChar = 'X',
+        layers = listOf(
+            listOf("DDD", "DXD", "DDD"),
+            listOf("H.H", "...", "H.H"),
+            listOf("C.C", "...", "C.C"),
+        ),
+    )
+
+    /** 升級溫室：苔基、四角杜鵑花叢與玻璃頂棚，花盆為核心。 */
+    private fun greenhouseTier2(): Multiblock = Multiblock.fromLayers(
+        id = "greenhouse_tier_2",
+        legend = mapOf(
+            'M' to Material.MOSS_BLOCK,
+            'A' to Material.FLOWERING_AZALEA,
+            'G' to Material.GLASS,
+            'X' to Material.FLOWER_POT,
+        ),
+        controllerChar = 'X',
+        layers = listOf(
+            listOf("MMM", "MXM", "MMM"),
+            listOf("A.A", "...", "A.A"),
+            listOf("GGG", "GGG", "GGG"),
+        ),
+    )
+
+    /**
+     * 日月儀（v0.8）：召喚蝕影守望者的祭壇。深板岩基座、四角金（日）／紫水晶（月）對置，中央哭泣
+     * 黑曜石為核心。在暮蝕之境蓋好、手持月輝核心右鍵核心 → 觸發蝕並召喚 BOSS（見 [EclipseBoss]）。
+     */
+    private fun eclipseDial(): Multiblock = Multiblock.fromLayers(
+        id = "eclipse_dial",
+        legend = mapOf(
+            'D' to Material.POLISHED_DEEPSLATE,
+            'B' to Material.DEEPSLATE_BRICKS,
+            'G' to Material.GOLD_BLOCK,
+            'A' to Material.AMETHYST_BLOCK,
+            'X' to Material.CRYING_OBSIDIAN,
+        ),
+        controllerChar = 'X',
+        layers = listOf(
+            listOf("DDD", "DDD", "DDD"),
+            listOf("G A", " B ", "A G"),
+            listOf("   ", " X ", "   "),
+        ),
     )
 
     /** Builds the shared 18-tall tower silhouette from a material palette. */

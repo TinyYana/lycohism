@@ -66,6 +66,8 @@ class AltarManager(private val plugin: Lycohism) {
         plugin.logger.info("Loaded ${recipes.size} altar recipes.")
     }
 
+    fun recipes(): List<Recipe> = recipes.toList()
+
     enum class Result { CRAFTED, NO_RECIPE, MISSING_INGREDIENTS, MISSING_ENERGY, INVALID }
 
     /** Attempts a craft at the altar centred on [block], with [held] as the catalyst. */

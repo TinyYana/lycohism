@@ -1,6 +1,7 @@
 package com.tinyyana.lycohism
 
 import com.tinyyana.lycohism.admin.AdminPanel
+import com.tinyyana.lycohism.boss.EclipseBoss
 import com.tinyyana.lycohism.command.LycohismCommand
 import com.tinyyana.lycohism.data.PlayerDataManager
 import com.tinyyana.lycohism.energy.EnergyManager
@@ -9,6 +10,7 @@ import com.tinyyana.lycohism.energy.EnergyTowers
 import com.tinyyana.lycohism.energy.NexusManager
 import com.tinyyana.lycohism.expedition.ExpeditionHazards
 import com.tinyyana.lycohism.expedition.ExpeditionManager
+import com.tinyyana.lycohism.expedition.ExpeditionMobBoost
 import com.tinyyana.lycohism.expedition.RainGate
 import com.tinyyana.lycohism.facility.Greenhouse
 import com.tinyyana.lycohism.facility.Workshop
@@ -31,6 +33,7 @@ import com.tinyyana.lycohism.multiblock.AltarManager
 import com.tinyyana.lycohism.multiblock.MultiblockRegistry
 import com.tinyyana.lycohism.progression.ProgressionManager
 import com.tinyyana.lycohism.tool.Blueprint
+import com.tinyyana.lycohism.tool.BuildingWand
 import com.tinyyana.lycohism.tool.DewLight
 import com.tinyyana.lycohism.tool.EnergyCrystal
 import com.tinyyana.lycohism.tool.FlowerBookmark
@@ -52,6 +55,7 @@ import com.tinyyana.lycohism.util.Keys
 import com.tinyyana.lycohism.util.Messages
 import com.tinyyana.lycohism.util.Texts
 import com.tinyyana.lycohism.world.StructureGenerator
+import com.tinyyana.lycohism.world.StructureLocator
 import org.bukkit.plugin.java.JavaPlugin
 
 /**
@@ -110,6 +114,9 @@ class Lycohism : JavaPlugin() {
     lateinit var stoneworkHammer: StoneworkHammer
         private set
 
+    lateinit var buildingWand: BuildingWand
+        private set
+
     lateinit var flowerVeinShears: FlowerVeinShears
         private set
 
@@ -164,13 +171,22 @@ class Lycohism : JavaPlugin() {
     lateinit var expeditionHazards: ExpeditionHazards
         private set
 
+    lateinit var expeditionMobBoost: ExpeditionMobBoost
+        private set
+
     lateinit var rainGate: RainGate
         private set
 
     lateinit var adminPanel: AdminPanel
         private set
 
+    lateinit var eclipseBoss: EclipseBoss
+        private set
+
     lateinit var structureGenerator: StructureGenerator
+        private set
+
+    lateinit var structureLocator: StructureLocator
         private set
 
     private lateinit var facilityAccessListener: FacilityAccessListener
@@ -204,6 +220,7 @@ class Lycohism : JavaPlugin() {
         rainBandage = RainBandage(this)
         rainTending = RainTending(this)
         stoneworkHammer = StoneworkHammer(this)
+        buildingWand = BuildingWand(this)
         flowerVeinShears = FlowerVeinShears(this)
         tuningManual = TuningManual(this)
         windVane = WindVane(this)
@@ -218,12 +235,15 @@ class Lycohism : JavaPlugin() {
         greenhouse = Greenhouse(this)
         expeditionManager = ExpeditionManager(this)
         expeditionHazards = ExpeditionHazards(this)
+        expeditionMobBoost = ExpeditionMobBoost(this)
         rainGate = RainGate(this)
         progressionManager = ProgressionManager(this)
         multiblockRegistry = MultiblockRegistry(this)
+        structureLocator = StructureLocator(this)
         blueprint = Blueprint(this)
         altarManager = AltarManager(this)
         structureGenerator = StructureGenerator(this)
+        eclipseBoss = EclipseBoss(this)
         dewLight.registerRecipe()
         adminPanel = AdminPanel(this)
 
@@ -277,6 +297,7 @@ class Lycohism : JavaPlugin() {
         rainBandage.load()
         rainTending.load()
         stoneworkHammer.load()
+        buildingWand.load()
         flowerVeinShears.load()
         windVane.load()
         moonPouch.load()
@@ -292,6 +313,8 @@ class Lycohism : JavaPlugin() {
         multiblockRegistry.load()
         altarManager.reload()
         structureGenerator.load()
+        eclipseBoss.load()
+        expeditionMobBoost.load()
         dewLight.registerRecipe()
         facilityAccessListener.load()
     }
@@ -325,6 +348,9 @@ class Lycohism : JavaPlugin() {
         server.pluginManager.registerEvents(structureGenerator, this)
         server.pluginManager.registerEvents(com.tinyyana.lycohism.listener.MultiblockListener(this), this)
         server.pluginManager.registerEvents(com.tinyyana.lycohism.listener.AltarListener(this), this)
+
+        server.pluginManager.registerEvents(eclipseBoss, this)
+        server.pluginManager.registerEvents(expeditionMobBoost, this)
 
         facilityAccessListener = FacilityAccessListener(this)
         server.pluginManager.registerEvents(facilityAccessListener, this)

@@ -42,14 +42,22 @@ class FacilityAccessListener(private val plugin: Lycohism) : Listener {
 
         val player = event.player
         if (requireSneak && !player.isSneaking) return
-        val type = event.clickedBlock?.type ?: return
+        val block = event.clickedBlock ?: return
 
-        when (type) {
-            workshopBlock -> open(event) { plugin.workshop.open(player) }
-            studyBlock -> open(event) { plugin.study.open(player) }
-            greenhouseBlock -> open(event) { plugin.greenhouse.open(player) }
+        when (block.type) {
+            workshopBlock -> open(event) { plugin.workshop.open(player, upgradedStructure(block, "workshop")) }
+            studyBlock -> open(event) { plugin.study.open(player, upgradedStructure(block, "study")) }
+            greenhouseBlock -> open(event) { plugin.greenhouse.open(player, upgradedStructure(block, "greenhouse")) }
             else -> return
         }
+    }
+
+    /** True when [block] is the controller of a complete 升級 structure — gates Lv2 access (v0.7.4 #3). */
+    private fun upgradedStructure(block: org.bukkit.block.Block, facility: String): Boolean {
+        val multiblock = plugin.multiblockRegistry.get(com.tinyyana.lycohism.facility.FacilityUpgrade.structureId(facility)) ?: return false
+        val complete = multiblock.detectRotation(block.world, block.x, block.y, block.z) != null
+        if (complete) plugin.structureLocator.record(multiblock.id, block.location)
+        return complete
     }
 
     private inline fun open(event: PlayerInteractEvent, action: () -> Unit) {

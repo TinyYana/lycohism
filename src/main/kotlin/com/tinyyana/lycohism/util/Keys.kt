@@ -45,8 +45,16 @@ object Keys {
     lateinit var blueprintTarget: NamespacedKey
         private set
 
+    /** Building wand tier-2 placement mode stored on the item. */
+    lateinit var wandMode: NamespacedKey
+        private set
+
     /** Floating structure labels: structure id and controller coordinates. */
     lateinit var structureLabelAnchor: NamespacedKey
+        private set
+
+    /** v0.8 BOSS: marks an entity as the 蝕影守望者 (and tracks its phase). */
+    lateinit var bossTag: NamespacedKey
         private set
 
     fun init(plugin: Plugin) {
@@ -61,6 +69,8 @@ object Keys {
         crystalSun = NamespacedKey(plugin, "crystal_sun")
         crystalMoon = NamespacedKey(plugin, "crystal_moon")
         blueprintTarget = NamespacedKey(plugin, "blueprint_target")
+        wandMode = NamespacedKey(plugin, "wand_mode")
         structureLabelAnchor = NamespacedKey(plugin, "structure_label_anchor")
+        bossTag = NamespacedKey(plugin, "boss_tag")
     }
 }

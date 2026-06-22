@@ -1,9 +1,15 @@
-# 輝能祭壇配方（v0.7）。在建好的祭壇中央手持 catalyst 右鍵，並把 ingredients 丟在祭壇周圍
-# （約 2.5 格內的掉落物），消耗玩家身上的輝能（energy-sun / energy-moon）即可合成。
-# key 用 Lycohism 內容 id（如 moon_core）或原版材質名（如 GOLD_INGOT）。result 為 id 或 材質:數量。
+# 輝能祭壇配方（v0.7）。
+# 用法：建好祭壇（中央附魔台＋一圈雕刻深板岩台座）後——
+#   1. 把 ingredients 列出的素材「丟」在祭壇周圍（約 2.5 格內的掉落物）。
+#   2. 手持 catalyst（催化物），右鍵中央的附魔台。
+#   3. 消耗你身上的輝能（energy-sun / energy-moon）即可煉成，成品掉在中央。
+# 空手右鍵祭壇會列出目前所有配方。
+# key 用 Lycohism 內容 id（如 moon_core）或原版材質名（如 GOLD_INGOT）。
+# result 必須是 Lycohism 內容 id（phenomenon 或工具 id）＋可選數量，如 "radiant_focus:1"。
+# 數值皆可依實玩口味調整。
 recipes:
 
-  # 輝能之鏡：高階道具，改在祭壇製作（消耗日月輝＋月輝核心＋蓄能晶）。
+  # 輝能之鏡：高階道具，祭壇限定（已從工房移除，給祭壇一個明確存在意義）。
   radiant_focus:
     catalyst: GOLD_INGOT
     ingredients:
@@ -12,3 +18,41 @@ recipes:
     energy-sun: 50
     energy-moon: 50
     result: "radiant_focus:1"
+
+  # 凝月：在祭壇用大量月輝把月光凝成月輝核心（永夜荒原以外的替代取得途徑）。
+  moon_core:
+    catalyst: AMETHYST_BLOCK
+    ingredients:
+      - "AMETHYST_SHARD:4"
+      - "GLOWSTONE:1"
+    energy-moon: 120
+    result: "moon_core:1"
+
+  # 鍛燼：以日輝引燃地獄餘燼，煉出燼華（採集之外的替代途徑）。
+  ember_bloom:
+    catalyst: BLAZE_POWDER
+    ingredients:
+      - "MAGMA_BLOCK:1"
+      - "GLOWSTONE_DUST:2"
+    energy-sun: 80
+    result: "ember_bloom:2"
+
+  building_wand:
+    catalyst: STICK
+    ingredients:
+      - "radiant_ore:4"
+      - "COPPER_INGOT:4"
+      - "SCAFFOLDING:8"
+    energy-sun: 60
+    energy-moon: 20
+    result: "building_wand:1"
+
+  building_wand_tier_2:
+    catalyst: BREEZE_ROD
+    ingredients:
+      - "building_wand:1"
+      - "radiant_ore:8"
+      - "DIAMOND:2"
+    energy-sun: 120
+    energy-moon: 80
+    result: "building_wand_tier_2:1"

@@ -37,6 +37,7 @@ class PlayerDataManager(private val plugin: Lycohism) {
             data.studyLevel = yaml.getInt("study-level", 0)
             data.greenhouseLevel = yaml.getInt("greenhouse-level", 0)
             data.confirmVanillaCrafts = yaml.getBoolean("confirm-vanilla-crafts", true)
+            data.confirmStructureBreaks = yaml.getBoolean("confirm-structure-breaks", true)
             data.sunEnergy = yaml.getInt("sun-energy", 0)
             data.moonEnergy = yaml.getInt("moon-energy", 0)
         }
@@ -53,6 +54,7 @@ class PlayerDataManager(private val plugin: Lycohism) {
         yaml.set("study-level", data.studyLevel)
         yaml.set("greenhouse-level", data.greenhouseLevel)
         yaml.set("confirm-vanilla-crafts", data.confirmVanillaCrafts)
+        yaml.set("confirm-structure-breaks", data.confirmStructureBreaks)
         yaml.set("sun-energy", data.sunEnergy)
         yaml.set("moon-energy", data.moonEnergy)
         runCatching { saveAtomically(uuid, yaml) }

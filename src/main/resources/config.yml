@@ -30,10 +30,34 @@ nexus:
   network-range: 48.0      # 節點之間（核心↔中繼↔塔）可連接的最大「水平」距離（格，約 3 區塊）
   production-per-cycle: 10   # 每個連上的塔、每秒灌進核心的量（塔只在對應時段＋見天時產能）
 
-# 設施升級到 Lv2 的成本（/lycohism upgrade <設施>）：材料 ＋ 附近核心的輝能。
+# 設施升級的成本（/lycohism upgrade <設施>）：材料 ＋ 附近核心的輝能。
 facility-upgrade:
-  nexus-sun: 500            # 消耗核心日輝
-  nexus-moon: 500           # 消耗核心月輝
+  nexus-sun: 500            # Lv1→Lv2 消耗核心日輝
+  nexus-moon: 500           # Lv1→Lv2 消耗核心月輝
   materials:                # 額外材料（id:數量；Lycohism 素材或原版方塊）
     - "GOLD_BLOCK:2"
     - "AMETHYST_BLOCK:2"
+  # Lv2→Lv3：用擊敗蝕影守望者掉落的「蝕輝結晶」開啟，不需升級結構（v0.8）。
+  tier-3:
+    nexus-sun: 1200         # Lv2→Lv3 消耗核心日輝
+    nexus-moon: 1200        # Lv2→Lv3 消耗核心月輝
+    crystal: 1             # 蝕輝結晶 數量
+    materials:
+      - "NETHERITE_INGOT:1"
+      - "radiant_ore:6"
+
+# v0.8 BOSS「蝕影守望者」：在暮蝕之境蓋好日月儀、手持日輝核心＋月輝核心右鍵核心召喚。
+eclipse-boss:
+  health: 450             # 最大生命（一隻強化凋零靈，沿用其原生 boss bar 與 AI）
+  crystal-drop: 1         # 擊殺掉落的蝕輝結晶數量（設施升三階的鑰匙）
+
+# v0.8.1 #2：高難度遠征維度裡，自然生成的生物整體強化（不影響主世界與低階遠征）。
+expedition-mob-boost:
+  worlds:
+    - lycohism_moonless_waste
+    - lycohism_eclipse_realm
+    - lycohism_tidal_depths
+  health-mult: 2.0        # 最大生命倍率
+  speed-mult: 1.1         # 移動速度倍率（小幅，避免追不到）
+  scale: 1.15            # 體型（generic.scale）
+  strength-amplifier: 1   # 力量等級（1 = 力量 I；0 = 不加）

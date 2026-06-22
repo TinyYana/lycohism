@@ -8,6 +8,7 @@ expeditions:
   # 雨後森林：v0.5 的第一個遠征地。永遠下著雨，回流到溫室。
   # 主題 雨息／苔蘚／濕地／藥草；專屬素材為苔華（見 phenomena.yml）。
   rainfall_forest:
+    terrain-style: rainfall
     # 對應的 Bukkit 世界名稱（會在伺服器資料夾下建立同名世界）。
     # 所有玩家共用這一個世界（v0.5.1 決策：1-3 人測試服不做每人獨立實例）。
     world-name: lycohism_rainfall_forest
@@ -40,6 +41,7 @@ expeditions:
   # 非去不可的理由：(1) 只有這裡能穩定累積月輝（永夜，蓄能晶整日蓄月輝），
   # (2) 專屬素材月輝核心，是製作輝能之鏡（月之力）的關鍵（見 phenomena.yml）。
   moonless_waste:
+    terrain-style: moonless
     world-name: lycohism_moonless_waste
     # 鎖定永久夜晚（關閉日夜循環、時間定在午夜），營造永夜氛圍。
     always-night: true
@@ -67,4 +69,59 @@ expeditions:
       effects:               # 生成時掛上的永久增益（潛行名稱＝原版效果 id）
         strength: 1          # 力量 II
         speed: 1             # 速度 II
+        fire_resistance: 0
+
+  # 暮蝕之境：v0.8 的第三個遠征地，也是 BOSS「蝕影守望者」的戰場。日與月在此相蝕，永遠是
+  # 陰暗的黃昏（沿用 always-night 的暗色氛圍）。蓋好日月儀、手持月輝核心右鍵核心即可召喚 BOSS，
+  # 擊敗掉落蝕輝結晶（設施升三階的鑰匙）。地形沿用永夜的風蝕風格，生態用裸岩與陰暗林。
+  # 潮汐深淵：v0.8.1 的海洋遠征地，也是「日」支線的專屬副本——與「月」支線的永夜荒原對位。
+  # 永遠白晝的暖海，白天蓄日輝加倍；專屬素材日輝核心（sun_core），是召喚蝕影守望者的另一半。
+  tidal_depths:
+    terrain-style: ocean
+    world-name: lycohism_tidal_depths
+    # 白晝的海，蓄日輝加倍（與永夜荒原的月輝 ×2 對稱）。
+    energy-multiplier: 2.0
+    requires-advancements:
+      - minecraft:story/enter_the_nether
+    biomes:
+      - warm_ocean
+      - deep_ocean
+      - lukewarm_ocean
+    # 氛圍威脅：被增幅的溺屍群（這類高難度維度的怪物整體強化，見 ExpeditionMobBoost）。
+    hazard:
+      enabled: true
+      mob: DROWNED
+      display-name-key: content-names.tide_shade
+      chance: 0.6
+      max-nearby: 5
+      radius: 30
+      night-only: false
+      scale: 1.3
+      effects:
+        strength: 0
+        dolphins_grace: 0
+
+  eclipse_realm:
+    terrain-style: eclipse
+    world-name: lycohism_eclipse_realm
+    always-night: true
+    # 解鎖條件：沿用踏入地獄門檻；實玩後可改成更後期的進度（例如打完日月雙塔）。
+    requires-advancements:
+      - minecraft:story/enter_the_nether
+    biomes:
+      - eroded_badlands
+      - dark_forest
+      - windswept_gravelly_hills
+    # 氛圍威脅：暮蝕中的殘影，襯托 BOSS 戰場的肅殺。
+    hazard:
+      enabled: true
+      mob: WITHER_SKELETON
+      display-name-key: content-names.eclipse_shade
+      chance: 0.5
+      max-nearby: 4
+      radius: 28
+      night-only: false
+      scale: 1.2
+      effects:
+        strength: 0          # 力量 I
         fire_resistance: 0

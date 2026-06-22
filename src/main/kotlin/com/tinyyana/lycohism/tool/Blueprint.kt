@@ -6,6 +6,7 @@ import com.tinyyana.lycohism.util.Audit
 import com.tinyyana.lycohism.util.Keys
 import com.tinyyana.lycohism.util.Messages
 import com.tinyyana.lycohism.util.Texts
+import com.tinyyana.lycohism.util.VanillaItems
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Material
 import org.bukkit.block.BlockFace
@@ -25,10 +26,19 @@ class Blueprint(private val plugin: Lycohism) {
 
     fun createItem(structureId: String): ItemStack {
         val structureName = Texts.line("content-names.$structureId", structureId)
+        val materials = plugin.multiblockRegistry.get(structureId)?.materialCounts().orEmpty()
         return ItemStack(Material.PAPER).apply {
             editMeta { meta ->
                 meta.displayName(Messages.parse(Texts.render("items.blueprint.name", "structure" to structureName)).decoration(TextDecoration.ITALIC, false))
-                meta.lore(Texts.renderLines("items.blueprint.lore", "structure" to structureName).map { Messages.parse(it).decoration(TextDecoration.ITALIC, false) })
+                val lore = buildList {
+                    addAll(Texts.renderLines("items.blueprint.lore", "structure" to structureName))
+                    add("")
+                    add(Texts.line("items.blueprint.materials"))
+                    materials.entries.sortedBy { it.key.name }.forEach { (material, count) ->
+                        add(Texts.render("items.blueprint.material-line", "material" to VanillaItems.tag(material), "count" to count.toString()))
+                    }
+                }
+                meta.lore(lore.map { Messages.parse(it).decoration(TextDecoration.ITALIC, false) })
                 meta.persistentDataContainer.set(Keys.itemId, PersistentDataType.STRING, ID)
                 meta.persistentDataContainer.set(Keys.blueprintTarget, PersistentDataType.STRING, structureId)
                 meta.setEnchantmentGlintOverride(true)
@@ -39,11 +49,19 @@ class Blueprint(private val plugin: Lycohism) {
     private fun targetOf(item: ItemStack): String? =
         item.itemMeta?.persistentDataContainer?.get(Keys.blueprintTarget, PersistentDataType.STRING)
 
+    fun materialSummary(item: ItemStack): String = targetOf(item)
+        ?.let(plugin.multiblockRegistry::get)
+        ?.materialCounts()
+        ?.entries
+        ?.sortedBy { it.key.name }
+        ?.joinToString(Texts.line("terms.list-separator")) { "${VanillaItems.tag(it.key)}×${it.value}" }
+        .orEmpty()
+
     /** Right-click: preview the structure where the player is looking. */
     fun preview(player: Player, item: ItemStack) {
         val multiblock = targetOf(item)?.let(plugin.multiblockRegistry::get) ?: return
         val target = player.getTargetBlockExact(6) ?: player.location.block.getRelative(BlockFace.DOWN)
-        multiblock.showGhost(target.world, target.x, target.y, target.z, com.tinyyana.lycohism.multiblock.Rotation.NONE, player)
+        multiblock.showGhost(plugin, target.world, target.x, target.y, target.z, com.tinyyana.lycohism.multiblock.Rotation.NONE, player)
     }
 
     /** Sneak-right-click: build it, consuming the required materials from the inventory. */
@@ -57,6 +75,7 @@ class Blueprint(private val plugin: Lycohism) {
         }
         if (player.gameMode != org.bukkit.GameMode.CREATIVE) Cost.consume(player, requirements)
         multiblock.place(target.world, target.x, target.y, target.z)
+        plugin.structureLocator.record(structureId, target.location)
         // Building from a blueprint also activates the structure (register + floating label).
         com.tinyyana.lycohism.multiblock.StructureActivation.activate(plugin, player, structureId, target.world.getBlockAt(target.x, target.y, target.z))
         Audit.log(player, "blueprint-build", "$structureId at ${target.x},${target.y},${target.z}")
