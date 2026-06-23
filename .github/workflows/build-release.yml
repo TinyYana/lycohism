@@ -1,0 +1,58 @@
+name: Build & Release
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      # gradlew is tracked without the +x bit; ensure it's runnable on the Linux runner.
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Build (test + shadowJar)
+        run: ./gradlew clean build --no-daemon --stacktrace
+
+      - name: Read project version
+        id: ver
+        run: echo "version=$(grep '^version=' gradle.properties | cut -d= -f2)" >> "$GITHUB_OUTPUT"
+
+      - name: Upload jar artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lycohism-${{ steps.ver.outputs.version }}
+          path: build/libs/lycohism-${{ steps.ver.outputs.version }}.jar
+          if-no-files-found: error
+
+      # Release only on pushes to main, once per version (skips if the tag exists).
+      - name: Publish GitHub release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="v${{ steps.ver.outputs.version }}"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo "Release $tag already exists — skipping (bump version in gradle.properties to cut a new one)."
+          else
+            gh release create "$tag" \
+              "build/libs/lycohism-${{ steps.ver.outputs.version }}.jar" \
+              --title "$tag" \
+              --notes "Automated release for $tag. ALPHA — see docs/FEATURES.md." \
+              --target "$GITHUB_SHA"
+          fi

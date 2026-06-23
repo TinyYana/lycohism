@@ -1,0 +1,1582 @@
+# Lycohism text settings (English)
+# All player-facing text lives here so wording, tone and colours can change without
+# recompiling. Format is MiniMessage: https://docs.advntr.dev/minimessage/format.html
+#
+# Note: book pages use a light parchment background. Use dark colours (black / dark_gray /
+# dark_green / dark_purple / dark_aqua / dark_red ...) so the text stays readable —
+# avoid white / gray / yellow on book pages.
+
+# ── GUI appearance (shared by every facility menu for a consistent look) ──────────────
+gui:
+  filler-material: GRAY_STAINED_GLASS_PANE
+  header-material: PINK_PETALS
+  back-material: ARROW
+  breadcrumb-separator: " ▸ "
+  back: "<white>Back</white>"
+  back-lore:
+    - "<dark_gray>Return to the previous page.</dark_gray>"
+
+  common:
+    requires: "<gray>Requires:</gray>"
+    cost-line: "<gray>· {item} <white>x{amount}</white></gray>"
+    cost-hidden: "<dark_gray>· <obfuscated>unknown material</obfuscated> <gray>x{amount}</gray></dark_gray>"
+    cost-hidden-hint: "<dark_gray>Pick up the unknown material once and its name will reveal itself.</dark_gray>"
+    cost-plain: "{item} x{amount}"
+    click-craft: "<yellow>Click to craft.</yellow>"
+    click-repair: "<yellow>Click to repair.</yellow>"
+    click-enchant: "<yellow>Click to apply Mending.</yellow>"
+    click-cultivate: "<dark_gray>Click to cultivate.</dark_gray>"
+
+  # Facility upgrade button (shared by all three facilities).
+  facility:
+    upgrade: "<gradient:#ffe9a8:#c0a8ff>Upgrade this facility → Lv{level}</gradient>"
+    # {structure} upgrade-structure name, {sun}/{moon} Nexus radiance cost.
+    upgrade-lore:
+      - "<gray>Build the facility into its <white>{structure}</white> rigid structure to reach Lv2.</gray>"
+      - "<gray>Flow: <gold>Sun/Moon Tower</gold> → <yellow>Relay</yellow> → <aqua>Radiance Nexus</aqua> → upgrade here.</gray>"
+      - "<gray>Costs Nexus <gold>{sun} Sunlight</gold> / <aqua>{moon} Moonlight</aqua>.</gray>"
+    # Lv2→Lv3: unlocked with an Eclipse Crystal from the Eclipse Warden, no upgrade structure needed.
+    upgrade-lore-3:
+      - "<gray>Use an <gradient:#ffd86b:#b07cff>Eclipse Crystal</gradient> to raise the facility to Lv3 — its third tier.</gray>"
+      - "<gray>The crystal drops from summoning and defeating the <white>Eclipse Warden</white> in the <white>Eclipse Realm</white>.</gray>"
+      - "<gray>Costs Nexus <gold>{sun} Sunlight</gold> / <aqua>{moon} Moonlight</aqua>.</gray>"
+    upgrade-action: "<yellow>Stand by the upgrade structure to upgrade; for Lv3 you only need the Eclipse Crystal and radiance.</yellow>"
+    # Shown in place of the upgrade button once a facility is maxed (Lv3).
+    maxed: "<gradient:#ffd86b:#b07cff>Fully attuned — Lv3</gradient>"
+    maxed-lore:
+      - "<gray>This facility is attuned to its peak — there is no higher tier.</gray>"
+      - "<dark_gray>Tier-3 content is reachable beside the upgrade structure (or via command).</dark_gray>"
+
+  workshop:
+    root: "<dark_aqua>Workshop</dark_aqua>"
+    broken: "<dark_gray>Workshop (broken)</dark_gray>"
+    tools-leaf: "<aqua>Craft Tools</aqua>"
+    materials-leaf: "<aqua>Process Materials</aqua>"
+    tools-lore:
+      - "<gray>Craft living tools with their full use and cost shown.</gray>"
+    materials-lore:
+      - "<gray>Convert common building materials in batches.</gray>"
+    repair: "<yellow>Repair Workshop</yellow>"
+    repair-lore:
+      - "<gray>The workshop must be repaired before it works.</gray>"
+    status: "<aqua>Workshop Status</aqua>"
+    status-lore:
+      - "<gray>Level <white>{level}</white> / 3</gray>"
+      - "<gray>Available: tool crafting, material processing, Mending.</gray>"
+      - "<dark_gray>Click to view the full details in chat.</dark_gray>"
+    mending: "<gradient:#8fd3ff:#ffffff>Rain-Breath Enchant</gradient>"
+    mending-lore:
+      - "<gray>Permanently apply Mending to your main-hand tool.</gray>"
+      - "<gray>Also consumes <white>{levels}</white> experience levels.</gray>"
+    mending-lore-2:
+      - "<gray>Permanently apply Mending<gold> + Unbreaking III</gold> to your main-hand tool.</gray>"
+      - "<gray>Also consumes <white>{levels}</white> experience levels.</gray>"
+      - "<dark_gray>Upgraded workshop bonus.</dark_gray>"
+    mending-lore-3:
+      - "<gray>Permanently apply Mending<gold> + Unbreaking III</gold> to your main-hand tool.</gray>"
+      - "<gray>Plus <red>Sharpness / Power / Protection / Efficiency</red> by item type.</gray>"
+      - "<gray>Also consumes <white>{levels}</white> experience levels.</gray>"
+      - "<dark_gray>Tier-3 (Eclipse) combat enhancement.</dark_gray>"
+    conversion: "<gray>{input} → {output}</gray>"
+    conversion-n: "<gray>{input} → {output} ×{amount}</gray>"
+    conversion-action: "<dark_gray>Click to convert a whole batch from your inventory.</dark_gray>"
+    output-name: "<aqua>{item}</aqua>"
+    header-main: "<aqua>Workshop</aqua>"
+    header-main-lore:
+      - "<gray>A repaired crafting post.</gray>"
+      - "<gray>Choose one of the options below.</gray>"
+    header-broken-lore:
+      - "<gray>The workshop still sleeps.</gray>"
+      - "<gray>Gather the materials and click to wake it.</gray>"
+    header-tools-lore:
+      - "<gray>Craft living tools from natural materials.</gray>"
+    header-materials-lore:
+      - "<gray>Convert building materials from your inventory in batches.</gray>"
+    header-materials-lore-2:
+      - "<gray>Convert building materials from your inventory in batches.</gray>"
+      - "<gold>Upgrade the workshop: double the yield and unlock more processing.</gold>"
+
+  study:
+    root: "<dark_aqua>Study</dark_aqua>"
+    sealed: "<dark_gray>Study (dormant)</dark_gray>"
+    header-main: "<aqua>Study</aqua>"
+    header-main-lore:
+      - "<gray>A record of the Path of Attunement you have walked.</gray>"
+      - "<gray>Choose a category below.</gray>"
+    header-sealed-lore:
+      - "<gray>The scattered records are not yet in order.</gray>"
+      - "<gray>Gather the materials and click to set the study in order.</gray>"
+    repair: "<yellow>Set the Study in Order</yellow>"
+    repair-lore:
+      - "<gray>Bring the scattered nature records back into order.</gray>"
+    # ── Categories (the three entries on root) ─────────────────────────────
+    books-leaf: "<aqua>Books</aqua>"
+    books-lore:
+      - "<gray>Read the manual, compendium and discovery records.</gray>"
+    tools-leaf: "<light_purple>Memory Tools</light_purple>"
+    tools-lore:
+      - "<gray>Craft tools for observation and record-keeping.</gray>"
+    map-mark: "<gradient:#aaccff:#e0f0ff>Mark Nearest Energy Tower</gradient>"
+    map-mark-lore:
+      - "<gray>Gives you a locked map centred on the nearest energy tower.</gray>"
+      - "<dark_gray>Unlocked by upgrading the study.</dark_gray>"
+    map-mark-name: "<gradient:#aaccff:#e0f0ff>{name} Location Map</gradient>"
+    forecast: "<gradient:#ffd86b:#b07cff>Regional Forecast</gradient>"
+    forecast-lore:
+      - "<gray>Read out every natural phenomenon harvestable here and now.</gray>"
+      - "<dark_gray>Tier-3 (Eclipse) exploration enhancement.</dark_gray>"
+    progress-leaf: "<aqua>Path of Attunement</aqua>"
+    progress-lore:
+      - "<gray>Look back on the road walked and see the next step.</gray>"
+    expedition-leaf: "<gradient:#8fd3ff:#d9f3ff>Expedition</gradient>"
+    expedition-lore:
+      - "<gray>Unlock and travel directly to an expedition site.</gray>"
+    header-books-lore:
+      - "<gray>Read through the attunement records you have gathered.</gray>"
+    header-tools-lore:
+      - "<gray>Craft memory tools from natural materials.</gray>"
+    header-expedition-lore:
+      - "<gray>Follow the rain-marks beyond the Overworld.</gray>"
+    # ── Books leaf ──────────────────────────────────────────
+    manual: "<light_purple>Attunement Manual</light_purple>"
+    manual-lore:
+      - "<gray>See the next step you can take right now.</gray>"
+    compendium: "<aqua>Nature Compendium</aqua>"
+    compendium-lore:
+      - "<gray>View the natural phenomena you have discovered.</gray>"
+    record: "<green>Discovery Record</green>"
+    record-lore:
+      - "<gray>Look back on the attunements you have completed.</gray>"
+    # ── Expedition leaf ──────────────────────────────────────────
+    expedition-enter: "<gradient:#8fd3ff:#d9f3ff>Enter the Rainfall Forest</gradient>"
+    expedition-enter-name: "<gradient:#8fd3ff:#d9f3ff>Travel to {name}</gradient>"
+    expedition-locked-name: "<dark_gray>{name} (locked)</dark_gray>"
+    expedition-enter-lore:
+      - "<gray>Unlocked. Click to enter the expedition world directly.</gray>"
+      - "<dark_gray>No extra entry item is given.</dark_gray>"
+    expedition-return: "<white>Return to Departure Point</white>"
+    expedition-return-lore:
+      - "<gray>Click to return to where you were before the expedition.</gray>"
+    gate-locked: "<dark_gray>Rainfall Forest (locked)</dark_gray>"
+    gate-locked-lore:
+      - "<gray>The rain-marks are still faint; the entrance is not yet unlocked.</gray>"
+      - "<gray>Set foot in the <white>Nether</white>, then come back and try again.</gray>"
+    # The Eclipse Realm is where the sun and moon lines converge; when locked, state the
+    # solution plainly so players know to finish both expedition lines first.
+    gate-locked-lore-eclipse_realm:
+      - "<gray>Sun and moon have not yet eclipsed here; the gate stays shut.</gray>"
+      - "<gray>First walk both the <gold>Tidal Depths</gold> (sun) and <aqua>Moonless Waste</aqua> (moon) lines;</gray>"
+      - "<gray>with both attunements complete, the gate to the eclipse will appear.</gray>"
+    status: "<aqua>Study Status</aqua>"
+    status-lore:
+      - "<gray>Level <white>{level}</white> / 3</gray>"
+      - "<gray>Categories: Books, Memory Tools, Expedition.</gray>"
+      - "<dark_gray>Click to view the full details in chat.</dark_gray>"
+  greenhouse:
+    root: "<dark_aqua>Greenhouse</dark_aqua>"
+    broken: "<dark_gray>Greenhouse (overgrown)</dark_gray>"
+    cultivate-leaf: "<green>Cultivate</green>"
+    tools-leaf: "<green>Plant Tools</green>"
+    cultivate-lore:
+      - "<gray>Trade Flower Vein for common and rare plants.</gray>"
+    tools-lore:
+      - "<gray>Craft tools to ripen, harvest and replant.</gray>"
+    repair: "<yellow>Reclaim Greenhouse</yellow>"
+    repair-lore:
+      - "<gray>Make the overgrown greenhouse fit to grow in again.</gray>"
+    status: "<green>Greenhouse Status</green>"
+    status-lore:
+      - "<gray>Level <white>{level}</white> / 3</gray>"
+      - "<gray>Available: Flower Vein & Moss Bloom cultivation, Flower Vein Shears, Moss Balm and Moss Fertilizer.</gray>"
+      - "<dark_gray>Click to view the full details in chat.</dark_gray>"
+    output-name: "<green>{item} x{amount}</green>"
+    header-main: "<green>Greenhouse</green>"
+    header-main-lore:
+      - "<gray>A place for plants and Flower Vein to settle.</gray>"
+      - "<gray>Choose one of the options below.</gray>"
+    header-broken-lore:
+      - "<gray>The greenhouse is still overgrown.</gray>"
+      - "<gray>Gather the materials and click to reclaim it.</gray>"
+    header-cultivate-lore:
+      - "<gray>Cultivate plant materials with Flower Vein.</gray>"
+    header-tools-lore:
+      - "<gray>Craft plant-line tools.</gray>"
+
+  admin:
+    title: "<dark_purple>Lycohism Admin</dark_purple>"
+    header: "<light_purple>Admin Tools</light_purple>"
+    header-lore:
+      - "<gray>Version <white>{version}</white> | Debug {debug}</gray>"
+      - "<gray>Test items, stages and expeditions in one place.</gray>"
+    materials: "<aqua>Give Natural Materials</aqua>"
+    materials-lore:
+      - "<gray>Pick a Lycohism natural material.</gray>"
+    tools: "<light_purple>Give Tools</light_purple>"
+    tools-lore:
+      - "<gray>Pick a tool or test item.</gray>"
+    stages: "<yellow>Adjust Game Stage</yellow>"
+    stages-lore:
+      - "<gray>Set a chapter as the current progress.</gray>"
+    expedition: "<gradient:#8fd3ff:#d9f3ff>Switch Expedition World</gradient>"
+    expedition-lore:
+      - "<gray>Enter ignoring unlock gates; return if already on an expedition.</gray>"
+    reload: "<green>Reload Config</green>"
+    reload-lore:
+      - "<gray>Re-read config, content and progression.</gray>"
+    facilities: "<aqua>Facility Levels</aqua>"
+    facilities-lore:
+      - "<gray>Quickly set your own facility levels to test repair / upgrade / Lv2 content.</gray>"
+    facilities-header-lore:
+      - "<gray>Click to cycle that facility's level (0→1→2→3→0).</gray>"
+    facility-level: "<gray>Current level: <white>{level}</white> / 3</gray>"
+    click-facility: "<yellow>Click to change level.</yellow>"
+    sounds: "<aqua>Sound Test Set</aqua>"
+    sounds-lore:
+      - "<gray>Audition four note-block melodies.</gray>"
+    sounds-header-lore:
+      - "<gray>Each uses the same scale so you can compare timbres.</gray>"
+    sound-chime: "<light_purple>Chime</light_purple>"
+    sound-harp: "<gold>Harp</gold>"
+    sound-flute: "<green>Flute</green>"
+    sound-bell: "<yellow>Bell</yellow>"
+    click-sound:
+      - "<yellow>Click to audition.</yellow>"
+    items-header-lore:
+      - "<gray>Click an item to receive one directly.</gray>"
+    stages-header-lore:
+      - "<gray>Click a chapter to set it as the current stage.</gray>"
+      - "<dark_gray>The glowing compass is the current stage.</dark_gray>"
+    item-id: "<dark_gray>ID: {id}</dark_gray>"
+    stage-id: "<dark_gray>Stage ID: {id}</dark_gray>"
+    click-give: "<yellow>Click to receive.</yellow>"
+    click-stage: "<yellow>Click to switch.</yellow>"
+    expedition-header-lore:
+      - "<gray>Pick an expedition world to travel to directly (ignoring gates).</gray>"
+    expedition-id: "<dark_gray>Expedition ID: {id}</dark_gray>"
+    click-expedition: "<yellow>Click to travel.</yellow>"
+    expedition-return: "<white>Return to Overworld</white>"
+    expedition-return-lore:
+      - "<gray>If on an expedition world, click to return to your departure point.</gray>"
+
+  nexus:
+    title: "<gradient:#ffe9a8:#c0a8ff>Radiance Nexus</gradient>"
+    header: "<gold>Radiance Nexus</gold>"
+    header-lore:
+      - "<gray>Your base's radiance store.</gray>"
+      - "<gray>Flow: <gold>Sun/Moon Tower</gold> → <yellow>Relay</yellow> → <aqua>Nexus</aqua> → upgrade facilities.</gray>"
+      - "<gray>Owner: <white>{owner}</white> | Members: <white>{members}</white></gray>"
+      - "<dark_gray>Use /lycohism nexus share <player> to share access.</dark_gray>"
+    sun: "<gold>☀ Sunlight</gold>"
+    sun-lore:
+      - "<gray>Stored <white>{value}</white> / {cap}</gray>"
+      - "<dark_gray>Fed in by Sun Towers through Relays.</dark_gray>"
+    moon: "<aqua>☾ Moonlight</aqua>"
+    moon-lore:
+      - "<gray>Stored <white>{value}</white> / {cap}</gray>"
+      - "<dark_gray>Fed in by Moon Towers through Relays.</dark_gray>"
+
+  # Standalone UI for the Path of Attunement (progression line).
+  progression:
+    title: "<dark_aqua>Path of Attunement</dark_aqua>"
+    header: "<aqua>Path of Attunement</aqua>"
+    header-lore:
+      - "<gray>The road you have walked, and the next step.</gray>"
+      - "<gray>Completed <white>{done}</white> / {total}</gray>"
+    advancement-root-title: "Lycohism"
+    advancement-root-description: "A tale of attuning to nature."
+    advancement-intro-title: "The Tale You Know"
+    advancement-intro-description: "The world still holds natural responses you have yet to notice."
+    done-name: "<green>✔ {title}</green>"
+    unlocked-label: "<aqua>Unlocked:</aqua>"
+    current-name: "<yellow>▶ {title}</yellow>"
+    objective-label: "<gold>Current objective:</gold>"
+    locked-name: "<dark_gray>???</dark_gray>"
+    locked-lore:
+      - "<dark_gray>You have not reached this step yet.</dark_gray>"
+    upcoming-name: "<dark_gray>⌛ {title}</dark_gray>"
+
+content-names:
+  eclipse_crystal: "<gradient:#ffd86b:#b07cff>Eclipse Crystal</gradient>"
+  morning_dew: "<gradient:#cfe8ff:#ffffff>Morning Dew</gradient>"
+  rain_breath: "<gradient:#8fd3ff:#d9f3ff>Rain Breath</gradient>"
+  flower_vein: "<gradient:#ff9ed6:#ffd9ef>Flower Vein</gradient>"
+  moon_dew: "<gradient:#c7b8ff:#f4f0ff>Moon Dew</gradient>"
+  wind_trace: "<gradient:#b8e6ff:#ffffff>Wind Trace</gradient>"
+  leyline_sand: "<gradient:#d8c3a5:#fff1d6>Leyline Sand</gradient>"
+  dew_light: "<gradient:#fff6c0:#ffffff>Dewlight Vial</gradient>"
+  flower_bookmark: "<gradient:#ffd6e8:#ffffff>Flower Bookmark</gradient>"
+  stonework_hammer: "<gradient:#cfd6df:#ffffff>Stonework Hammer</gradient>"
+  stonework_hammer_tier_2: "<gradient:#ffe08a:#ffffff>Stonework Hammer II</gradient>"
+  building_wand: "<gradient:#d8b8ff:#ffe8a8>Building Wand</gradient>"
+  building_wand_tier_2: "<gradient:#8fe8ff:#ffe08a>Building Wand II</gradient>"
+  rain_bandage: "<gradient:#8fd3ff:#ffffff>Rain Bandage</gradient>"
+  flower_vein_shears: "<gradient:#ff9ed6:#ffffff>Flower Vein Shears</gradient>"
+  wind_vane: "<gradient:#b8e6ff:#ffffff>Wind Vane</gradient>"
+  moon_pouch: "<gradient:#c7b8ff:#ffffff>Moon Pouch</gradient>"
+  leyline_probe: "<gradient:#d8c3a5:#fff1d6>Leyline Probe</gradient>"
+  tuning_manual: "<gradient:#9b6cff:#5a3aa8>Attunement Manual</gradient>"
+  moss_bloom: "<gradient:#7fd6a0:#e3fff0>Moss Bloom</gradient>"
+  rain_gate: "<gradient:#8fd3ff:#d9f3ff>Rainmark Gate</gradient>"
+  rainfall_forest: "<gradient:#6fb3d6:#cfeefe>Rainfall Forest</gradient>"
+  rain_wraith: "<gradient:#5a7d99:#9fc4dd>Rain Wraith</gradient>"
+  moss_balm: "<gradient:#7fd6a0:#d8ffe8>Moss Balm</gradient>"
+  moss_fertile: "<gradient:#9ad17f:#e6ffcf>Moss Fertilizer</gradient>"
+  ember_bloom: "<gradient:#ff9d5c:#ffe0a3>Ember Bloom</gradient>"
+  radiant_ore: "<gradient:#ffcf66:#d8b8ff>Radiant Ore</gradient>"
+  energy_crystal: "<gradient:#ffe9a8:#a8c8ff>Energy Crystal</gradient>"
+  radiant_focus: "<gradient:#ffd98a:#c0a8ff>Radiant Focus</gradient>"
+  moon_core: "<gradient:#a89cff:#e6e0ff>Moon Core</gradient>"
+  energy_relay: "<gradient:#ffd98a:#a8c8ff>Energy Relay</gradient>"
+  sun_tower: "<gradient:#ffe9a8:#ffd24a>Sun Tower</gradient>"
+  moon_tower: "<gradient:#c0a8ff:#e6e0ff>Moon Tower</gradient>"
+  energy_nexus: "<gradient:#ffe9a8:#c0a8ff>Radiance Nexus</gradient>"
+  energy_altar: "<gradient:#c0a8ff:#ffd98a>Radiance Altar</gradient>"
+  workshop_tier_2: "<gradient:#ffd98a:#ffb24a>Workshop II</gradient>"
+  study_tier_2: "<gradient:#c0a8ff:#e6e0ff>Study II</gradient>"
+  greenhouse_tier_2: "<gradient:#9ad17f:#e6ffcf>Greenhouse II</gradient>"
+  solar_pick: "<gradient:#ffe07a:#ffb24a>Solar Pickaxe</gradient>"
+  star_compass: "<gradient:#aaccff:#e0f0ff>Star Compass</gradient>"
+  lunar_spore: "<gradient:#d8b8ff:#f0e0ff>Lunar Spore</gradient>"
+  moonless_waste: "<gradient:#3a3a5a:#9a8fd6>Moonless Waste</gradient>"
+  night_shade: "<gradient:#4a4466:#8a7fbf>Nightshade</gradient>"
+  eclipse_realm: "<gradient:#5a3a6a:#ffd86b>Eclipse Realm</gradient>"
+  eclipse_shade: "<gradient:#4a3a5a:#b07cff>Eclipse Shade</gradient>"
+  tidal_depths: "<gradient:#2a9bd6:#bfeeff>Tidal Depths</gradient>"
+  tide_shade: "<gradient:#1f6f99:#7fc4e0>Tide Shade</gradient>"
+  sun_core: "<gradient:#ffd76b:#fff3c0>Sun Core</gradient>"
+  tidal_warden: "<gradient:#2a9bd6:#a8f0e0>Tidal Warden</gradient>"
+  eclipse_dial: "<gradient:#ffd86b:#b07cff>Eclipse Dial</gradient>"
+  eclipse_warden: "<gradient:#ffcf66:#b07cff>Eclipse Warden</gradient>"
+  attunement_engine: "<gradient:#ffd98a:#a8c8ff>Attunement Engine</gradient>"
+  seedling_cultivator: "<gradient:#a8e6a0:#d9f3a8>Seedling Cultivator</gradient>"
+  phenomenon_condenser: "<gradient:#b0b8ff:#d6c4ff>Phenomenon Condenser</gradient>"
+  infernal_shard: "<gradient:#ff5a00:#ffd080>Infernal Shard</gradient>"
+  infernal_relay: "<gradient:#ff7040:#d06030>Infernal Ruins</gradient>"
+  ember_forge: "<gradient:#ff7040:#ffd080>Ember Forge</gradient>"
+
+# Function description for each automation machine (injected into blueprint lore + right-click status).
+content-descriptions:
+  attunement_engine:
+    - "<gray>Uses <gold>Sunlight</gold>: stone processing (cobble→stone→stone bricks, sand→sandstone, granite→polished granite, etc.).</gray>"
+    - "<gray>Uses <aqua>Moonlight</aqua>: deepslate processing (deepslate→deepslate bricks, cobbled deepslate→polished deepslate, blackstone→polished blackstone, etc.).</gray>"
+    - "<dark_gray>Once built, right-click the blast furnace controller to claim it; place a chest directly above as the input bin.</dark_gray>"
+  seedling_cultivator:
+    - "<gray>Uses <aqua>Moonlight</aqua>: plant processing (cactus→green dye ×2, sugar cane→sugar ×2, kelp→dried kelp ×2, bone meal→bone).</gray>"
+    - "<dark_gray>Once built, right-click the composter controller to claim it; place a chest directly above as the plant-material bin.</dark_gray>"
+  phenomenon_condenser:
+    - "<gray>Uses <aqua>Moonlight</aqua>: material condensing (rotten flesh→leather, paper→book, ink sac→black dye ×2, blaze rod→blaze powder ×4, glowstone dust→glowstone).</gray>"
+    - "<dark_gray>Once built, right-click the lectern controller to claim it; place a chest directly above as the material bin.</dark_gray>"
+  infernal_relay:
+    - "<gray>An ancient ruin deep in the Nether, its soul fire still burning.</gray>"
+    - "<dark_gray>Right-click the soul fire to claim it; afterwards you can build an Ember Forge to refine Infernal Shards.</dark_gray>"
+  ember_forge:
+    - "<gray>Uses <gold>Sunlight</gold>: with Ember Bloom as catalyst, refine blaze rods + nether wart into 3 Infernal Shards.</gray>"
+    - "<dark_gray>Once built, empty-hand right-click the central magma block to view the recipe; base is 9 nether bricks with polished blackstone brick pillars at the corners.</dark_gray>"
+
+structures:
+  tidal-shrine:
+    chest-name: "<aqua>Offering of the Tidal Shrine</aqua>"
+  moss-altar:
+    chest-name: "<dark_green>Offering of the Moss Attunement Altar</dark_green>"
+  dew-well:
+    chest-name: "<aqua>Sediment of the Dewspeak Well</aqua>"
+  wind-circle:
+    chest-name: "<gray>Cache of the Wind-Trace Stone Circle</gray>"
+  rainfall-dungeon:
+    chest-name: "<dark_aqua>Supply Crate of the Rain-Soaked Cellar</dark_aqua>"
+  moondial:
+    chest-name: "<light_purple>Offering Beneath the Moondial</light_purple>"
+  sundial:
+    chest-name: "<gold>Offering Beneath the Sundial</gold>"
+  sealed-shrine:
+    chest-name: "<gradient:#b0b8ff:#ffd6ff>Relics of the Sealed Shrine</gradient>"
+
+items:
+  dew_light:
+    name: "<gradient:#fff6c0:#ffffff>Dewlight Vial</gradient>"
+    lore:
+      - "<gray>Grants two minutes of night vision in the dark.</gray>"
+      - "<dark_gray>Right-click to consume; leaves an empty glass bottle.</dark_gray>"
+  flower_bookmark:
+    name: "<gradient:#ffd6e8:#ffffff>Flower Bookmark</gradient>"
+    lore:
+      - "<gray>Remembers a place, then guides you back to it.</gray>"
+      - "<dark_gray>Shift+right-click to remember, right-click to be guided.</dark_gray>"
+  stonework_hammer:
+    name: "<gradient:#cfd6df:#ffffff>Stonework Hammer</gradient>"
+    lore:
+      - "<gray>Makes stone processing more convenient.</gray>"
+      - "<dark_gray>First right-click previews; right-click again within 5 seconds to confirm.</dark_gray>"
+  stonework_hammer_tier_2:
+    name: "<gradient:#ffe08a:#ffffff>Stonework Hammer II</gradient>"
+    lore:
+      - "<gray>Right-click stone to shape a connected 3×3 face at once.</gray>"
+      - "<dark_gray>First right-click previews; right-click again to confirm the 3×3 shaping.</dark_gray>"
+  building_wand:
+    name: "<gradient:#d8b8ff:#ffe8a8>Building Wand</gradient>"
+    lore:
+      - "<gray>First right-click previews; right-click again within 5 seconds to confirm a line placement.</gray>"
+      - "<dark_gray>Consumes the same vanilla blocks from your inventory; forged at the Radiance Altar.</dark_gray>"
+  building_wand_tier_2:
+    name: "<gradient:#8fe8ff:#ffe08a>Building Wand II</gradient>"
+    lore:
+      - "<gray>First right-click previews; right-click again to confirm placement.</gray>"
+      - "<gray>Shift+right-click (even into the air) to switch: line / wall / floor / column.</gray>"
+      - "<dark_gray>Consumes the same vanilla blocks from your inventory.</dark_gray>"
+  rain_bandage:
+    name: "<gradient:#8fd3ff:#ffffff>Rain Bandage</gradient>"
+    lore:
+      - "<gray>A simple bandage steeped in Rain Breath.</gray>"
+      - "<dark_gray>Right-click to restore a little health; consumed on use.</dark_gray>"
+  flower_vein_shears:
+    name: "<gradient:#ff9ed6:#ffffff>Flower Vein Shears</gradient>"
+    lore:
+      - "<gray>Makes immature crops grow instantly.</gray>"
+      - "<dark_gray>Right-click again once mature to harvest and replant.</dark_gray>"
+  wind_vane:
+    name: "<gradient:#b8e6ff:#ffffff>Wind Vane</gradient>"
+    lore:
+      - "<gray>Reads the current natural harvest conditions.</gray>"
+      - "<dark_gray>While held in either hand, keeps showing the environment readout.</dark_gray>"
+  moon_pouch:
+    name: "<gradient:#c7b8ff:#ffffff>Moon Pouch</gradient>"
+    lore:
+      - "<gray>Automatically stores natural phenomena you pick up.</gray>"
+      - "<dark_gray>Right-click to release everything inside.</dark_gray>"
+  leyline_probe:
+    name: "<gradient:#d8c3a5:#fff1d6>Leyline Probe</gradient>"
+    lore:
+      - "<gray>Makes Leyline Sand respond to nearby ore veins.</gray>"
+      - "<dark_gray>While held in either hand, keeps showing the nearest ore vein.</dark_gray>"
+  rain_gate:
+    name: "<gradient:#8fd3ff:#d9f3ff>Rainmark Gate</gradient>"
+    lore:
+      - "<gray>Follow the rain-marks to a forest in the rain.</gray>"
+      - "<dark_gray>Right-click in the Overworld to travel; right-click in the expedition world to return.</dark_gray>"
+      - "<dark_gray>You must first set foot in the Nether for the rain-marks to answer.</dark_gray>"
+  moss_balm:
+    name: "<gradient:#7fd6a0:#d8ffe8>Moss Balm</gradient>"
+    lore:
+      - "<gray>Right-click to apply for a gentle stretch of Regeneration.</gray>"
+      - "<dark_gray>Brewed in the greenhouse only from Rainfall Forest Moss Bloom.</dark_gray>"
+  moss_fertile:
+    name: "<gradient:#9ad17f:#e6ffcf>Moss Fertilizer</gradient>"
+    lore:
+      - "<gray>Right-click a plant to grow a small patch of crops and vegetation around it.</gray>"
+      - "<dark_gray>Brewed in the greenhouse only from Rainfall Forest Moss Bloom.</dark_gray>"
+  energy_crystal:
+    name: "<gradient:#ffe9a8:#a8c8ff>Energy Crystal</gradient>"
+    lore:
+      - "<gray>Held in your inventory, it absorbs overflowing radiance.</gray>"
+      - "<gray>Once your energy pool is full, the surplus is stored here.</gray>"
+      - "<dark_gray>Right-click to pour the crystal's energy back into your own pool.</dark_gray>"
+  radiant_focus:
+    name: "<gradient:#ffd98a:#c0a8ff>Radiant Focus</gradient>"
+    lore:
+      - "<gray>Right-click to draw <gold>Sunlight</gold>: a sun blessing of Fire Resistance and Strength.</gray>"
+      - "<gray>Shift+right-click to draw <aqua>Moonlight</aqua>: a moon blessing of Night Vision and Slow Falling.</gray>"
+      - "<dark_gray>Forged at the Radiance Altar from gold ingots + Moon Core + Energy Crystal.</dark_gray>"
+  solar_pick:
+    name: "<gradient:#ffe07a:#ffb24a>Solar Pickaxe</gradient>"
+    lore:
+      - "<gray>Right-click to spend <gold>Sunlight</gold> for a burst of Haste.</gray>"
+      - "<dark_gray>Unlocked at Workshop Lv2.</dark_gray>"
+  star_compass:
+    name: "<gradient:#aaccff:#e0f0ff>Star Compass</gradient>"
+    lore:
+      - "<gray>Right-click to point to the direction and distance of the nearest <aqua>energy tower</aqua>.</gray>"
+      - "<dark_gray>Crafted at the Study (Lv1).</dark_gray>"
+  lunar_spore:
+    name: "<gradient:#d8b8ff:#f0e0ff>Lunar Spore</gradient>"
+    lore:
+      - "<gray>Right-click a plant to spend <aqua>Moonlight</aqua> and bone-meal an area.</gray>"
+      - "<dark_gray>Unlocked at Greenhouse Lv2.</dark_gray>"
+  blueprint:
+    name: "<gradient:#9ad1ff:#e0f0ff>{structure} Blueprint</gradient>"
+    lore:
+      - "<gray>Right-click facing the ground: show a <green>ghost outline</green> (green = present, red = missing).</gray>"
+      - "<gray>Shift+right-click: <white>build directly</white> using materials from your inventory.</gray>"
+      - "<dark_gray>The design for building the {structure}.</dark_gray>"
+    materials: "<white>Blocks required:</white>"
+    material-line: "<gray>• {material} ×{count}</gray>"
+
+# Text for each chapter of the Path of Attunement (matches stage ids in progression.yml).
+progression:
+  stages:
+    awakening:
+      title: "<white>First Morning Dew</white>"
+      lore:
+        - "<gray>The first drop of natural power at dawn.</gray>"
+      details:
+        - "<gray>Morning Dew harvesting and the earliest natural recipes.</gray>"
+      hint: "<gray>At dawn, harvest Morning Dew among grass and flowers.</gray>"
+    workshop:
+      title: "<white>Wake the Workshop</white>"
+      lore:
+        - "<gray>Grow the first function out of your base.</gray>"
+      details:
+        - "<gray>Tool crafting, material processing and Rain-Breath enchanting.</gray>"
+      hint: "<gray>Gather the materials and repair the workshop at a crafting table.</gray>"
+    first_tools:
+      title: "<white>Your First Living Tool</white>"
+      lore:
+        - "<gray>Nature begins to solve the small troubles of survival for you.</gray>"
+      details:
+        - "<gray>Dewlight Vial: grants two minutes of night vision once consumed.</gray>"
+      hint: "<gray>Craft a Dewlight Vial at the workshop using Morning Dew.</gray>"
+    rain:
+      title: "<white>The Breath of Rain</white>"
+      lore:
+        - "<gray>A rainy day is no longer just waiting.</gray>"
+      details:
+        - "<gray>Harvest Rain Breath to grow crops and craft restoratives.</gray>"
+      hint: "<gray>On a rainy day, harvest Rain Breath by water and in forests.</gray>"
+    study:
+      title: "<white>Open the Study</white>"
+      lore:
+        - "<gray>Begin recording the road you have walked.</gray>"
+      details:
+        - "<gray>The manual, compendium, discovery record and Path of Attunement.</gray>"
+      hint: "<gray>Gather the materials and set the study in order.</gray>"
+    greenhouse:
+      title: "<white>Life in the Greenhouse</white>"
+      lore:
+        - "<gray>Plants and farming find a home.</gray>"
+      details:
+        - "<gray>Plant cultivation, Flower Vein Shears, Moss Balm and Moss Fertilizer.</gray>"
+      hint: "<gray>Gather the materials and reclaim the greenhouse.</gray>"
+    night:
+      title: "<white>Memory of the Night</white>"
+      lore:
+        - "<gray>The night and the moonlight are worth lingering on.</gray>"
+      details:
+        - "<gray>Moon Dew, and crafting the Wind Vane and Moon Pouch.</gray>"
+      hint: "<gray>On a clear full-moon night, harvest Moon Dew.</gray>"
+    nether_gate:
+      title: "<white>Toward the Nether</white>"
+      lore:
+        - "<gray>A further road needs deeper footprints.</gray>"
+      details:
+        - "<gray>The Rainfall Forest entrance in the study.</gray>"
+      hint: "<gray>Set foot in the Nether once, and the study's expedition entrance unlocks.</gray>"
+    infernal_relay:
+      title: "<gradient:#ff7040:#ffd080>Infernal Ruins</gradient>"
+      lore:
+        - "<gray>An ancient relay ruin, its soul fire still burning.</gray>"
+      details:
+        - "<gray>Deep in the Nether, find a ruin: a cracked nether-brick platform + corner pillars + central soul fire.</gray>"
+        - "<gray>Right-click the central soul fire to claim the ruin; afterwards you can refine Infernal Shards from Ember Bloom at the Radiance Altar.</gray>"
+      hint: "<gray>Venture deep into the Nether and find an ancient ruin still burning with soul fire.</gray>"
+    ember_forge:
+      title: "<gradient:#ff7040:#ffd080>Ember Forge</gradient>"
+      lore:
+        - "<gray>Refining Nether minerals needs a deeper fire.</gray>"
+      details:
+        - "<gray>Ember Forge: a 9-block nether-brick base + polished blackstone brick pillars at the corners + a central magma-block controller.</gray>"
+        - "<gray>Hold Ember Bloom and right-click the magma block to refine Infernal Shards from blaze rods + nether wart, spending Sunlight.</gray>"
+      hint: "<gray>Build the Ember Forge (a 3×3 nether-brick base + corner polished blackstone brick pillars + central magma block) and empty-hand right-click to view the recipe.</gray>"
+    radiant_vein:
+      title: "<gold>Nether Radiant Vein</gold>"
+      lore:
+        - "<gray>Within gilded blackstone hides a crystal this world does not have.</gray>"
+      details:
+        - "<gray>Radiant Ore: a Lycohism-exclusive mineral, used for tier-2 tools and altar creations.</gray>"
+      hint: "<gray>Explore newly generated Nether chunks and mine the gilded blackstone veins in the rock layers.</gray>"
+    expedition:
+      title: "<white>The First Expedition</white>"
+      lore:
+        - "<gray>Step out of the Overworld, into the forest after the rain.</gray>"
+      details:
+        - "<gray>The Rainfall Forest and its exclusive material, Moss Bloom.</gray>"
+      hint: "<gray>Travel to the Rainfall Forest from the study's expedition screen.</gray>"
+    expedition_yield:
+      title: "<white>Gifts Brought Home</white>"
+      lore:
+        - "<gray>The spoils of an expedition become something only found there.</gray>"
+      details:
+        - "<gray>Brew Moss Balm and Moss Fertilizer from Moss Bloom.</gray>"
+      hint: "<gray>Brew Moss Balm from Moss Bloom in the greenhouse.</gray>"
+    radiance:
+      title: "<white>Radiance Emerges</white>"
+      lore:
+        - "<gray>The light of sun and moon can begin to be gathered.</gray>"
+      details:
+        - "<gray>Energy Crystal; passively gather Sunlight and Moonlight under the open sky.</gray>"
+      hint: "<gray>Craft an Energy Crystal at the workshop, then stand under the open sky outdoors to gather energy.</gray>"
+    solar_tower:
+      title: "<gold>Tower of the Sun</gold>"
+      lore:
+        - "<gray>Follow the sunlight and find the first high tower.</gray>"
+      details:
+        - "<gray>Sun Tower: a tall rigid landmark that supplies Sunlight under open daytime sky.</gray>"
+      hint: "<gray>Find a naturally generated <gold>Sundial (Sun Tower)</gold> around the world; approach it to be recorded. (Admins can /lycohism build sun_tower.)</gray>"
+    lunar_tower:
+      title: "<aqua>Tower of the Moon</aqua>"
+      lore:
+        - "<gray>Follow the moonlight and find the matching high tower.</gray>"
+      details:
+        - "<gray>Moon Tower: mirror of the Sun Tower, supplying Moonlight under open night sky.</gray>"
+      hint: "<gray>Find a naturally generated <aqua>Moondial (Moon Tower)</aqua> and approach it to be recorded; it may appear in the Moonless Waste or the Overworld.</gray>"
+    lunar_waste:
+      title: "<white>Into the Endless Night</white>"
+      lore:
+        - "<gray>A waste without dawn is the source of the moon's power.</gray>"
+      details:
+        - "<gray>Moonless Waste: gather Moonlight all day, and the source of the Moon Core.</gray>"
+      hint: "<gray>Travel to the Moonless Waste from the study's expedition screen.</gray>"
+    energy_altar:
+      title: "<white>The Radiance Altar</white>"
+      lore:
+        - "<gray>Raise an altar, and higher refining begins here.</gray>"
+      details:
+        - "<gray>Radiance Altar: drop materials, hold a catalyst and right-click, spending radiance to refine.</gray>"
+      hint: "<gray>Build the Radiance Altar (a central enchanting table + a ring of deepslate pedestals); empty-hand right-click it to view its use and recipes.</gray>"
+    moon_attunement:
+      title: "<white>Attunement of the Moon</white>"
+      lore:
+        - "<gray>Forge the Moon Core you brought back into usable power.</gray>"
+      details:
+        - "<gray>Radiant Focus: draw sun/moon blessings at the altar with Sunlight/Moonlight.</gray>"
+      hint: "<gray>At the Radiance Altar, hold gold ingots, drop in a Moon Core and Energy Crystal, and spend radiance to forge the Radiant Focus.</gray>"
+    tidal_depths:
+      title: "<gradient:#2a9bd6:#bfeeff>Dive the Warm Sea</gradient>"
+      lore:
+        - "<gray>The sea of endless day is the source of the sun's power.</gray>"
+      details:
+        - "<gray>Tidal Depths: gather Sunlight at double rate by day, the source of the Sun Core (mirror of the Moonless Waste).</gray>"
+      hint: "<gray>Travel to the Tidal Depths from the study's expedition screen.</gray>"
+    solar_attunement:
+      title: "<gradient:#ffd76b:#fff3c0>Attunement of the Sun</gradient>"
+      lore:
+        - "<gray>Forge the Sun Core you brought back into usable power.</gray>"
+      details:
+        - "<gray>Solar Pickaxe: draw Haste with Sunlight; the sun line mirrors the moon attunement.</gray>"
+      hint: "<gray>After upgrading the workshop, craft the Solar Pickaxe at the workshop.</gray>"
+    radiant_nexus:
+      title: "<gold>Radiance Base</gold>"
+      lore:
+        - "<gray>Gather the scattered radiance into one core.</gray>"
+      details:
+        - "<gray>Radiance Nexus: your base's energy store, shareable with companions.</gray>"
+        - "<gray>Energy flow: <gold>Sun/Moon Tower</gold> (produce) → <yellow>Relay</yellow> (carry) → <aqua>Nexus</aqua> (store).</gray>"
+      hint: "<gray>Build a Radiance Nexus and right-click the beacon core to claim it; place it within 48 horizontal blocks of a tower and energy flows in (you'll see a beam when close).</gray>"
+    energy_grid:
+      title: "<yellow>The Radiance Network</yellow>"
+      lore:
+        - "<gray>Use Relays to string towers and the Nexus into one web.</gray>"
+      details:
+        - "<gray>Energy Relay: carries a tower's energy to a farther Nexus, 48 blocks per hop.</gray>"
+        - "<gray>Towers only produce in their matching period (sun by day / moon by night) and under open sky.</gray>"
+      hint: "<gray>When a tower is too far from the Nexus, build and activate an Energy Relay between them; a flowing beam when nearby means energy is moving.</gray>"
+    facility_growth:
+      title: "<white>Growth of the Facilities</white>"
+      lore:
+        - "<gray>Feed the radiance you have gathered back into the base itself.</gray>"
+      details:
+        - "<gray>Upgrade = build the facility's 'upgrade structure' + spend Nexus radiance.</gray>"
+        - "<gray>Afterwards, access the full Lv2 features beside the upgrade structure or via command.</gray>"
+      hint: "<gray>Build your Workshop/Study/Greenhouse into the matching upgrade structure, then click 'Upgrade' on the facility page beside it (or /lycohism upgrade).</gray>"
+    attunement_engine:
+      title: "<white>Attunement Engine</white>"
+      lore:
+        - "<gray>Let the base take over the repetitive material processing.</gray>"
+      details:
+        - "<gray>Build an Attunement Engine near a Radiance Nexus (blueprint crafted at Workshop Lv2), then right-click the central blast furnace to claim it.</gray>"
+        - "<gray>Place a chest directly above as the input bin; every few seconds it takes one input, spends Nexus Sunlight, and returns the product to the chest.</gray>"
+      hint: "<gray>At Workshop Lv2, craft an 'Attunement Engine Blueprint', build it within 48 blocks of a Nexus, right-click the blast furnace to claim it, and place a chest above with cobblestone inside.</gray>"
+
+    eclipse_realm:
+      title: "<gradient:#5a3a6a:#ffd86b>Eclipse Realm</gradient>"
+      lore:
+        - "<gray>The two roads of sun and moon meet in the eclipse.</gray>"
+      details:
+        - "<gray>Walk the 'sun' Tidal Depths and the 'moon' Moonless Waste, and the eclipse chapter opens.</gray>"
+        - "<gray>The third expedition: a dim dusk where the battlefield and Eclipse Dial have already formed.</gray>"
+      hint: "<gray>First walk the Tidal Depths and the Moonless Waste, then travel to the <white>Eclipse Realm</white> from the study.</gray>"
+
+    eclipse_warden:
+      title: "<gradient:#ffcf66:#b07cff>Eclipse Warden</gradient>"
+      lore:
+        - "<gray>When the eclipse falls, the Warden awakens.</gray>"
+      details:
+        - "<gray>At the Eclipse Dial in the Eclipse Realm, hold a <gold>Sun Core</gold> + <aqua>Moon Core</aqua> and right-click the core to summon it.</gray>"
+        - "<gray>Defeating it drops an <gradient:#ffd86b:#b07cff>Eclipse Crystal</gradient> — the key to tier-3 facilities.</gray>"
+      hint: "<gray>Summon and defeat the Eclipse Warden in the Eclipse Realm to obtain an Eclipse Crystal.</gray>"
+
+    seedling_cultivator:
+      title: "<white>Seedling Cultivator</white>"
+      lore:
+        - "<gray>Free greenhouse plant processing from doing it by hand.</gray>"
+      details:
+        - "<gray>Seedling Cultivator: Moonlight-driven, processes plant materials (cactus→dye, kelp→dried kelp, etc.).</gray>"
+        - "<gray>Craft the blueprint on the Greenhouse Lv2 tools page, build it within 48 blocks of a Nexus → right-click the composter to claim it.</gray>"
+      hint: "<gray>Upgrade the greenhouse to Lv2, craft a 'Seedling Cultivator Blueprint' on the tools page, build it per the blueprint and right-click the composter to claim it.</gray>"
+
+    phenomenon_condenser:
+      title: "<white>Phenomenon Condenser</white>"
+      lore:
+        - "<gray>Condense ordinary materials into a more refined form.</gray>"
+      details:
+        - "<gray>Phenomenon Condenser: Moonlight-driven, processes scholarly materials (rotten flesh→leather, paper→book, etc.).</gray>"
+        - "<gray>Craft the blueprint on the Study Lv2 tools page, build it within 48 blocks of a Nexus → right-click the lectern to claim it.</gray>"
+      hint: "<gray>Upgrade the study to Lv2, craft a 'Phenomenon Condenser Blueprint' on the tools page, build it per the blueprint and right-click the lectern to claim it.</gray>"
+
+    sealed_shrine:
+      title: "<white>Sealed Shrine</white>"
+      lore:
+        - "<gray>A trial of radiance lore — break the seal and take the treasure.</gray>"
+      details:
+        - "<gray>Sealed Shrine: generated naturally in the Overworld, with a sealed treasure chest and a chiseled deepslate controller.</gray>"
+        - "<gray>Opening the chest directly is sealed; you must grasp the Radiance Nexus lore + hold an Energy Crystal and right-click the controller to unseal it.</gray>"
+      hint: "<gray>First build a Radiance Nexus, then find a structure of a deepslate platform + amethyst pillars in the Overworld, and right-click the central chiseled deepslate while holding an Energy Crystal.</gray>"
+
+    facility_growth_3:
+      title: "<gradient:#ffd86b:#b07cff>Tier-3 Facilities</gradient>"
+      lore:
+        - "<gray>The light of the eclipse pours into the base's final layer.</gray>"
+      details:
+        - "<gray>Use Eclipse Crystals to raise the Workshop/Study/Greenhouse to Lv3 (no upgrade structure needed).</gray>"
+        - "<gray>Lv3: workshop combat enchants, study regional forecast, greenhouse double output.</gray>"
+      hint: "<gray>Gather Eclipse Crystals and Nexus radiance, then click 'Upgrade → Lv3' on the facility page.</gray>"
+
+terms:
+  none: "<dark_gray>None</dark_gray>"
+  list-separator: ", "
+  enabled: "<green>on</green>"
+  disabled: "<red>off</red>"
+  shared: "has access"
+  not-shared: "has no access"
+  wand-mode:
+    line: "Line"
+    wall: "Wall 3×3"
+    floor: "Floor 5×5"
+    column: "Column"
+  period:
+    morning: "Morning"
+    day: "Day"
+    dusk: "Dusk"
+    night: "Night"
+  weather:
+    clear: "Clear"
+    rain: "Rain"
+    thunder: "Thunder"
+  moon-phase:
+    0: "Full Moon"
+    1: "Waning Gibbous"
+    2: "Last Quarter"
+    3: "Waning Crescent"
+    4: "New Moon"
+    5: "Waxing Crescent"
+    6: "First Quarter"
+    7: "Waxing Gibbous"
+  direction:
+    north: "North"
+    east: "East"
+    south: "South"
+    west: "West"
+    nearby: "Nearby"
+  vertical:
+    above: "above"
+    level: "same level"
+    below: "below"
+
+messages:
+  common:
+    missing-materials: "<red>Not enough materials.</red> <gray>Requires: {costs}</gray>"
+    recipe-locked: "<gray>This recipe still has unidentified materials; pick those materials up by hand first.</gray>"
+  crafting:
+    confirm-vanilla: "<yellow>This vanilla recipe will consume a Lycohism item.</yellow> <gray>Click again within 10 seconds to confirm; Shift+right-click to never ask again.</gray>"
+    confirm-disabled: "<gray>Vanilla crafting warnings permanently disabled.</gray>"
+  structure-break:
+    confirm: "<yellow>This block belongs to {structure}.</yellow> <gray>Mine again within 10 seconds to confirm; Shift+break to never ask again.</gray>"
+    confirm-disabled: "<gray>Multiblock structure removal warnings permanently disabled.</gray>"
+  tools:
+    dew-light-used: "<white>The Dewlight Vial dissolves into a faint glow, lighting the next two minutes.</white>"
+    flower-shears-grown: "<white>Flower Vein flows along the stems, and the crop is mature.</white>"
+    flower-shears-harvested: "<white>Harvested and replanted the crop.</white>"
+    moon-pouch-capacity: "<gray>Stored <white>{stored}</white> / {capacity}</gray>"
+    moon-pouch-entry: "<dark_gray>· {item} x{amount}</dark_gray>"
+    moon-pouch-released: "<white>The Moon Pouch released its stored natural phenomena.</white>"
+    moon-pouch-empty: "<gray>The Moon Pouch holds no natural phenomena yet.</gray>"
+    wind-vane-status: "<aqua>Wind Vane</aqua> {period} · {weather} · {moon} <gray>Harvestable: {phenomena}</gray>"
+    leyline-probe-status: "<gold>Probe</gold> {item} · {direction} · {vertical} · {distance} blocks"
+    leyline-probe-none-status: "<gold>Probe</gold> <dark_gray>no ore veins nearby</dark_gray>"
+    held-status-separator: " <dark_gray>|</dark_gray> "
+    bookmark-remembered: "<white>The Flower Bookmark remembered this place.</white>"
+    bookmark-empty: "<gray>Shift+right-click first to remember a place.</gray>"
+    bookmark-other-world: "<gray>That place is in another world.</gray>"
+    bookmark-arrived: "<white>You are at the place the Flower Bookmark remembered.</white>"
+    bookmark-guide: "<white>Guiding: {arrow} <gray>still <white>{distance}</white> blocks</gray>"
+    rain-tending-mature: "<gray>This crop is already mature.</gray>"
+    rain-tending-grown: "<white>Rain Breath seeps into the soil, and the crop grows upward.</white>"
+    bandage-used: "<white>The rain-pattern unfurls, and the wound settles a little.</white>"
+    bandage-not-needed: "<gray>There's no need for a bandage right now.</gray>"
+    moss-balm-used: "<white>The moss balm sinks into your skin, and the wound slowly heals.</white>"
+    moss-fertile-used: "<white>The moss fertilizer spreads, and the plants around you shoot up.</white>"
+    moss-fertile-empty: "<gray>There are no plants here to coax into growth.</gray>"
+    ember-used: "<white>Ember Bloom shatters in your palm; flame cannot harm you for a while.</white>"
+    crystal-status: "<gold>Sunlight</gold> {sun}<dark_gray>/{cap}</dark_gray> <dark_gray>·</dark_gray> <aqua>Moonlight</aqua> {moon}<dark_gray>/{cap}</dark_gray>"
+    crystal-banked: "<white>The Energy Crystal poured <yellow>{amount}</yellow> radiance into your energy pool.</white>"
+    crystal-empty: "<gray>The Energy Crystal has no radiance to pour, or your energy pool is full.</gray>"
+    focus-sun: "<gold>Sunlight courses through you, becoming a blessing of the sun.</gold>"
+    focus-moon: "<aqua>Moonlight courses through you, becoming a blessing of the moon.</aqua>"
+    focus-no-sun: "<gray>Not enough Sunlight. Charge an Energy Crystal in daylight and pour it into your pool first.</gray>"
+    focus-no-moon: "<gray>Not enough Moonlight. Travel to the Moonless Waste and fill the Energy Crystal with Moonlight.</gray>"
+    solar-pick-used: "<gold>Solar fire pours in, and mining turns swift.</gold>"
+    solar-pick-empty: "<gray>Not enough Sunlight to drive the Solar Pickaxe.</gray>"
+    lunar-spore-used: "<aqua>Lunar spores scatter, and the plants around you shoot up.</aqua>"
+    lunar-spore-empty: "<gray>There are no plants to coax into growth here, or not enough Moonlight.</gray>"
+    compass-reading: "<aqua>Star Chart</aqua> {name} <gray>·</gray> {arrow} <gray>·</gray> <white>{distance}</white> blocks"
+    compass-none: "<gray>No registered energy towers nearby.</gray>"
+    blueprint-preview: "<gray>Translucent preview: <green>green = matched</green>, <aqua>light blue = to be placed</aqua>. Shift+right-click to build.</gray>"
+    blueprint-materials: "<gray>Blocks required: {materials}</gray>"
+    blueprint-built: "<green>Built per the blueprint.</green>"
+    blueprint-missing: "<red>Not enough materials to build per the blueprint.</red>"
+    blueprint-invalid: "<gray>This blueprint has no matching structure.</gray>"
+    building-wand: "<gray>The Building Wand placed <white>{amount}</white> blocks.</gray>"
+    wand-preview: "<gray>Previewing <white>{mode}</white>, <white>{amount}</white> blocks total; right-click again within 5 seconds to confirm.</gray>"
+    wand-mode: "<gray>Building Wand mode switched to: <white>{mode}</white>.</gray>"
+    hammer-preview: "<gray>Previewed the next stone variant; right-click again within 5 seconds to confirm the shaping.</gray>"
+  discovery:
+    manual-granted: "<gray>An <white>Attunement Manual</white> appears in your inventory; right-click to read it.</gray>"
+  facility:
+    workshop-required: "<red>You must repair the workshop first.</red>"
+    workshop-repaired: "<green>The workshop answered the natural materials and is repaired.</green>"
+    workshop-crafted: "<green>The workshop crafted {item}.</green>"
+    blueprint-crafted: "<green>The workshop drew the <white>{item}</white> blueprint.</green> <gray>Right-click for the translucent outline, Shift+right-click to build it using materials (remember to build it near a Radiance Nexus).</gray>"
+    workshop-status:
+      - "<gray>Workshop level: <white>{level}</white> / 3.</gray>"
+      - "<gray>Lv1: tool crafting, material processing, Rain-Breath enchanting.</gray>"
+      - "<gray>Lv2 (build Workshop II): Stonework Hammer II, Solar Pickaxe, double processing yield + more recipes, enchant adds Unbreaking III.</gray>"
+      - "<gray>Lv3 (Eclipse Crystal): enchant also adds a combat enchant (Sharpness / Power / Protection / Efficiency).</gray>"
+    conversion-empty: "<gray>You have no {item} in your inventory.</gray>"
+    conversion-done: "<green>Processed <white>{amount}</white> {item}.</green>"
+    mending-invalid: "<gray>Hold an enchantable tool, weapon or armour in your main hand.</gray>"
+    mending-present: "<gray>This item already has Mending.</gray>"
+    mending-levels-missing: "<red>Not enough experience.</red> <gray>Requires {levels} experience levels.</gray>"
+    mending-applied: "<green>Rain Breath clings to the tool, forming Mending.</green>"
+    mending-applied-2: "<green>Rain Breath clings to the tool, forming Mending<gold> and Unbreaking III</gold>.</green>"
+    mending-applied-3: "<green>Rain Breath clings to the tool, forming Mending<gold> + Unbreaking III</gold><red> + a combat enchant</red>.</green>"
+    forecast-header: "<gradient:#ffd86b:#b07cff>Regional Forecast</gradient><gray> — harvestable here and now:</gray>"
+    forecast-line: "<gray> ·</gray>{name}"
+    forecast-none: "<gray>Nothing is harvestable here and now.</gray>"
+    tower-marked: "<green>Marked the energy tower location (<white>{x}, {z}</white>) onto a map.</green>"
+    greenhouse-required: "<red>You must reclaim the greenhouse first.</red>"
+    greenhouse-repaired: "<green>The greenhouse grew its life back.</green>"
+    greenhouse-crafted: "<green>The greenhouse crafted {item}.</green>"
+    greenhouse-status:
+      - "<gray>Greenhouse level: <white>{level}</white> / 3.</gray>"
+      - "<gray>Lv1: Flower Vein & Moss Bloom cultivation (incl. glow lichen), Flower Vein Shears, Moss Balm and Moss Fertilizer.</gray>"
+      - "<gray>Lv2 (build Greenhouse II): Lunar Spore, more advanced cultivation products, <aqua>Seedling Cultivator Blueprint</aqua> (auto plant processing, needs a Moon Core).</gray>"
+      - "<gray>Lv3 (Eclipse Crystal): double cultivation output.</gray>"
+    cultivated: "<green>The greenhouse cultivated <white>{amount}</white> {item}.</green>"
+    study-repaired: "<green>The study remembered the road you have walked.</green>"
+    study-crafted: "<green>The study compiled {item}.</green>"
+    study-status:
+      - "<gray>Study level: <white>{level}</white> / 3.</gray>"
+      - "<gray>Lv1: manual, compendium, discovery record, Wind Vane, Moon Pouch, Star Compass, expedition entrance.</gray>"
+      - "<gray>Lv2 (build Study II): mark the nearest energy tower onto a map, <aqua>Phenomenon Condenser Blueprint</aqua> (auto material condensing, needs a Moon Core).</gray>"
+      - "<gray>Lv3 (Eclipse Crystal): regional forecast — lists what is harvestable here and now; personal Sun/Moon caps ×1.5.</gray>"
+  expedition:
+    entered: "<white>You followed the rain-marks and set foot in {name}.</white>"
+    title:
+      rainfall_forest: "<gradient:#8fd3ff:#d9f3ff>Rainfall Forest</gradient>"
+      moonless_waste: "<gradient:#3a3a5a:#9a8fd6>Moonless Waste</gradient>"
+      eclipse_realm: "<gradient:#5a3a6a:#ffd86b>Eclipse Realm</gradient>"
+      tidal_depths: "<gradient:#2a9bd6:#bfeeff>Tidal Depths</gradient>"
+    subtitle:
+      rainfall_forest: "<gray>Deep in the sound of rain, the moss is remembering your steps.</gray>"
+      moonless_waste: "<gray>A waste without dawn, where moonlight congeals into cold light you can hold.</gray>"
+      eclipse_realm: "<gray>Sun and moon eclipse here, and the Warden sleeps.</gray>"
+      tidal_depths: "<gray>A warm sea of endless day, sunlight congealing into gold beneath the waves.</gray>"
+    returned: "<white>The rain-marks gather in, and you return to where you set out.</white>"
+    none-configured: "<red>There is no expedition site to travel to right now.</red>"
+    locked: "<gray>The path is still too faint. The study entrance unlocks once you have <white>set foot in the Nether</white>.</gray>"
+    first-hint:
+      rainfall_forest: "<gray>The rain keeps falling, and something else seems to stir in the woods. Look for <white>moss and wetland vegetation</white> and harvest <white>Moss Bloom</white> to bring back to the greenhouse.</gray>"
+      moonless_waste: "<gray>There is no day here, and the monsters are fiercer. Standing under the open sky keeps gathering <aqua>Moonlight</aqua>; slay Nightshades or harvest dark vegetation for the <white>Moon Core</white>.</gray>"
+      tidal_depths: "<gray>A warm sea of endless day; the monsters are amplified by the tide and fiercer. Sunlight gathers at double rate by day; slay drowned guardians or harvest coral and sea lanterns for the <white>Sun Core</white>.</gray>"
+      eclipse_realm: "<gray>The battlefield and Eclipse Dial have formed here. Hold a <gold>Sun Core</gold> + <aqua>Moon Core</aqua> and right-click the altar core to summon and defeat the <white>Eclipse Warden</white> for an <gradient:#ffd86b:#b07cff>Eclipse Crystal</gradient>.</gray>"
+  # Messages for the v0.8 BOSS "Eclipse Warden".
+  boss:
+    wrong-world: "<gray>The Eclipse Dial only answers in the <white>Eclipse Realm</white>. Travel there from the study first.</gray>"
+    need-core: "<gray>You must hold one <gold>Sun Core</gold> and one <aqua>Moon Core</aqua> at once to trigger the eclipse.</gray>"
+    already: "<gray>The eclipse has not yet passed — a Warden is already nearby.</gray>"
+    summoned: "<gradient:#5a3a6a:#ffd86b>The eclipse has fallen.</gradient><gray> {player} woke the Eclipse Warden.</gray>"
+    phase-2: "<light_purple>The Warden turns to its moon phase, faster and fiercer.</light_purple>"
+    defeated: "<gradient:#ffd86b:#b07cff>The Eclipse Warden falls, and an Eclipse Crystal forms from the fading light.</gradient>"
+  energy:
+    # Persistent energy bar (boss bar). {sun}/{sun_cap} Sunlight, {moon}/{moon_cap} Moonlight.
+    bar: "<gold>☀ Sunlight {sun}/{sun_cap}</gold>   <aqua>☾ Moonlight {moon}/{moon_cap}</aqua>"
+  altar:
+    hold-catalyst: "<gray>Hold a catalyst, drop the materials around the altar, then right-click the centre.</gray>"
+    crafted: "<green>Radiance gathers, and the altar refines the product.</green>"
+    no-recipe: "<gray>What you're holding is not a catalyst.</gray>"
+    catalysts: "<gray>Available catalysts: <white>{catalysts}</white>. Hold one and right-click; empty-hand right-click to view the full recipes.</gray>"
+    missing-ingredients: "<red>Not enough materials around the altar.</red>"
+    missing-energy: "<red>You don't have enough radiance to drive this refining.</red>"
+    # Usage notes + recipe list shown on empty-hand right-click of the altar.
+    guide:
+      - "<gradient:#c0a8ff:#ffd98a>── Radiance Altar ──</gradient>"
+      - "<gray>1. <white>Drop</white> the materials around the altar (within about 2.5 blocks).</gray>"
+      - "<gray>2. <white>Hold a catalyst</white> and right-click the central enchanting table.</gray>"
+      - "<gray>3. Spend your <gold>Sunlight</gold> / <aqua>Moonlight</aqua> to refine the product.</gray>"
+      - "<gray>Current recipes:</gray>"
+    # {result} product, {catalyst} catalyst, {ingredients} materials, {energy} radiance cost.
+    guide-recipe: "<white>• {result}</white> <gray>= catalyst {catalyst} + {ingredients}<yellow>{energy}</yellow></gray>"
+  upgrade:
+    usage: "<gray>Usage: <yellow>/{label} upgrade <workshop|study|greenhouse></yellow> (stand near the facility's upgrade structure + a Radiance Nexus)</gray>"
+    done: "<green>{facility} upgraded to Lv2.</green> <gray>Spent Nexus radiance and materials. Access the full features later via command or beside the upgrade structure.</gray>"
+    not-repaired: "<red>This facility must be repaired to Lv1 before it can be upgraded.</red>"
+    already: "<gray>This facility is already Lv2.</gray>"
+    no-structure: "<red>The upgrade structure has not been built yet.</red> <gray>Build the facility into the matching rigid structure (stand beside it, then upgrade).</gray>"
+    blueprint-hint: "<gray>Gave you an <white>upgrade-structure blueprint</white>: right-click for the translucent outline, build it (Shift+right-click to build instantly using materials), then return to the facility page to upgrade.</gray>"
+    no-nexus: "<red>No Radiance Nexus you can access nearby.</red> <gray>Flow: <gold>Sun/Moon Tower</gold> → <yellow>Relay</yellow> → <aqua>Radiance Nexus</aqua>, then come back to upgrade.</gray>"
+    missing-materials: "<red>Not enough upgrade materials.</red>"
+    missing-energy: "<red>Not enough Nexus radiance.</red> <gray>Let the Sun/Moon Towers produce more first.</gray>"
+  nexus:
+    claimed: "<green>The Radiance Nexus is active, and you are its owner.</green> <gray>Right-click the core to view its store. Next: use a <yellow>Relay</yellow> to feed in a <gold>Sun/Moon Tower</gold>.</gray>"
+    not-allowed: "<red>This Radiance Nexus is not yours and hasn't been shared.</red>"
+    relay-registered: "<green>The Energy Relay joined the network.</green> <gray>It strings towers and the Nexus together hop by hop (a flowing beam when nearby).</gray>"
+    relay-exists: "<gray>This Relay is already in the network.</gray>"
+    tower-registered: "<green>The energy tower is registered and producing.</green> <gray>Next: build a <aqua>Radiance Nexus</aqua> within 48 blocks, or use a <yellow>Relay</yellow> to carry the energy over.</gray>"
+    tower-exists: "<gray>This energy tower is already registered.</gray>"
+    share-usage: "<gray>Usage: <yellow>/{label} nexus <share|unshare> <player></yellow> (stand near a Nexus you own)</gray>"
+    no-owned: "<red>No Radiance Nexus you own nearby.</red>"
+    player-not-found: "<red>Player not found: {player}</red>"
+    shared: "<green>Shared Nexus access with <white>{player}</white>.</green>"
+    unshared: "<green>Revoked <white>{player}</white>'s Nexus access.</green>"
+    share-noop: "<gray>No change (they already {state}).</gray>"
+  automation:
+    engine-registered: "<green>The Attunement Engine is active.</green> <gray>Place a chest directly above as the input bin; every few seconds it takes one input, spends the nearby <aqua>Radiance Nexus</aqua>'s Sunlight, and returns the product to the chest.</gray>"
+    engine-status:
+      - "<white>▌ Attunement Engine (running)</white>"
+      - "<gray>Uses <gold>Sunlight</gold>: cobble→stone, stone→stone bricks, sand→sandstone, granite→polished granite...</gray>"
+      - "<gray>Uses <aqua>Moonlight</aqua>: deepslate→deepslate bricks, deepslate→polished deepslate, blackstone→polished blackstone...</gray>"
+      - "<dark_gray>Place a chest directly above as the input bin.</dark_gray>"
+    cultivator-registered: "<green>The Seedling Cultivator is active.</green> <gray>Place a chest directly above as the plant-material bin; every few seconds it takes one, spends the nearby Nexus's <aqua>Moonlight</aqua>, and returns the product to the chest.</gray>"
+    cultivator-status:
+      - "<white>▌ Seedling Cultivator (running)</white>"
+      - "<gray>Uses <aqua>Moonlight</aqua>: cactus→green dye ×2, sugar cane→sugar ×2, kelp→dried kelp ×2, bone meal→bone.</gray>"
+      - "<dark_gray>Place a chest directly above as the plant-material bin.</dark_gray>"
+    condenser-registered: "<green>The Phenomenon Condenser is active.</green> <gray>Place a chest directly above as the material bin; every few seconds it takes one, spends the nearby Nexus's <aqua>Moonlight</aqua>, and returns the condensed product to the chest.</gray>"
+    condenser-status:
+      - "<white>▌ Phenomenon Condenser (running)</white>"
+      - "<gray>Uses <aqua>Moonlight</aqua>: rotten flesh→leather, paper→book, ink sac→black dye ×2, blaze rod→blaze powder ×4, glowstone dust→glowstone.</gray>"
+      - "<dark_gray>Place a chest directly above as the material bin.</dark_gray>"
+  infernal-relay:
+    claimed: "<green>The ancient ruin answered you, and the soul fire leaps.</green> <gray>Next: build an <gradient:#ff7040:#ffd080>Ember Forge</gradient>, where you can refine <gradient:#ff5a00:#ffd080>Infernal Shards</gradient> from blaze rods + nether wart.</gray>"
+    exists: "<gray>This ruin's soul fire still burns, and ember-radiance flows in the air.</gray>"
+  ember-forge:
+    guide:
+      - "<gradient:#ff7040:#ffd080>── Ember Forge ──</gradient>"
+      - "<gray>1. <white>Drop</white> the materials around the forge (within about 2.5 blocks).</gray>"
+      - "<gray>2. <white>Hold Ember Bloom</white> (a Lycohism item) and right-click the central magma block.</gray>"
+      - "<gray>3. Spend your <gold>Sunlight</gold> to refine the product.</gray>"
+      - "<gray>Current recipes:</gray>"
+  puzzle:
+    seal:
+      sealed: "<dark_gray>The seal is not yet broken. This chest is still closed to you.</dark_gray>"
+      hint-discovery: "<gray>The shrine's heart sleeps in radiance. It seems only one who grasps the lore of the radiance array can reach the resonance within...</gray>"
+      hint-item: "<gray>The sealed stone trembles faintly. Hold some crystal of radiance and feel whether its frequency matches the carving?</gray>"
+      unlocked: "<gradient:#b0b8ff:#ffd6ff>The sealed patterns flow, and the shrine's heart resonates open.</gradient>"
+      already-open: "<gray>This shrine holds no seal for you now.</gray>"
+
+commands:
+  root: "<gray>Lycohism <white>v{version}</white> — a nature-attunement survival expansion. Type <yellow>/{label} help</yellow> to see the commands.</gray>"
+  version: "<gray>Version: <white>{version}</white></gray>"
+  reloaded: "<green>Config reloaded.</green>"
+  debug: "<gray>Debug mode: {state} (adjust <yellow>debug</yellow> in config.yml, then reload).</gray>"
+  player-only: "<red>This command can only be used by a player.</red>"
+  unknown: "<red>Unknown command.</red> <gray>Type <yellow>/{label} help</yellow>.</gray>"
+  give-usage: "<gray>Usage: <yellow>/{label} give <item> [amount]</yellow></gray>"
+  give-items: "<gray>Items: {items}</gray>"
+  give-unknown: "<red>Unknown item: {item}</red>"
+  give-done: "<green>Gave {item} <white>x{amount}</white>.</green>"
+  stage-usage: "<gray>Usage: <yellow>/{label} stage <stage></yellow></gray>"
+  stage-list: "<gray>Stages: {stages}</gray>"
+  stage-unknown: "<red>Unknown stage: {stage}</red>"
+  stage-done: "<green>Current game stage set to <white>{stage}</white>.</green>"
+  build-usage: "<gray>Usage: <yellow>/{label} build <structure> [ghost]</yellow> (look at the build location)</gray>"
+  build-items: "<gray>Structures: {items}</gray>"
+  build-unknown: "<red>Unknown structure: {id}</red>"
+  build-ghost: "<gray>Showing the ghost outline of <white>{id}</white> (green = matched, red = missing).</gray>"
+  build-done: "<green>Built multiblock structure <white>{id}</white>.</green>"
+  locate-usage: "<gray>Usage: <yellow>/{label} locate <structure></yellow> <dark_gray>available: {items}</dark_gray></gray>"
+  locate-none: "<gray>No <white>{id}</white> registered yet; structures generated by older versions without an index won't appear.</gray>"
+  locate-done: "<green>The nearest <white>{id}</white> is at <white>{x}, {y}, {z}</white>; your compass now points to it.</green>"
+  no-permission: "<red>You don't have permission to do that.</red>"
+  help:
+    player:
+      - "<gray>— Lycohism Commands —</gray>"
+      - "<yellow>/{label} version</yellow> <gray>view the version</gray>"
+      - "<yellow>/{label} help</yellow> <gray>show this help</gray>"
+      - "<yellow>/{label} workshop</yellow> <gray>open the workshop (or Shift+right-click a crafting table)</gray>"
+      - "<yellow>/{label} study</yellow> <gray>open the study (or Shift+right-click a bookshelf)</gray>"
+      - "<yellow>/{label} greenhouse</yellow> <gray>open the greenhouse (or Shift+right-click a flower pot)</gray>"
+      - "<yellow>/{label} progress</yellow> <gray>view the Path of Attunement (progression)</gray>"
+      - "<yellow>/{label} nexus <share|unshare> <player></yellow> <gray>share access to your Radiance Nexus</gray>"
+      - "<yellow>/{label} upgrade <facility></yellow> <gray>use Nexus radiance to upgrade a facility to Lv2</gray>"
+    admin:
+      - "<yellow>/{label} admin</yellow> <gray>open the integrated admin panel</gray>"
+      - "<yellow>/{label} reload</yellow> <gray>reload the config</gray>"
+      - "<yellow>/{label} debug</yellow> <gray>view debug status</gray>"
+      - "<yellow>/{label} expedition</yellow> <gray>travel to / return from an expedition (testing)</gray>"
+      - "<yellow>/{label} stage <stage></yellow> <gray>switch the current game stage (testing)</gray>"
+      - "<yellow>/{label} give <item> [amount]</yellow> <gray>get a Lycohism item (testing)</gray>"
+      - "<yellow>/{label} build <structure> [ghost]</yellow> <gray>place/preview a multiblock structure (testing)</gray>"
+      - "<yellow>/{label} blueprint <structure></yellow> <gray>get a structure blueprint (for players/rewards)</gray>"
+      - "<yellow>/{label} locate <structure></yellow> <gray>locate the nearest registered plugin structure</gray>"
+
+# ── Book contents (light background, use dark text) ──────────────────────────────────
+books:
+  manual:
+    title: "<dark_purple>Attunement Manual</dark_purple>"
+    item-name: "<gradient:#9b6cff:#5a3aa8>Attunement Manual</gradient>"
+    item-lore:
+      - "<dark_gray>Records the natural phenomena you have felt.</dark_gray>"
+      - "<dark_gray>Right-click to read.</dark_gray>"
+    cover:
+      - "<dark_purple><bold>Attunement Manual</bold></dark_purple>"
+      - ""
+      - "<black>The world hides natural responses.</black>"
+      - ""
+      - "<gold>Time, weather,</gold>"
+      - "<gold>height and biome.</gold>"
+    entries:
+      - requires: [ morning_dew ]
+        title: "Morning Dew"
+        done:
+          - "<dark_green><bold>✔ Morning Dew</bold></dark_green>"
+          - ""
+          - "<gold>At dawn</gold><black> break grass and leaves.</black>"
+          - "<black>It forms an early attunement material.</black>"
+        hint:
+          - "<dark_gray>· Morning Dew</dark_gray>"
+          - ""
+          - "<gold>At dawn</gold><black> head to the grassland.</black>"
+          - "<black>Harvest grass and flowers.</black>"
+      - requires: [ dew_light ]
+        title: "Dewlight Vial"
+        done:
+          - "<dark_green><bold>✔ Dewlight Vial</bold></dark_green>"
+          - ""
+          - "<gold>Right-click</gold><black> to use the vial.</black>"
+          - "<black>Gain two minutes of night vision.</black>"
+        hint:
+          - "<dark_gray>· Dewlight Vial</dark_gray>"
+          - ""
+          - "<gold>Glass bottle + Morning Dew</gold>"
+          - "<black>craft at a crafting table.</black>"
+      - requires: [ workshop ]
+        title: "Workshop"
+        done:
+          - "<dark_green><bold>✔ Workshop</bold></dark_green>"
+          - ""
+          - "<gold>Shift + empty hand</gold>"
+          - "<black>right-click a crafting table to open.</black>"
+          - "<black>Craft tools, process materials.</black>"
+        hint:
+          - "<dark_gray>· Workshop</dark_gray>"
+          - ""
+          - "<gold>Shift + empty-hand right-click a table</gold>"
+          - "<black>to open; with Morning Dew ×4 +</black>"
+          - "<black>planks and stone you can repair it.</black>"
+          - "<black>Then right-click the table again.</black>"
+      - requires: [ flower_bookmark, stonework_hammer ]
+        title: "Workshop Tools"
+        done:
+          - "<dark_green><bold>✔ Workshop Tools</bold></dark_green>"
+          - ""
+          - "<aqua>Flower Bookmark</aqua><black> handles navigation.</black>"
+          - "<aqua>Stonework Hammer</aqua><black> processes stone.</black>"
+        hint:
+          - "<dark_gray>· Workshop Tools</dark_gray>"
+          - ""
+          - "<black>After repairing the workshop,</black>"
+          - "<black>craft the Flower Bookmark and Stonework Hammer.</black>"
+      - requires: [ rain_breath ]
+        title: "Rain Breath"
+        done:
+          - "<dark_green><bold>✔ Rain Breath</bold></dark_green>"
+          - ""
+          - "<gold>Hold Rain Breath</gold>"
+          - "<black>right-click an immature crop.</black>"
+          - "<black>Push it two growth stages.</black>"
+        hint:
+          - "<dark_gray>· Rain Breath</dark_gray>"
+          - ""
+          - "<gold>While raining</gold><black> head to a riverbank.</black>"
+          - "<black>Harvest moss and vines.</black>"
+      - requires: [ rain_bandage, tool_repair ]
+        title: "Uses of Rain Breath"
+        done:
+          - "<dark_green><bold>✔ Uses of Rain Breath</bold></dark_green>"
+          - ""
+          - "<aqua>Rain Bandage</aqua><black>: restore</black>"
+          - "<aqua>Rain-Breath Mending</aqua><black>: enchant</black>"
+        hint:
+          - "<dark_gray>· Uses of Rain Breath</dark_gray>"
+          - ""
+          - "<black>Bring Rain Breath back to the workshop.</black>"
+          - "<gold>Complete both uses.</gold>"
+      - requires: [ study ]
+        title: "Study"
+        done:
+          - "<dark_green><bold>✔ Study</bold></dark_green>"
+          - ""
+          - "<gold>Shift + empty hand</gold>"
+          - "<black>right-click a bookshelf to open.</black>"
+          - "<black>Compendium and records unlocked.</black>"
+        hint:
+          - "<dark_gray>· Study</dark_gray>"
+          - ""
+          - "<gold>Rain Breath + bookshelves + lectern</gold>"
+          - "<black>repair your study.</black>"
+      - requires: [ leyline_sand ]
+        title: "Leyline Sand"
+        done:
+          - "<dark_green><bold>✔ Leyline Sand</bold></dark_green>"
+          - ""
+          - "<gold>Below height 32</gold>"
+          - "<black>mine the deep rock.</black>"
+        hint:
+          - "<dark_gray>· Leyline Sand</dark_gray>"
+          - ""
+          - "<gold>Go deep underground</gold>"
+          - "<black>mine deepslate and tuff.</black>"
+      - requires: [ leyline_probe ]
+        title: "Leyline Probe"
+        done:
+          - "<dark_green><bold>✔ Leyline Probe</bold></dark_green>"
+          - ""
+          - "<gold>Hold the probe in either hand</gold>"
+          - "<black>to keep showing nearby ore veins.</black>"
+        hint:
+          - "<dark_gray>· Leyline Probe</dark_gray>"
+          - ""
+          - "<gold>Leyline Sand ×3</gold>"
+          - "<black>bring it back to the workshop to craft.</black>"
+      - requires: [ flower_vein ]
+        title: "Flower Vein"
+        done:
+          - "<dark_green><bold>✔ Flower Vein</bold></dark_green>"
+          - ""
+          - "<black>Harvest flowers and cherry leaves.</black>"
+          - "<black>Used for greenhouse cultivation.</black>"
+        hint:
+          - "<dark_gray>· Flower Vein</dark_gray>"
+          - ""
+          - "<gold>Harvest flowers</gold>"
+          - "<black>watch for cherry leaves and blossoms too.</black>"
+      - requires: [ greenhouse ]
+        title: "Greenhouse"
+        done:
+          - "<dark_green><bold>✔ Greenhouse</bold></dark_green>"
+          - ""
+          - "<gold>Shift + empty hand</gold>"
+          - "<black>right-click a flower pot to open.</black>"
+          - "<black>Cultivate plants and Flower Vein Shears.</black>"
+        hint:
+          - "<dark_gray>· Greenhouse</dark_gray>"
+          - ""
+          - "<gold>Flower Vein + glass + moss</gold>"
+          - "<black>reclaim the greenhouse.</black>"
+      - requires: [ wind_trace ]
+        title: "Wind Trace"
+        done:
+          - "<dark_green><bold>✔ Wind Trace</bold></dark_green>"
+          - ""
+          - "<gold>Above height 96</gold>"
+          - "<black>mine the mountain rock.</black>"
+          - "<black>Used to craft the Wind Vane.</black>"
+        hint:
+          - "<dark_gray>· Wind Trace</dark_gray>"
+          - ""
+          - "<gold>Climb a high mountain</gold>"
+          - "<black>harvest rock, snow and grass.</black>"
+      - requires: [ moon_dew ]
+        title: "Moon Dew"
+        done:
+          - "<dark_green><bold>✔ Moon Dew</bold></dark_green>"
+          - ""
+          - "<gold>On a clear full-moon night</gold>"
+          - "<black>harvest leaves and flowers for Moon Dew.</black>"
+          - "<black>Used for memory and record-keeping.</black>"
+        hint:
+          - "<dark_gray>· Moon Dew</dark_gray>"
+          - ""
+          - "<gold>On a clear full-moon night</gold>"
+          - "<black>go harvest among flowers and leaves.</black>"
+      - requires: [ wind_vane, moon_pouch ]
+        requires-any: true
+        title: "Night and Memory"
+        done:
+          - "<dark_green><bold>✔ Night and Memory</bold></dark_green>"
+          - ""
+          - "<aqua>Wind Vane</aqua><black>: environment readout</black>"
+          - "<aqua>Moon Pouch</aqua><black>: auto-storage</black>"
+        hint:
+          - "<dark_gray>· Night and Memory</dark_gray>"
+          - ""
+          - "<black>Craft the Moon Pouch from Moon Dew.</black>"
+          - "<black>Craft the Wind Vane from Moon Dew + Wind Trace.</black>"
+      - requires: [ rainfall_forest ]
+        title: "Expedition: Rainfall Forest"
+        done:
+          - "<dark_green><bold>✔ Rainfall Forest</bold></dark_green>"
+          - ""
+          - "<aqua>The study's expedition screen</aqua><black> takes you there.</black>"
+          - "<black>Harvest Moss Bloom, cultivate it in the greenhouse.</black>"
+        hint:
+          - "<dark_gray>· Expedition: Rainfall Forest</dark_gray>"
+          - ""
+          - "<gold>Set foot in the Nether</gold><black> then return to the study.</black>"
+          - "<black>Enter the forest from the expedition screen.</black>"
+      # Radiance network tutorial page: shown after touching the radiance system, explaining
+      # how tower ↔ relay ↔ nexus ↔ upgrade chain together.
+      - requires: [ sun_tower, moon_tower, energy_crystal, energy_nexus ]
+        requires-any: true
+        title: "The Radiance Network"
+        done:
+          - "<dark_green><bold>✔ The Radiance Network</bold></dark_green>"
+          - ""
+          - "<gold>Sun/Moon Tower</gold><black>: produce under open day/night sky.</black>"
+          - "<dark_red>Relay</dark_red><black>: carries 48 blocks per hop.</black>"
+          - "<dark_aqua>Radiance Nexus</dark_aqua><black>: stores, for upgrading facilities.</black>"
+          - ""
+          - "<black>Place the Nexus within 48 blocks of a tower,</black>"
+          - "<black>or carry it over with a Relay. When near,</black>"
+          - "<black>a flowing beam means energy is moving.</black>"
+        hint:
+          - "<dark_gray>· The Radiance Network</dark_gray>"
+          - ""
+          - "<black>Charge an Energy Crystal, raise a Sun/Moon Tower,</black>"
+          - "<black>and use Relays to send energy into the Nexus.</black>"
+      # Sealed Shrine tutorial page: shown after you have an Energy Crystal, telling the
+      # player such a puzzle structure exists in the world.
+      - requires: [ sealed_shrine ]
+        title: "Sealed Shrine"
+        done:
+          - "<dark_green><bold>✔ Sealed Shrine</bold></dark_green>"
+          - ""
+          - "<black>The chiseled deepslate patterns flowed,</black>"
+          - "<black>the seal broke, and the treasure was taken.</black>"
+        hint:
+          - "<dark_gray>· Sealed Shrine</dark_gray>"
+          - ""
+          - "<black>Search around the world for a structure of</black>"
+          - "<dark_purple>a deepslate platform + amethyst pillars</dark_purple>"
+          - "<dark_purple>+ soul lanterns</dark_purple><black>.</black>"
+          - ""
+          - "<black>The chest is sealed —</black>"
+          - "<black>you must grasp the radiance-array lore</black>"
+          - "<black>and right-click the controller holding an </black><gold>Energy Crystal</gold><black>.</black>"
+      # Seedling Cultivator tutorial page: shown after the Attunement Engine, introducing
+      # the Greenhouse Lv2 Moonlight plant-processing machine.
+      - requires: [ seedling_cultivator ]
+        title: "Seedling Cultivator"
+        done:
+          - "<dark_green><bold>✔ Seedling Cultivator</bold></dark_green>"
+          - ""
+          - "<black>A Moonlight-driven plant processor.</black>"
+          - "<black>Cactus→dye, sugar cane→sugar,</black>"
+          - "<black>kelp→dried kelp, and more.</black>"
+        hint:
+          - "<dark_gray>· Seedling Cultivator</dark_gray>"
+          - ""
+          - "<black>Upgrade the greenhouse to Lv2,</black>"
+          - "<black>craft the blueprint on the tools page.</black>"
+          - "<dark_green>Moss ×9 base</dark_green><black> +</black>"
+          - "<dark_green>azalea bushes at the corners</dark_green><black> +</black>"
+          - "<dark_green>a central composter</dark_green><black> to claim.</black>"
+          - "<black>Place a chest above as the input bin.</black>"
+      # Phenomenon Condenser tutorial page: shown after the Attunement Engine, introducing
+      # the Study Lv2 Moonlight scholarly-condensing machine.
+      - requires: [ phenomenon_condenser ]
+        title: "Phenomenon Condenser"
+        done:
+          - "<dark_green><bold>✔ Phenomenon Condenser</bold></dark_green>"
+          - ""
+          - "<black>A Moonlight-driven material condenser.</black>"
+          - "<black>Rotten flesh→leather, paper→book,</black>"
+          - "<black>ink sac→black dye, and more.</black>"
+        hint:
+          - "<dark_gray>· Phenomenon Condenser</dark_gray>"
+          - ""
+          - "<black>Upgrade the study to Lv2,</black>"
+          - "<black>craft the blueprint on the tools page.</black>"
+          - "<dark_aqua>Deepslate bricks ×9 base</dark_aqua><black> +</black>"
+          - "<dark_aqua>bookshelves at the corners</dark_aqua><black> +</black>"
+          - "<dark_aqua>a central lectern</dark_aqua><black> to claim.</black>"
+          - "<black>Place a chest above as the material bin.</black>"
+      # Attunement Engine tutorial page (v0.9.2 #1): shown after you have a Nexus (touched the
+      # radiance network), explaining its purpose and use.
+      - requires: [ energy_nexus ]
+        title: "Attunement Engine"
+        done:
+          - "<dark_green><bold>✔ Attunement Engine</bold></dark_green>"
+          - ""
+          - "<black>Let the base take over </black><gold>material processing</gold><black>,</black>"
+          - "<black>no more clicking cell by cell in the workshop.</black>"
+          - ""
+          - "<black>Build it within 48 blocks of a </black><dark_aqua>Radiance Nexus</dark_aqua>"
+          - "<black>(blueprint crafted at Workshop Lv2),</black>"
+          - "<black>right-click the central blast furnace to claim it.</black>"
+          - "<black>Place a chest above as the input bin,</black>"
+          - "<black>and drop in cobblestone and the like.</black>"
+          - ""
+          - "<black>Every few seconds it takes one input,</black>"
+          - "<black>spends a little Nexus Sunlight, returns the product.</black>"
+        hint:
+          - "<dark_gray>· Attunement Engine</dark_gray>"
+          - ""
+          - "<black>Raise a Radiance Nexus first;</black>"
+          - "<black>afterwards the base can take over processing.</black>"
+      # Infernal Ruins tutorial page: shown only after nether_gate (set foot in the Nether).
+      - requires: [ infernal_relay ]
+        title: "Infernal Ruins"
+        done:
+          - "<dark_green><bold>✔ Infernal Ruins</bold></dark_green>"
+          - ""
+          - "<dark_red>An ancient soul-fire ruin,</dark_red>"
+          - "<dark_red>the relay ruin claimed.</dark_red>"
+          - ""
+          - "<black>Next: build the</black>"
+          - "<gold>Ember Forge</gold><black> to refine Infernal Shards.</black>"
+        hint:
+          - "<dark_gray>· Infernal Ruins</dark_gray>"
+          - ""
+          - "<black>Venture deep into the Nether for a ruin:</black>"
+          - "<dark_red>a cracked nether-brick base</dark_red>"
+          - "<dark_red>+ corner pillars + soul fire</dark_red>"
+          - "<black>. Right-click the fire to claim it.</black>"
+      # Infernal Shard tutorial page: appears on first obtaining one.
+      - requires: [ infernal_shard ]
+        title: "Infernal Shard"
+        done:
+          - "<dark_green><bold>✔ Infernal Shard</bold></dark_green>"
+          - ""
+          - "<gold>Embers</gold><black> left by flame,</black>"
+          - "<black>congealed into a shard.</black>"
+          - ""
+          - "<black>Dropped by Nether creatures,</black>"
+          - "<black>or refined at the Ember Forge.</black>"
+        hint:
+          - "<dark_gray>· Infernal Shard</dark_gray>"
+          - ""
+          - "<black>In the Nether, hunt</black>"
+          - "<gold>blazes, ghasts</gold>"
+          - "<gold>or wither skeletons</gold><black> to obtain it.</black>"
+      # Ember Forge tutorial page: appears after building one and first right-click.
+      - requires: [ ember_forge ]
+        title: "Ember Forge"
+        done:
+          - "<dark_green><bold>✔ Ember Forge</bold></dark_green>"
+          - ""
+          - "<gold>A nether-brick base</gold>"
+          - "<black>+ corner polished blackstone brick pillars</black>"
+          - "<black>+ a central magma block.</black>"
+          - ""
+          - "<black>Hold Ember Bloom and right-click,</black>"
+          - "<black>refine Infernal Shards with Sunlight.</black>"
+        hint:
+          - "<dark_gray>· Ember Forge</dark_gray>"
+          - ""
+          - "<black>After claiming the Infernal Ruins,</black>"
+          - "<gold>9 nether bricks (3×3)</gold>"
+          - "<black>for the base, raise</black>"
+          - "<gold>polished blackstone brick pillars</gold><black> at the corners,</black>"
+          - "<gold>a magma block in the centre</gold><black>.</black>"
+          - "<black>Empty-hand right-click to view the recipe.</black>"
+
+  compendium:
+    title: "<dark_aqua>Nature Compendium</dark_aqua>"
+    intro:
+      - "<dark_aqua><bold>Nature Compendium</bold></dark_aqua>"
+      - ""
+      - "<black>Records only the natural responses</black>"
+      - "<black>you have met yourself.</black>"
+    entries:
+      - requires: [ morning_dew ]
+        title: "Morning Dew"
+        found:
+          - "<dark_green><bold>✔ Morning Dew</bold></dark_green>"
+          - ""
+          - "<gold>At dawn</gold><black> harvest grass and leaves.</black>"
+          - "<black>It forms an early attunement material.</black>"
+        hidden:
+          - "<dark_gray>· Unknown phenomenon</dark_gray>"
+          - ""
+          - "<gold>Dawn · grass · faint glow</gold>"
+      - requires: [ rain_breath ]
+        title: "Rain Breath"
+        found:
+          - "<dark_green><bold>✔ Rain Breath</bold></dark_green>"
+          - ""
+          - "<gold>While raining</gold><black> harvest wet plants.</black>"
+          - "<black>Used for farming and tools.</black>"
+        hidden:
+          - "<dark_gray>· Unknown phenomenon</dark_gray>"
+          - ""
+          - "<gold>Rain · riverbank · moss</gold>"
+          - "<gold>vines</gold>"
+      - requires: [ flower_vein ]
+        title: "Flower Vein"
+        found:
+          - "<dark_green><bold>✔ Flower Vein</bold></dark_green>"
+          - ""
+          - "<black>Harvest flowers and cherry leaves.</black>"
+          - "<black>A greenhouse cultivation material.</black>"
+        hidden:
+          - "<dark_gray>· Unknown phenomenon</dark_gray>"
+          - ""
+          - "<gold>Flowers · cherry grove · blossoms</gold>"
+      - requires: [ moon_dew ]
+        title: "Moon Dew"
+        found:
+          - "<dark_green><bold>✔ Moon Dew</bold></dark_green>"
+          - ""
+          - "<gold>On a clear full-moon night</gold>"
+          - "<black>harvest leaves and flowers for Moon Dew.</black>"
+        hidden:
+          - "<dark_gray>· Unknown phenomenon</dark_gray>"
+          - ""
+          - "<gold>Clear · full moon · leaves and flowers</gold>"
+      - requires: [ wind_trace ]
+        title: "Wind Trace"
+        found:
+          - "<dark_green><bold>✔ Wind Trace</bold></dark_green>"
+          - ""
+          - "<gold>Above height 96</gold>"
+          - "<black>harvest rock and snow.</black>"
+        hidden:
+          - "<dark_gray>· Unknown phenomenon</dark_gray>"
+          - ""
+          - "<gold>Mountain · rock face · snow</gold>"
+      - requires: [ leyline_sand ]
+        title: "Leyline Sand"
+        found:
+          - "<dark_green><bold>✔ Leyline Sand</bold></dark_green>"
+          - ""
+          - "<gold>Below height 32</gold>"
+          - "<black>mine the deep rock.</black>"
+        hidden:
+          - "<dark_gray>· Unknown phenomenon</dark_gray>"
+          - ""
+          - "<gold>Underground · deep rock · caves</gold>"
+      - requires: [ moss_bloom ]
+        title: "Moss Bloom"
+        found:
+          - "<dark_green><bold>✔ Moss Bloom</bold></dark_green>"
+          - ""
+          - "<gold>Rainfall Forest</gold>"
+          - "<black>harvest moss and wetland vegetation.</black>"
+          - "<black>Cultivate it in the greenhouse into a rare material.</black>"
+        hidden:
+          - "<dark_gray>· Unknown phenomenon</dark_gray>"
+          - ""
+          - "<gold>Expedition · after the rain · moss</gold>"
+      - requires: [ moon_core ]
+        title: "Moon Core"
+        found:
+          - "<dark_green><bold>✔ Moon Core</bold></dark_green>"
+          - ""
+          - "<gold>Moonless Waste</gold>"
+          - "<black>slay Nightshades or harvest dark vegetation.</black>"
+          - "<black>The moon's power for crafting the Radiant Focus.</black>"
+        hidden:
+          - "<dark_gray>· Unknown phenomenon</dark_gray>"
+          - ""
+          - "<gold>Endless night · waste · cold light</gold>"
+
+  record:
+    title: "<dark_green>Discovery Record</dark_green>"
+    header: "<black>Discovered </black><dark_green>{count}</dark_green><black> / {total}</black>"
+    legend:
+      - ""
+      - "<dark_green>✔ Discovered</dark_green>"
+      - "<dark_gray>◇ Unknown record</dark_gray>"
+    entry-line: "<dark_green>✔ {item}</dark_green>"
+    hidden-line: "<dark_gray>◇ <obfuscated>{item}</obfuscated></dark_gray>"
+    entries:
+      - id: morning_dew
+        label: "Morning Dew"
+      - id: dew_light
+        label: "Dewlight Vial"
+      - id: workshop
+        label: "Workshop"
+      - id: flower_bookmark
+        label: "Flower Bookmark"
+      - id: stonework_hammer
+        label: "Stonework Hammer"
+      - id: stonework_hammer_tier_2
+        label: "Stonework Hammer II"
+      - id: building_wand
+        label: "Building Wand"
+      - id: building_wand_tier_2
+        label: "Building Wand II"
+      - id: rain_breath
+        label: "Rain Breath"
+      - id: rain_tending
+        label: "Rain-Breath Tending"
+      - id: rain_bandage
+        label: "Rain Bandage"
+      - id: tool_repair
+        label: "Rain-Breath Mending"
+      - id: study
+        label: "Study"
+      - id: flower_vein
+        label: "Flower Vein"
+      - id: greenhouse
+        label: "Greenhouse"
+      - id: flower_vein_shears
+        label: "Flower Vein Shears"
+      - id: moon_dew
+        label: "Moon Dew"
+      - id: wind_trace
+        label: "Wind Trace"
+      - id: leyline_sand
+        label: "Leyline Sand"
+      - id: wind_vane
+        label: "Wind Vane"
+      - id: moon_pouch
+        label: "Moon Pouch"
+      - id: leyline_probe
+        label: "Leyline Probe"
+      - id: rainfall_forest
+        label: "Rainfall Forest"
+      - id: moss_bloom
+        label: "Moss Bloom"
+      - id: moss_balm
+        label: "Moss Balm"
+      - id: moss_fertile
+        label: "Moss Fertilizer"
+      - id: ember_bloom
+        label: "Ember Bloom"
+      - id: radiant_ore
+        label: "Radiant Ore"
+      - id: energy_crystal
+        label: "Energy Crystal"
+      - id: radiant_focus
+        label: "Radiant Focus"
+      - id: moonless_waste
+        label: "Moonless Waste"
+      - id: moon_core
+        label: "Moon Core"
+      - id: sun_tower
+        label: "Sun Tower"
+      - id: moon_tower
+        label: "Moon Tower"
+      - id: energy_nexus
+        label: "Radiance Nexus"
+      - id: energy_relay
+        label: "Energy Relay"
+      - id: energy_altar
+        label: "Radiance Altar"
+      - id: solar_pick
+        label: "Solar Pickaxe"
+      - id: star_compass
+        label: "Star Compass"
+      - id: lunar_spore
+        label: "Lunar Spore"

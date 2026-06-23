@@ -123,9 +123,9 @@ class AdminPanel(private val plugin: Lycohism) : Listener {
         val facility = com.tinyyana.lycohism.facility.FacilityUpgrade.FACILITIES[index]
         plugin.playerDataManager.update(player.uniqueId) { data ->
             when (facility) {
-                "workshop" -> data.workshopLevel = (data.workshopLevel + 1) % 3
-                "study" -> data.studyLevel = (data.studyLevel + 1) % 3
-                else -> data.greenhouseLevel = (data.greenhouseLevel + 1) % 3
+                "workshop" -> data.workshopLevel = (data.workshopLevel + 1) % 4
+                "study" -> data.studyLevel = (data.studyLevel + 1) % 4
+                else -> data.greenhouseLevel = (data.greenhouseLevel + 1) % 4
             }
         }
         openFacilities(player)

@@ -21,38 +21,40 @@ class AltarListener(private val plugin: Lycohism) : Listener {
         if (event.action != Action.RIGHT_CLICK_BLOCK) return
         if (event.hand != EquipmentSlot.HAND) return
         val block = event.clickedBlock ?: return
-        if (block.type != Material.ENCHANTING_TABLE) return
-        // Only intercept correctly-built altars; a plain enchanting table keeps its vanilla menu.
-        if (plugin.multiblockRegistry.get("energy_altar")?.detectRotation(block.world, block.x, block.y, block.z) == null) return
+        val altarId = when (block.type) {
+            Material.ENCHANTING_TABLE -> "energy_altar"
+            Material.MAGMA_BLOCK -> "ember_forge"
+            else -> return
+        }
+        // Only intercept correctly-built altars; a plain block keeps its vanilla behaviour.
+        if (plugin.multiblockRegistry.get(altarId)?.detectRotation(block.world, block.x, block.y, block.z) == null) return
 
         event.isCancelled = true
         val player = event.player
-        // Touching a built altar reveals it (codex + progression "輝能祭壇").
-        plugin.playerDataManager.discover(player.uniqueId, "energy_altar")
-        plugin.structureLocator.record("energy_altar", block.location)
+        plugin.playerDataManager.discover(player.uniqueId, altarId)
+        plugin.structureLocator.record(altarId, block.location)
         val held = player.inventory.itemInMainHand
         if (held.type.isAir) {
-            // Empty hand = "how do I use this": show the steps and every known recipe.
-            showGuide(player)
+            showGuide(player, altarId)
             return
         }
-        when (plugin.altarManager.craft(player, block, held)) {
+        when (plugin.altarManager.craft(player, block, held, altarId)) {
             AltarManager.Result.CRAFTED -> Messages.actionBar(player, Texts.line("messages.altar.crafted"))
             AltarManager.Result.MISSING_INGREDIENTS -> Messages.actionBar(player, Texts.line("messages.altar.missing-ingredients"))
             AltarManager.Result.MISSING_ENERGY -> Messages.actionBar(player, Texts.line("messages.altar.missing-energy"))
-            // Held item isn't a catalyst: say so AND list what counts as one (v0.7.5 #6).
             AltarManager.Result.NO_RECIPE, AltarManager.Result.INVALID -> {
                 Messages.actionBar(player, Texts.line("messages.altar.no-recipe"))
-                val catalysts = plugin.altarManager.recipes().map { it.catalyst }.distinct().joinToString("、", transform = ::name)
+                val catalysts = plugin.altarManager.recipes(altarId).map { it.catalyst }.distinct().joinToString("、", transform = ::name)
                 Messages.send(player, Texts.render("messages.altar.catalysts", "catalysts" to catalysts))
             }
         }
     }
 
-    /** Prints the how-to plus a one-line summary of every altar recipe (catalyst → result). */
-    private fun showGuide(player: Player) {
-        Texts.lines("messages.altar.guide").forEach { Messages.send(player, it) }
-        for (recipe in plugin.altarManager.recipes()) {
+    /** Prints the how-to plus a one-line summary of recipes for this altar type. */
+    private fun showGuide(player: Player, altarId: String) {
+        val guideKey = if (altarId == "energy_altar") "messages.altar.guide" else "messages.ember-forge.guide"
+        Texts.lines(guideKey).forEach { Messages.send(player, it) }
+        for (recipe in plugin.altarManager.recipes(altarId)) {
             val ingredients = recipe.ingredients.entries.joinToString("、") { (k, c) -> "${name(k)}×$c" }
             val energy = buildString {
                 if (recipe.sunCost > 0) append(" ☀${recipe.sunCost}")

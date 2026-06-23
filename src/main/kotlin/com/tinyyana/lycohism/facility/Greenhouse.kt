@@ -148,6 +148,9 @@ class Greenhouse(private val plugin: Lycohism) {
             if (effective >= 2) add(craftEntry({ plugin.lunarSpore.createItem() }, plugin.lunarSpore.craftCost) {
                 craftTool(player, plugin.lunarSpore.craftCost, com.tinyyana.lycohism.tool.LunarSpore.ID) { plugin.lunarSpore.createItem() }
             })
+            if (effective >= 2) add(craftEntry({ plugin.blueprint.createItem(CULTIVATOR_ID) }, CULTIVATOR_BP_COST) {
+                craftTool(player, CULTIVATOR_BP_COST, CULTIVATOR_ID) { plugin.blueprint.createItem(CULTIVATOR_ID) }
+            })
         }
     }
 
@@ -340,6 +343,9 @@ class Greenhouse(private val plugin: Lycohism) {
 
     companion object {
         private const val FILE_NAME = "facilities.yml"
+        private const val CULTIVATOR_ID = "seedling_cultivator"
+        private val CULTIVATOR_BP_COST = listOf("morning_dew:2", "BONE_MEAL:8", "PAPER:1")
+
         // Main menu: evenly spaced (10/12/14/16) so it reads cleanly with or without the upgrade button.
         private const val SLOT_REPAIR = 13
         private const val SLOT_CULTIVATE = 10

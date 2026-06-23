@@ -67,7 +67,8 @@ class MultiblockListener(private val plugin: Lycohism) : Listener {
         val block = event.clickedBlock ?: return
         val player = event.player
         for (multiblock in plugin.multiblockRegistry.all()) {
-            if (multiblock.id == "energy_altar") continue // the altar has its own right-click handler
+            if (multiblock.id == "energy_altar") continue // the altar has its own right-click handler (AltarListener)
+            if (multiblock.id == "ember_forge") continue // handled by AltarListener
             if (multiblock.id == "eclipse_dial") continue // the 日月儀 has its own handler (EclipseBoss)
             if (multiblock.id in plugin.multiblockRegistry.FACILITY_TIER_2) continue // facility tiers open via FacilityAccessListener
             // v0.7.5 #1: towers only produce when generated naturally / by admin / blueprint — a hand-built
@@ -114,15 +115,51 @@ class MultiblockListener(private val plugin: Lycohism) : Listener {
             }
 
             "attunement_engine" -> {
-                val registered = plugin.automationManager.register(block, player.uniqueId)
-                Messages.send(player, Texts.line(if (registered) "messages.automation.engine-registered" else "messages.automation.engine-exists"))
-                if (registered) {
-                    plugin.playerDataManager.discover(player.uniqueId, "attunement_engine")
-                    com.tinyyana.lycohism.multiblock.StructureActivation.label(block, "attunement_engine")
-                    plugin.structureLocator.record("attunement_engine", block.location)
-                    com.tinyyana.lycohism.util.Audit.log(player, "automation-register", "at ${block.x},${block.y},${block.z}")
-                    player.playSound(player.location, Sound.BLOCK_BEACON_ACTIVATE, 0.6f, 1.2f)
+                if (!plugin.automationManager.register(block, player.uniqueId)) {
+                    Texts.lines("messages.automation.engine-status").forEach { Messages.send(player, it) }
+                    return
                 }
+                Messages.send(player, Texts.line("messages.automation.engine-registered"))
+                plugin.playerDataManager.discover(player.uniqueId, "attunement_engine")
+                com.tinyyana.lycohism.multiblock.StructureActivation.label(block, "attunement_engine")
+                plugin.structureLocator.record("attunement_engine", block.location)
+                com.tinyyana.lycohism.util.Audit.log(player, "automation-register", "at ${block.x},${block.y},${block.z}")
+                player.playSound(player.location, Sound.BLOCK_BEACON_ACTIVATE, 0.6f, 1.2f)
+            }
+
+            "seedling_cultivator" -> {
+                if (!plugin.automationManager.register(block, player.uniqueId)) {
+                    Texts.lines("messages.automation.cultivator-status").forEach { Messages.send(player, it) }
+                    return
+                }
+                Messages.send(player, Texts.line("messages.automation.cultivator-registered"))
+                plugin.playerDataManager.discover(player.uniqueId, "seedling_cultivator")
+                com.tinyyana.lycohism.multiblock.StructureActivation.label(block, "seedling_cultivator")
+                plugin.structureLocator.record("seedling_cultivator", block.location)
+                com.tinyyana.lycohism.util.Audit.log(player, "automation-register", "seedling_cultivator at ${block.x},${block.y},${block.z}")
+                player.playSound(player.location, Sound.BLOCK_BEACON_ACTIVATE, 0.6f, 1.1f)
+            }
+
+            "phenomenon_condenser" -> {
+                if (!plugin.automationManager.register(block, player.uniqueId)) {
+                    Texts.lines("messages.automation.condenser-status").forEach { Messages.send(player, it) }
+                    return
+                }
+                Messages.send(player, Texts.line("messages.automation.condenser-registered"))
+                plugin.playerDataManager.discover(player.uniqueId, "phenomenon_condenser")
+                com.tinyyana.lycohism.multiblock.StructureActivation.label(block, "phenomenon_condenser")
+                plugin.structureLocator.record("phenomenon_condenser", block.location)
+                com.tinyyana.lycohism.util.Audit.log(player, "automation-register", "phenomenon_condenser at ${block.x},${block.y},${block.z}")
+                player.playSound(player.location, Sound.BLOCK_ENCHANTMENT_TABLE_USE, 0.6f, 1.2f)
+            }
+
+            "infernal_relay" -> {
+                val isNew = "infernal_relay" !in plugin.playerDataManager.get(player.uniqueId).discoveries
+                plugin.playerDataManager.discover(player.uniqueId, "infernal_relay")
+                com.tinyyana.lycohism.multiblock.StructureActivation.label(block, "infernal_relay")
+                plugin.structureLocator.record("infernal_relay", block.location)
+                Messages.send(player, Texts.line(if (isNew) "messages.infernal-relay.claimed" else "messages.infernal-relay.exists"))
+                player.playSound(player.location, Sound.BLOCK_BEACON_ACTIVATE, 0.6f, 0.7f)
             }
         }
     }

@@ -25,6 +25,7 @@ class AltarManager(private val plugin: Lycohism) {
 
     data class Recipe(
         val id: String,
+        val altarId: String,
         val catalyst: String,
         val ingredients: Map<String, Int>,
         val sunCost: Int,
@@ -44,6 +45,7 @@ class AltarManager(private val plugin: Lycohism) {
         val section = ConfigFiles.load(plugin, FILE_NAME).getConfigurationSection("recipes") ?: return
         for (id in section.getKeys(false)) {
             val node = section.getConfigurationSection(id) ?: continue
+            val altarId = node.getString("altar", "energy_altar")?.trim() ?: "energy_altar"
             val catalyst = node.getString("catalyst")?.trim() ?: continue
             val ingredients = node.getStringList("ingredients").mapNotNull { token ->
                 val parts = token.split(":")
@@ -55,6 +57,7 @@ class AltarManager(private val plugin: Lycohism) {
             val resultId = result.getOrNull(0)?.trim()?.takeIf { it.isNotEmpty() } ?: continue
             recipes += Recipe(
                 id = id,
+                altarId = altarId,
                 catalyst = catalyst,
                 ingredients = ingredients,
                 sunCost = node.getInt("energy-sun", 0).coerceAtLeast(0),
@@ -67,16 +70,17 @@ class AltarManager(private val plugin: Lycohism) {
     }
 
     fun recipes(): List<Recipe> = recipes.toList()
+    fun recipes(altarId: String): List<Recipe> = recipes.filter { it.altarId == altarId }
 
     enum class Result { CRAFTED, NO_RECIPE, MISSING_INGREDIENTS, MISSING_ENERGY, INVALID }
 
     /** Attempts a craft at the altar centred on [block], with [held] as the catalyst. */
-    fun craft(player: Player, block: Block, held: ItemStack): Result {
-        if (plugin.multiblockRegistry.get("energy_altar")?.detectRotation(block.world, block.x, block.y, block.z) == null) {
+    fun craft(player: Player, block: Block, held: ItemStack, altarId: String = "energy_altar"): Result {
+        if (plugin.multiblockRegistry.get(altarId)?.detectRotation(block.world, block.x, block.y, block.z) == null) {
             return Result.INVALID
         }
         val catalystKey = key(held)
-        val recipe = recipes.firstOrNull { it.catalyst == catalystKey } ?: return Result.NO_RECIPE
+        val recipe = recipes.firstOrNull { it.altarId == altarId && it.catalyst == catalystKey } ?: return Result.NO_RECIPE
 
         val centre = block.location.add(0.5, 0.5, 0.5)
         val dropped = centre.world.getNearbyEntities(centre, RADIUS, RADIUS, RADIUS).filterIsInstance<Item>()

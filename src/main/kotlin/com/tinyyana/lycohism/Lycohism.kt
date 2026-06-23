@@ -33,6 +33,8 @@ import com.tinyyana.lycohism.phenomenon.RainTending
 import com.tinyyana.lycohism.multiblock.AltarManager
 import com.tinyyana.lycohism.multiblock.MultiblockRegistry
 import com.tinyyana.lycohism.progression.ProgressionManager
+import com.tinyyana.lycohism.puzzle.SealListener
+import com.tinyyana.lycohism.puzzle.SealManager
 import com.tinyyana.lycohism.tool.Blueprint
 import com.tinyyana.lycohism.tool.BuildingWand
 import com.tinyyana.lycohism.tool.DewLight
@@ -172,6 +174,9 @@ class Lycohism : JavaPlugin() {
     lateinit var altarManager: AltarManager
         private set
 
+    lateinit var sealManager: SealManager
+        private set
+
     lateinit var expeditionHazards: ExpeditionHazards
         private set
 
@@ -247,6 +252,7 @@ class Lycohism : JavaPlugin() {
         structureLocator = StructureLocator(this)
         blueprint = Blueprint(this)
         altarManager = AltarManager(this)
+        sealManager = SealManager(this)
         structureGenerator = StructureGenerator(this)
         eclipseBoss = EclipseBoss(this)
         dewLight.registerRecipe()
@@ -276,6 +282,9 @@ class Lycohism : JavaPlugin() {
         }
         if (::automationManager.isInitialized) {
             automationManager.save()
+        }
+        if (::sealManager.isInitialized) {
+            sealManager.save()
         }
         if (::playerDataManager.isInitialized) {
             playerDataManager.saveAll()
@@ -321,6 +330,7 @@ class Lycohism : JavaPlugin() {
         progressionManager.reload()
         multiblockRegistry.load()
         altarManager.reload()
+        sealManager.load()
         structureGenerator.load()
         eclipseBoss.load()
         expeditionMobBoost.load()
@@ -357,6 +367,7 @@ class Lycohism : JavaPlugin() {
         server.pluginManager.registerEvents(structureGenerator, this)
         server.pluginManager.registerEvents(com.tinyyana.lycohism.listener.MultiblockListener(this), this)
         server.pluginManager.registerEvents(com.tinyyana.lycohism.listener.AltarListener(this), this)
+        server.pluginManager.registerEvents(SealListener(this), this)
 
         server.pluginManager.registerEvents(eclipseBoss, this)
         server.pluginManager.registerEvents(expeditionMobBoost, this)

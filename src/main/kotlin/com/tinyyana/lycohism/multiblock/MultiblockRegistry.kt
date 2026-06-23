@@ -31,6 +31,10 @@ class MultiblockRegistry(private val plugin: Lycohism) {
         register(greenhouseTier2())
         register(eclipseDial())
         register(attunementEngine())
+        register(seedlingCultivator())
+        register(phenomenonCondenser())
+        register(infernalRelay())
+        register(emberForge())
         plugin.logger.info("Loaded ${structures.size} multiblock templates.")
     }
 
@@ -226,6 +230,79 @@ class MultiblockRegistry(private val plugin: Lycohism) {
         layers = listOf(
             listOf("PPP", "PBP", "PPP"),
             listOf("L L", " X ", "L L"),
+        ),
+    )
+
+    /**
+     * 育苗機（v0.9.3 溫室自動化）：苔蘚基座＋四角杜鵑花叢＋中央堆肥桶為控制器。右鍵堆肥桶認領；
+     * 邏輯複用 [com.tinyyana.lycohism.energy.AutomationManager]，從正上方容器取植物素材、耗月輝加工。
+     */
+    private fun seedlingCultivator(): Multiblock = Multiblock.fromLayers(
+        id = "seedling_cultivator",
+        legend = mapOf(
+            'M' to Material.MOSS_BLOCK,
+            'A' to Material.FLOWERING_AZALEA,
+            'X' to Material.COMPOSTER,
+        ),
+        controllerChar = 'X',
+        layers = listOf(
+            listOf("MMM", "MMM", "MMM"),
+            listOf("A.A", ".X.", "A.A"),
+        ),
+    )
+
+    /**
+     * 現象凝縮台（v0.9.3 書房自動化）：深板岩基座＋四角書架＋中央講台為控制器。右鍵講台認領；
+     * 邏輯複用 [com.tinyyana.lycohism.energy.AutomationManager]，從正上方容器取學術素材、耗月輝加工。
+     */
+    private fun phenomenonCondenser(): Multiblock = Multiblock.fromLayers(
+        id = "phenomenon_condenser",
+        legend = mapOf(
+            'D' to Material.DEEPSLATE_BRICKS,
+            'H' to Material.BOOKSHELF,
+            'X' to Material.LECTERN,
+        ),
+        controllerChar = 'X',
+        layers = listOf(
+            listOf("DDD", "DDD", "DDD"),
+            listOf("H.H", ".X.", "H.H"),
+        ),
+    )
+
+    /**
+     * 地獄腐壞中繼廢址（v0.9.31）：鑿裂地獄磚基座、四角地獄磚牆柱、中央魂靈焰火為控制器。
+     * 右鍵魂靈焰火認領廢址（discover + label），解鎖輝能祭壇的焰輝碎片提煉配方。
+     * 自然生成於地獄底層新區塊（StructureGenerator），可用 /lycohism build 管理員放置。
+     */
+    private fun infernalRelay(): Multiblock = Multiblock.fromLayers(
+        id = "infernal_relay",
+        legend = mapOf(
+            'N' to Material.CRACKED_NETHER_BRICKS,
+            'W' to Material.NETHER_BRICK_WALL,
+            'X' to Material.SOUL_CAMPFIRE,
+        ),
+        controllerChar = 'X',
+        layers = listOf(
+            listOf("NNN", "NNN", "NNN"),
+            listOf("W.W", ".X.", "W.W"),
+        ),
+    )
+
+    /**
+     * 燼華鍛爐（v0.9.32）：地獄磚基座＋四角磨製黑石磚柱＋中央熔岩塊為控制器。玩家自建；
+     * 空手右鍵熔岩塊查看配方，手持燼華右鍵煉製焰輝碎片（耗日輝）。見 [AltarListener]。
+     */
+    private fun emberForge(): Multiblock = Multiblock.fromLayers(
+        id = "ember_forge",
+        legend = mapOf(
+            'N' to Material.NETHER_BRICKS,
+            'P' to Material.POLISHED_BLACKSTONE_BRICKS,
+            'X' to Material.MAGMA_BLOCK,
+        ),
+        controllerChar = 'X',
+        layers = listOf(
+            listOf("NNN", "NNN", "NNN"),
+            listOf("P.P", ".X.", "P.P"),
         ),
     )
 

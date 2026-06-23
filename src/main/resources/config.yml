@@ -4,6 +4,14 @@
 # 啟用後會在 console 輸出額外的 debug 訊息。
 debug: false
 
+# 玩家文字語系 / Player text language.
+#   auto = 跟著伺服器的系統地區（JVM locale）自動選；zh 地區用繁體中文，其餘用英文。
+#   auto = follow the server's system locale; Chinese-region hosts get 繁體中文, everyone else English.
+#   zh   = 一律繁體中文 / always Traditional Chinese (lang_zh.yml)
+#   en   = 一律英文 / always English (lang_en.yml)
+# 對應檔案是 lang_<語系>.yml，可自行編輯後 /lyco reload。
+language: auto
+
 # 稽核紀錄：把插件產出/移動的東西（給予、掉落、合成、輝能消耗、結構認領）寫到
 # plugins/lycohism/logs/lycohism-audit.log，方便多人伺服器追查經濟與重複刷。
 audit:
@@ -77,8 +85,20 @@ automation:
     - "GRANITE>POLISHED_GRANITE:1;SUN;4"
     - "DIORITE>POLISHED_DIORITE:1;SUN;4"
     - "ANDESITE>POLISHED_ANDESITE:1;SUN;4"
-    # 月輝線：深色岩石
+    # 月輝線：深色岩石（調律機）
     - "DEEPSLATE>DEEPSLATE_BRICKS:1;MOON;4"
     - "COBBLED_DEEPSLATE>POLISHED_DEEPSLATE:1;MOON;4"
     - "BLACKSTONE>POLISHED_BLACKSTONE:1;MOON;4"
     - "TUFF>TUFF_BRICKS:1;MOON;4"
+    # 月輝線：植物加工（育苗機風格）
+    - "CACTUS>GREEN_DYE:2;MOON;4"
+    - "SUGAR_CANE>SUGAR:2;MOON;4"
+    - "KELP>DRIED_KELP:2;MOON;3"
+    - "COBBLESTONE>MOSSY_COBBLESTONE:1;MOON;10"
+    - "BONE_MEAL>BONE:1;MOON;6"
+    # 月輝線：學術凝縮（現象凝縮台風格）
+    - "ROTTEN_FLESH>LEATHER:1;MOON;12"
+    - "PAPER>BOOK:1;MOON;8"
+    - "INK_SAC>BLACK_DYE:2;MOON;4"
+    - "BLAZE_ROD>BLAZE_POWDER:4;MOON;6"
+    - "GLOWSTONE_DUST>GLOWSTONE:1;MOON;8"

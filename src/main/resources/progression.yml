@@ -3,7 +3,7 @@
 #   discoveries  : 發現紀錄 id 全部具備
 #   advancements : 原版進度 namespaced key 全部完成
 #   facilities   : 設施等級 >= 指定值（workshop / study / greenhouse）
-# 顯示名稱、描述、提示放在 lang.yml 的 progression.stages.<id>（title / lore / hint）。
+# 顯示名稱、描述、提示放在 lang_zh.yml / lang_en.yml 的 progression.stages.<id>（title / lore / hint）。
 # preview: true 代表「規劃中」章節，永遠不算完成，只用來預告下一步方向。
 # 章節順序即顯示順序；最多 14 個會顯示在 UI 上。
 progression:
@@ -50,6 +50,22 @@ progression:
       advancement-sound: minecraft:block.portal.travel
       requires:
         advancements: [ minecraft:story/enter_the_nether ]
+
+    # v0.9.31 地獄廢址：在地獄深處找到並認領古老的腐壞中繼廢址。
+    infernal_relay:
+      icon: SOUL_CAMPFIRE
+      advancement-sound: minecraft:block.beacon.activate
+      advancement-parent: nether_gate
+      requires:
+        discoveries: [ infernal_relay ]
+
+    # v0.9.32 燼華鍛爐：建造並使用地獄鍛爐提煉焰輝碎片。
+    ember_forge:
+      icon: MAGMA_BLOCK
+      advancement-sound: minecraft:block.blastfurnace.fire_crackle
+      advancement-parent: infernal_relay
+      requires:
+        discoveries: [ ember_forge ]
 
     radiant_vein:
       icon: RAW_GOLD
@@ -149,6 +165,28 @@ progression:
       advancement-parent: facility_growth
       requires:
         discoveries: [ attunement_engine ]
+
+    # v0.9.3 自動化擴充：溫室育苗機（月輝，植物素材加工）。
+    seedling_cultivator:
+      icon: COMPOSTER
+      advancement-parent: attunement_engine
+      requires:
+        discoveries: [ seedling_cultivator ]
+
+    # v0.9.3 自動化擴充：書房現象凝縮台（月輝，學術素材凝縮）。
+    phenomenon_condenser:
+      icon: LECTERN
+      advancement-parent: attunement_engine
+      requires:
+        discoveries: [ phenomenon_condenser ]
+
+    # v0.9.3 解謎：解開第一座封印祠（需已建輝能核心＋持蓄能晶）。
+    sealed_shrine:
+      icon: CHISELED_DEEPSLATE
+      advancement-sound: minecraft:block.amethyst_block.resonate
+      advancement-parent: radiant_nexus
+      requires:
+        discoveries: [ sealed_shrine ]
 
     # ── v0.8 蝕：日月兩支線在此收束 ───────────────────────────────
     # 暮蝕之境：要走過「日」的潮汐深淵與「月」的永夜荒原兩條線，蝕的章節才開啟（v0.8.1 #5）。

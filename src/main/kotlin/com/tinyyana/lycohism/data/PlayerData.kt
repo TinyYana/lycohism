@@ -37,5 +37,8 @@ class PlayerData(val uuid: UUID) {
     /** 月輝 pool: radiant energy gathered under a night sky, spent by moon-attuned abilities. */
     var moonEnergy: Int = 0
 
+    /** Coordinate keys ("world,x,y,z") of sealed shrines this player has already unlocked. */
+    val unsealed: MutableSet<String> = mutableSetOf()
+
     fun hasDiscovered(id: String): Boolean = id in discoveries
 }

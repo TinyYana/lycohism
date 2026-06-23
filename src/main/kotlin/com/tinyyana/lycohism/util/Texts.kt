@@ -2,19 +2,40 @@ package com.tinyyana.lycohism.util
 
 import com.tinyyana.lycohism.Lycohism
 import org.bukkit.configuration.file.YamlConfiguration
+import java.util.Locale
 
 /**
- * Editable text layer backed by lang.yml. All player-facing prose (book pages, GUI
- * labels, common messages) lives here so it can be reworded or recoloured without
- * touching code. Loaded once on enable and refreshed on /lycohism reload.
+ * Editable text layer backed by a per-language lang file (lang_zh.yml / lang_en.yml).
+ * All player-facing prose (book pages, GUI labels, common messages) lives here so it
+ * can be reworded or recoloured without touching code. Loaded once on enable and
+ * refreshed on /lycohism reload.
+ *
+ * Which file is active comes from config.yml `language` (auto|zh|en); `auto` follows
+ * the server's JVM locale so a zh-region host defaults to Chinese, everyone else English.
  */
 object Texts {
 
     private var yaml: YamlConfiguration? = null
 
     fun load(plugin: Lycohism) {
-        yaml = ConfigFiles.load(plugin, FILE_NAME)
+        val setting = plugin.config.getString("language", "auto") ?: "auto"
+        val code = resolveLanguage(setting, Locale.getDefault().language)
+        // ponytail: each language is its own on-disk file; switching language reads a
+        // different file rather than migrating an admin's edits. Fine for ALPHA.
+        yaml = ConfigFiles.load(plugin, "lang_$code.yml")
     }
+
+    /**
+     * Resolves the bundled language code from the config [setting], falling back to the
+     * server's [serverLanguage] (JVM locale language tag) when set to "auto". Bukkit-free
+     * so it stays unit-testable. Unknown values default to English.
+     */
+    fun resolveLanguage(setting: String, serverLanguage: String): String =
+        when (setting.trim().lowercase()) {
+            "zh", "zh_tw", "zh-tw", "zh-hant", "zh_hant", "cht", "chinese" -> "zh"
+            "en", "en_us", "en-us", "english" -> "en"
+            else -> if (serverLanguage.lowercase().startsWith("zh")) "zh" else "en"
+        }
 
     /** A single line, falling back to [default] when the path is missing. */
     fun line(path: String, default: String = path): String = yaml?.getString(path) ?: default
@@ -48,6 +69,4 @@ object Texts {
         for ((key, value) in replacements) result = result.replace("{$key}", value)
         return result
     }
-
-    private const val FILE_NAME = "lang.yml"
 }

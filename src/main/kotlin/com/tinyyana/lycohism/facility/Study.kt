@@ -115,6 +115,10 @@ class Study(private val plugin: Lycohism) {
             if (effective >= 2) add(ToolEntry(
                 Menu.button(Material.FILLED_MAP, Texts.line("gui.study.map-mark"), Texts.lines("gui.study.map-mark-lore")),
             ) { markNearestTower(player) })
+            // Lv2（升級結構）：現象凝縮台藍圖（書房風格的自動化機器）。
+            if (effective >= 2) add(craftEntry({ plugin.blueprint.createItem(CONDENSER_ID) }, CONDENSER_BP_COST) {
+                craftTool(player, CONDENSER_BP_COST, CONDENSER_ID) { plugin.blueprint.createItem(CONDENSER_ID) }
+            })
             // Lv3（蝕輝）：全境預報——讀出此刻此地所有可採集的自然現象，均衡口味的「探索向」三階強化。
             if (effective >= 3) add(ToolEntry(
                 Menu.button(Material.SPYGLASS, Texts.line("gui.study.forecast"), Texts.lines("gui.study.forecast-lore")),
@@ -365,6 +369,8 @@ class Study(private val plugin: Lycohism) {
 
     companion object {
         private const val FILE_NAME = "facilities.yml"
+        private const val CONDENSER_ID = "phenomenon_condenser"
+        private val CONDENSER_BP_COST = listOf("rain_breath:2", "AMETHYST_SHARD:4", "PAPER:1")
 
         // MAIN — six entries sit consecutively (11–16) for a clean row; upgrade takes 16 when shown.
         private const val SLOT_REPAIR = 13

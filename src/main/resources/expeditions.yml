@@ -1,7 +1,7 @@
 # Lycohism 遠征設定
 # 每個遠征都是一個獨立、持久的世界，玩家從書房介面前往並帶回素材。
 # 世界在第一次進入時才建立（lazy），之後保存在磁碟上。
-# 顯示名稱放在 lang.yml 的 content-names，首次進入提示放在 messages.expedition.first-hint。
+# 顯示名稱放在 lang_zh.yml / lang_en.yml 的 content-names，首次進入提示放在 messages.expedition.first-hint。
 
 expeditions:
 

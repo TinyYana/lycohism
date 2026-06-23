@@ -1,114 +1,126 @@
-# Lycohism 玩法教學
+# Lycohism Gameplay Tutorial
 
-這份是給玩家的。不會把每個數值跟配方都列出來——有些東西自己撞到比較有意思——但會把「卡住人的地方」講清楚，讓你不用一直回來查。
+*[繁體中文版](TUTORIAL.zh-TW.md)*
 
-照原版生存玩就好，Lycohism 的東西會自己浮出來。下面大概照你會遇到的順序走。
+This one is for players. It won't list every number and recipe — some things are more fun to bump into yourself — but it spells out "where people get stuck" so you don't keep coming back to look things up.
 
-## 先講一個會卡住所有人的點
+Just play vanilla survival; Lycohism's stuff surfaces on its own. Below roughly follows the order you'll meet it.
 
-設施（工房、書房、溫室）不是用指令開的，是用世界裡的方塊開的。手勢是：
+## First, the thing that trips everyone up
 
-**潛行 + 空手 + 右鍵** 對應的方塊。
+Facilities (Workshop, Study, Greenhouse) aren't opened by command — they're opened with blocks in the world. The gesture is:
 
-- 工房 → 工作台
-- 書房 → 書架
-- 溫室 → 花盆
+**Sneak + empty hand + right-click** the matching block.
 
-空手是故意設計的，不然你每次想放方塊或用工作台都會變成開選單。記住這個手勢，剩下的就順了。
+- Workshop → crafting table
+- Study → bookshelf
+- Greenhouse → flower pot
 
-## 自然現象：你的第一個素材
+Empty hand is deliberate, otherwise every time you wanted to place a block or use a crafting table you'd open a menu instead. Remember this gesture and the rest flows.
 
-世界多了一層會回應你的東西。最早會遇到的是**晨露**：清晨在草地上破壞草、花，有機會掉。
+## Natural phenomena: your first material
 
-重點是「對的時間、對的地點」。晨露只在清晨、只在植被上。後面的也一樣——
+The world has gained a layer that responds to you. The earliest you'll meet is **Morning Dew**: at dawn, break grass and flowers in a grassland for a chance to drop it.
 
-- 雨息：雨天、水邊
-- 月露：夜晚、滿月、高處
-- 風痕：山地、高處
-- 地脈砂：洞窟、深層
-- 花脈：花叢、櫻花林
+The key is "the right time, the right place". Morning Dew is only at dawn, only on vegetation. The later ones work the same way —
 
-不用背。手上拿著某些工具（像風標、地脈探針）的時候，畫面會提示你現在這個環境能採什麼。先去外面晃，撞到再說。
+- Rain Breath: rain, near water
+- Moon Dew: night, full moon, high up
+- Wind Trace: mountains, high up
+- Leyline Sand: caves, deep
+- Flower Vein: flower clusters, cherry groves
 
-## 工房：把素材變成有用的東西
+No need to memorise. While holding certain tools (like the Wind Vane or Leyline Probe), the screen hints at what's harvestable in your current environment. Go wander outside first and bump into things.
 
-採到幾滴晨露之後，去找一個工作台，潛行空手右鍵打開工房。一開始它是壞的，選單會告訴你修復要哪些材料（晨露 + 一些木板石材）。修好就是 Lv1，開始能做工具。
+## Workshop: turning materials into useful things
 
-第一個值得做的大概是**露光瓶**——下礦的時候給你一段夜視，比一直插火把舒服。其他像石工槌（石材加工）、花籤（記地點、之後指方向）也都在這。每個按鈕的說明會寫清楚成本跟用途。
+After a few drops of Morning Dew, find a crafting table and sneak+empty-hand right-click to open the Workshop. It starts broken; the menu tells you what repair needs (Morning Dew + some planks and stone). Repaired = Lv1, and you can start making tools.
 
-## 書房跟溫室
+The first thing worth making is probably the **Dewlight Vial** — a stretch of night vision for mining, comfier than constantly placing torches. Others like the Stonework Hammer (stone processing) and Flower Bookmark (remember a place, point back later) are here too. Each button's description spells out its cost and use.
 
-同一套邏輯，不同方塊。
+## Study and Greenhouse
 
-- **書房**（書架）：放你的紀錄。調律手冊告訴你「下一個小步驟」，自然圖鑑記你遇過的現象，還有調律之路的入口。也是遠征的出發點。
-- **溫室**（花盆）：植物相關。用花脈培育各種農作素材，做花脈剪那類工具。
+Same logic, different blocks.
 
-## 調律之路：不知道幹嘛的時候看這個
+- **Study** (bookshelf): holds your records. The Attunement Manual tells you "the next small step", the Nature Compendium records phenomena you've met, and there's the entrance to the Path of Attunement. It's also the departure point for expeditions.
+- **Greenhouse** (flower pot): plant-related. Cultivate various farming materials from Flower Vein, make tools like the Flower Vein Shears.
 
-書房裡能打開「調律之路」。它是一條里程碑，第一個還沒完成的章節就是你現在的目標，會給提示；後面的章節先藏起來，維持一點往前探的感覺。
+## Path of Attunement: look here when you don't know what to do
 
-如果你哪天上線忘記自己卡在哪，先翻這個。它也會對映到原版的進度（advancement）畫面，所以在那邊也看得到。
+The study can open the "Path of Attunement". It's a chain of milestones; the first uncompleted chapter is your current objective and gives a hint, while later chapters stay hidden to keep a sense of pushing forward.
 
-## 輝能：日與月
+If you log in one day and forget where you were stuck, check this first. It also maps onto the vanilla advancement screen, so you can see it there too.
 
-玩到中期會碰到能量。模型很單純：**你站在天空下就會自己蓄能**，白天蓄日輝、晚上蓄月輝。畫面上方那條 boss bar 就是你目前的量。
+## Radiance: sun and moon
 
-池子滿了之後，多出來的會自動溢流進你背包裡的**蓄能晶**（在工房做）。所以蓄能晶比較像一顆會自己充電的電池，不用一直拿在手上。
+Mid-game you'll run into energy. The model is simple: **stand under the open sky and you gather on your own** — Sunlight by day, Moonlight by night. The boss bar at the top of the screen is your current amount.
 
-接下來是把能量「集中起來」這件事，這也是最多人看不懂怎麼玩的地方，拆開講：
+Once the pool is full, the surplus auto-overflows into the **Energy Crystal** in your inventory (made at the workshop). So the Energy Crystal is more like a self-charging battery — you don't have to hold it.
 
-1. **日輝塔 / 月輝塔**（遊戲裡叫日晷 / 月晷）：高高的塔，會產能。日塔白天產、月塔晚上產，而且塔頂要見得到天。**注意：這版的塔只有自然生成、或管理員 / 藍圖放出來的才會產能**，你自己手堆一座是不會動的（玩家自己產能是之後的版本）。在世界裡晃到一座、靠近它，它就會被記錄下來，進度也會跟著走。
-2. **輝能核心**：基地的能量倉。把它蓋在塔水平 48 格內，塔的能量就會流進來。靠近的時候會看到一條流動的光束，那就代表能量真的在走。
-3. **能量中繼器**：塔離核心太遠的時候，在中間放中繼器接力，一段 48 格、一段一段串過去。
+Next comes "concentrating" the energy, which is where most people get confused, so let's break it down:
 
-順序記成一句話就好：**塔產能 → 中繼器接力 → 核心儲存 → 拿去升級設施**。核心頁面跟設施的升級按鈕上也都有寫這條流程，忘記就點開看。
+1. **Sun Tower / Moon Tower** (called Sundial / Moondial in-game): tall towers that produce. The sun tower produces by day, the moon tower by night, and the top must see open sky. **Note: in this version, only naturally generated towers — or ones placed by an admin / blueprint — produce.** One you stack by hand won't run (player-produced towers are a later version). Wander to one in the world and approach it, and it gets recorded, advancing your progress.
+2. **Radiance Nexus**: the base's energy store. Place it within 48 horizontal blocks of a tower and the tower's energy flows in. When you're near, you'll see a flowing beam — that means energy is actually moving.
+3. **Energy Relay**: when a tower is too far from the Nexus, place a relay in between to carry it, 48 blocks per hop, segment by segment.
 
-## 自動調律機：讓基地接手加工
+Remember the order as one sentence: **towers produce → relays carry → the Nexus stores → spend it upgrading facilities**. The Nexus page and the facility upgrade buttons both spell out this flow; click in if you forget.
 
-蓋好輝能核心、有能量在跑之後，可以做一台**自動調律機**。它的藍圖在**工房 Lv2** 製作（調律手冊接觸輝能核心後也會介紹它）。它是一座有中央高爐的小多方塊，照藍圖蓋好後**右鍵高爐**認領。
+## Automation machines: let the base take over processing
 
-用法：在它**正上方放一個箱子**，把原料丟進去（目前是建材，像圓石）。只要它在輝能核心 48 格內、核心有日輝，它就會每隔幾秒自己取一份原料、扣一點輝能、把加工好的成品（石頭、石磚那類）放回箱子。等於把你本來要在工房一格一格點的加工，交給基地自己跑。這也是輝能網路除了升級設施、召喚 BOSS 之外，第一個「持續花能量」的地方。
+Once the Radiance Nexus is built and energy is flowing, you can make an **Attunement Engine**. Its blueprint is crafted at **Workshop Lv2** (the Attunement Manual also introduces it once you've touched a Nexus). It's a small multiblock with a central blast furnace; build it per the blueprint and **right-click the furnace** to claim it.
 
-（這是第一版自動化，先做建材加工；之後會再加培育類等更多種類。）
+Use: place a chest **directly above it** and drop in inputs (like cobblestone). As long as it's within 48 blocks of a Nexus that has the matching radiance, it takes one input every few seconds, spends a little radiance, and returns the product to the chest. This is the first "continuous radiance sink" beyond upgrading facilities and summoning the BOSS.
 
-## 升級設施：要先蓋出「升級結構」
+Once the Greenhouse and Study reach Lv2, their tools pages each gain a blueprint too: the **Seedling Cultivator** uses a composter as its controller and is flavoured toward plant processing; the **Phenomenon Condenser** uses a lectern and is flavoured toward material condensing. All three currently share one recipe pool, so in practice don't fuss over "which category does this input belong to" — drop it into any of the three and it may run. This is an ALPHA simplification; whether to split is a post-playtest decision.
 
-設施修好是 Lv1。想升 Lv2，光有材料跟能量還不夠——你得先把設施蓋進一個對應的**升級結構**（一個固定形狀的多方塊）。
+## Upgrading facilities: build the "upgrade structure" first
 
-不知道長怎樣很正常，我一開始也不知道。所以做法是：在設施頁面點「升級」按鈕，如果你還沒蓋好結構，它會直接塞一張**藍圖**給你。拿著藍圖右鍵看半透明輪廓，照著蓋；或潛行右鍵讓它扣材料直接蓋好。蓋完站在旁邊，再點一次升級就成了。
+A repaired facility is Lv1. To reach Lv2, materials and energy alone aren't enough — you first have to build the facility into a matching **upgrade structure** (a fixed-shape multiblock).
 
-升完之後的東西（強化的加工、附魔順帶耐久、新的培育產物、標記塔的地圖之類）只有在那個升級結構旁邊，或用指令，才存取得到。換句話說，那座結構就是你「升級版設施」的本體。
+Not knowing what it looks like is normal; I didn't either at first. So the way it works: click "Upgrade" on the facility page, and if you haven't built the structure yet, it hands you a **blueprint** directly. Hold the blueprint and right-click for the translucent outline, then build it; or sneak+right-click to build it instantly using materials. Build it, stand beside it, and click upgrade once more.
 
-## 遠征
+The post-upgrade content (enhanced processing, enchant with extra durability, new cultivation products, the tower-marking map, etc.) is only accessible beside that upgrade structure, or via command. In other words, that structure *is* the body of your "upgraded facility".
 
-書房的遠征介面可以前往主世界以外的地方。前期會先接觸的是：
+After the Study reaches Lv3, on top of the regional forecast, your personal Sunlight/Moonlight caps also rise from the default 200 to 300.
 
-- **雨後森林**：白天、潮濕、長滿苔。專屬素材是苔華，帶回來在溫室培育，回流到農業跟恢復系。
-- **永夜荒原**：永遠是夜，比較危險。它存在的理由就是機制本身——這裡是唯一能整天穩定蓄月輝的地方，月輝核心也在這裡產。
+## Sealed Shrine
 
-遠征不會洗掉你主世界的進度，是讓你帶東西回來用。
+New chunks in the Overworld occasionally grow a small shrine of a deepslate platform, amethyst pillars and soul lanterns. The chest won't open directly — first touch the Radiance Nexus line, then **right-click the central chiseled deepslate while holding an Energy Crystal**. The controller gives different directional hints depending on which condition is missing.
 
-中後期還有兩個，都是「日 / 月」兩條線的延伸：
+Unseal progress is tracked per player; one player solving a shrine doesn't mean you have. One ALPHA boundary to flag: currently only the chest is locked, the whole structure isn't teardown-protected yet — don't pickaxe the puzzle apart physically.
 
-- **潮汐深淵**（日線）：永晝的暖海，蓄日輝加倍；專屬素材日輝核心，還有潮汐神殿跟一隻小王。
-- **暮蝕之境**（收束）：日與月在這裡相蝕，是 BOSS **蝕影守望者**的戰場。它要先走過潮汐深淵（日）與永夜荒原（月）兩線才會解鎖——在那之前，書房遠征頁裡它會是鎖住的，按鈕上會寫清楚還差哪一線。進去之後出生點會自然生成一座**日月儀**，你手上同時拿著**日輝核心＋月輝核心**右鍵它，就能召喚 BOSS；打贏掉**蝕輝結晶**，那是把設施升到 Lv3 的鑰匙。
+## Expeditions
 
-（暮蝕之境在 v0.8 就做好了，但一直要到 v0.9 才正式接上正常玩家入口——之前格位不夠，現在四個遠征都看得到、進得去。）
+The study's expedition screen travels to places beyond the Overworld. Early on you'll first meet:
 
-## 輝能祭壇
+- **Rainfall Forest**: day, wet, overgrown with moss. The exclusive material is Moss Bloom — bring it back to cultivate in the greenhouse, feeding the farming and restoration lines.
+- **Moonless Waste**: always night, more dangerous. Its reason to exist is the mechanic itself — this is the only place to stably gather Moonlight all day, and where the Moon Core is produced.
 
-高階一點的合成搬到祭壇做（像輝能之鏡）。用法跟工房不一樣，第一次會有點懵：
+After entering the Nether you'll also meet two material lines: mobs may drop **Infernal Shards**; new chunks may also grow **Infernal Ruins** with a central burning soul fire. Right-click that soul fire to record the discovery and get a hint on how to refine ember-radiance at the altar. It doesn't transmit radiance currently — the name looks like a relay but don't read too much into it, it's still just an exploration point.
 
-1. 把素材**丟**在祭壇周圍（大概 2.5 格內的掉落物）。
-2. **手持催化物**，右鍵中央的附魔台。
-3. 消耗你身上的輝能，煉成成品。
+Expeditions don't wipe your Overworld progress; they're for bringing things back to use.
 
-催化物是哪個拿不準的話，空手右鍵祭壇，它會把三步驟跟目前所有配方列給你看。手上拿錯東西右鍵，它也會告訴你哪些才算催化物。
+Two more come mid-to-late game, both extensions of the "sun / moon" lines:
 
-## 一些指令跟小提醒
+- **Tidal Depths** (sun line): a warm sea of endless day, Sunlight gathered at double rate; exclusive material the Sun Core, plus the Tidal Shrine and a mini-boss.
+- **Eclipse Realm** (convergence): sun and moon eclipse here, the battlefield of the BOSS **Eclipse Warden**. It unlocks only after walking both the Tidal Depths (sun) and Moonless Waste (moon) lines — before that, it shows as locked on the study's expedition page, with the button stating which line is still missing. After entering, an **Eclipse Dial** generates naturally at spawn; hold a **Sun Core + Moon Core** at once and right-click it to summon the BOSS. Win and it drops the **Eclipse Crystal**, the key to raising facilities to Lv3.
 
-- `/lyco help`：列出能用的指令。
-- `/lyco progress`：直接開調律之路（懶得跑去書房的時候）。
-- 設施都能用 `/lyco workshop`、`/lyco study`、`/lyco greenhouse` 開，不過正常玩還是建議用方塊開，比較有在「使用基地」的感覺。
+(The Eclipse Realm was built back in v0.8, but only in v0.9 was it formally hooked up to the normal player entrance — there weren't enough slots before; now all four expeditions are visible and enterable.)
 
-最後：這還是 ALPHA，數值會調、可能會撞到 bug。卡住或覺得哪裡怪，那通常不是你的問題，是還沒調好。
+## Radiance Altar
+
+Higher-tier crafting (like the Radiant Focus) moves to the altar. Its use differs from the workshop, and is a bit confusing the first time:
+
+1. **Drop** the materials around the altar (dropped items within about 2.5 blocks).
+2. **Hold a catalyst** and right-click the central enchanting table.
+3. Spend your radiance to refine the product.
+
+If you're unsure which item is the catalyst, empty-hand right-click the altar and it lists the three steps and all current recipes. Right-click while holding the wrong thing and it'll tell you which items count as catalysts.
+
+## A few commands and small reminders
+
+- `/lyco help`: lists the usable commands.
+- `/lyco progress`: opens the Path of Attunement directly (when you don't want to run to the study).
+- Facilities can all be opened with `/lyco workshop`, `/lyco study`, `/lyco greenhouse`, but for normal play, opening with blocks feels more like "using your base".
+
+Finally: this is still ALPHA, the numbers will be tuned, and you may hit bugs. If you're stuck or something feels off, it's usually not you — it's just not dialled in yet.

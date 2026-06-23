@@ -1,46 +1,55 @@
 # Lycohism
 
-Minecraft 生存的伺服器端插件(PaperMC Plugin)。不用裝客戶端 mod，就在原版生存上面長出一層「自然魔法 / 生活工具 / 基地成長 / 探索」的玩法。
+*[繁體中文版 README](README.zh-TW.md)*
 
-Lycohism 目前是 ALPHA，功能仍在快速調整中。  
-## 它在幹嘛
+A server-side survival expansion for Minecraft (a PaperMC plugin). No client mod required — it grows a layer of "nature magic / living tools / base growth / exploration" on top of vanilla survival.
 
-你在原版生存裡照常砍樹挖礦蓋家，然後會慢慢發現世界多了一層「自然現象」——清晨的草地、雨天的河邊、滿月的夜空、高山、洞窟，各自會回應不同的素材。把這些收集起來，可以修復基地設施、做生活工具，讓生存變順手，也順便開出下一條路。
+Lycohism is currently **ALPHA**; features are still being adjusted quickly.
 
-設計上從頭到尾都在防一件事：不要變成「把科技道具換個魔法名字」。所以每個東西盡量都綁在某個原版行為上——你得真的在對的時間、對的地點做對的事，現象才會冒出來。觀察本身就是玩法的一部分。
+## What it does
 
-完整玩法、精確成本與目前限制見 [`docs/FEATURES.md`](docs/FEATURES.md)；第一次玩的流程見 [`docs/TUTORIAL.md`](docs/TUTORIAL.md)。
+You play vanilla survival as usual — chop trees, mine, build a home — and gradually notice the world has gained a layer of **natural phenomena**: morning grass, riversides in the rain, the full-moon night sky, high mountains, caves. Each responds with a different material. Collect them to repair base facilities, craft living tools that smooth out survival, and open the next path along the way.
 
-## 目前有的東西
+The whole design guards against one thing: becoming "tech gadgets with a magic name". So everything is tied to some vanilla behaviour — you have to actually do the right thing, at the right time, in the right place, for a phenomenon to appear. Observation itself is part of the play.
 
-- **自然現象**：晨露、雨息、月露、風痕、地脈砂、花脈，再加遠征／地獄／BOSS 線的苔華、燼華、輝脈晶、日月核心與蝕輝結晶。全部資料驅動（`phenomena.yml`）。
-- **生活工具**：露光瓶、花籤、石工槌、風標、月紗袋⋯⋯十幾件，都在工房 / 書房 / 溫室的選單裡做。每件都有一句話能講完用途，講不清楚的就先不放進來。
-- **基地設施**：工房、書房、溫室。修好是 Lv1；Lv2 要蓋升級結構並花核心輝能，Lv3 要擊敗 BOSS 取得蝕輝結晶。
-- **輝能系統（日與月）**：白天站在天空下蓄日輝、晚上蓄月輝，池子滿了會溢流進背包裡的蓄能晶。日輝塔 / 月輝塔產能 → 中繼器一段段接力 → 輝能核心儲存 → 拿去升級設施。
-- **遠征世界**：雨後森林、永夜荒原、潮汐深淵與暮蝕之境；從植物回流、日月核心一路接到小王與蝕影守望者。
-- **調律之路**：一條會跟原版 advancement 對映的進度線，告訴你下一步大概往哪走。但它不會把後面全部攤開給你看，留一點探索的空間。
+For the full feature set, exact costs and current limits, see [`docs/FEATURES.md`](docs/FEATURES.md); for a first-time walkthrough, see [`docs/TUTORIAL.md`](docs/TUTORIAL.md).
 
-## 怎麼跑起來
+## What's in it now
 
-需要 Paper（版本對應 `plugin.yml` 裡的 `api-version`）。
+- **Natural phenomena**: Morning Dew, Rain Breath, Moon Dew, Wind Trace, Leyline Sand, Flower Vein — plus the expedition / Nether / BOSS lines' Moss Bloom, Ember Bloom, Radiant Ore, Sun/Moon Cores and Eclipse Crystal. All data-driven (`phenomena.yml`).
+- **Living tools**: Dewlight Vial, Flower Bookmark, Stonework Hammer, Wind Vane, Moon Pouch... a dozen-plus, all crafted in the Workshop / Study / Greenhouse menus. Each has a one-sentence purpose; if it can't be explained that cleanly, it doesn't go in.
+- **Base facilities**: Workshop, Study, Greenhouse. Repairing one gets it to Lv1; Lv2 needs an upgrade structure and Nexus radiance; Lv3 needs an Eclipse Crystal from defeating a BOSS.
+- **Radiance system (sun & moon)**: stand under the open sky to gather Sunlight by day and Moonlight by night; when your pool fills, the overflow spills into Energy Crystals in your inventory. Sun/Moon Towers produce → Relays carry hop by hop → the Radiance Nexus stores → you spend it upgrading facilities.
+- **Base automation**: the Attunement Engine, Seedling Cultivator and Phenomenon Condenser hook into a Nexus, pull inputs from the container directly above, and process them by spending radiance. The three currently share one recipe pool — playable first, split finer later if testing calls for it.
+- **Expedition worlds**: Rainfall Forest, Moonless Waste, Tidal Depths and Eclipse Realm — running from plant returns and Sun/Moon Cores all the way to a mini-boss and the Eclipse Warden.
+- **Exploration side-paths**: the Overworld has Sealed Shrines unlocked by progression + an Energy Crystal; the Nether has ember-line mob drops and claimable Infernal Ruins.
+- **Path of Attunement**: a progression line mapped onto vanilla advancements that points you roughly toward the next step — without laying everything ahead bare, leaving room to explore.
 
-build：
+## How to run it
+
+Requires Paper (matching the `api-version` in `plugin.yml`).
+
+Build:
 
 ```bash
 ./gradlew.bat build   # Windows
-./gradlew build       # 其他平台
+./gradlew build       # other platforms
 ```
 
-跑完 JAR 在 `build/libs/lycohism-<version>.jar`，丟進伺服器的 `plugins/` 就行。
+The JAR lands at `build/libs/lycohism-<version>.jar`; drop it into your server's `plugins/`.
 
-進遊戲之後第一件會卡住人的事先講：**潛行 + 空手 + 右鍵工作台** 才會打開工房（空手是故意的，不然會搶走原版放方塊的動作）。書房對應書架、溫室對應花盆，同一個手勢。其他指令 `/lyco help` 自己看。
+First thing in-game that trips people up: **sneak + empty hand + right-click a crafting table** opens the Workshop (empty hand is deliberate, otherwise it would steal vanilla's place-block action). The Study maps to bookshelves, the Greenhouse to flower pots — same gesture. For everything else, `/lyco help`.
 
-想完整走一遍玩法在 `docs/TUTORIAL.md`。
+To walk the full playthrough, see [`docs/TUTORIAL.md`](docs/TUTORIAL.md).
 
-## 狀態
+## Language
 
-`ALPHA`。功能大致都在了，但**還沒在正式 Paper 服上從頭到尾跑過一輪**，數值幾乎全是資料驅動、隨時會調。會有 bug，先說。
+Player-facing text ships in **Traditional Chinese and English**. The active language follows config.yml `language` (`auto` | `zh` | `en`). On `auto`, it follows the server's system locale — a Chinese-region host defaults to Traditional Chinese, everyone else to English. Edit `lang_zh.yml` / `lang_en.yml` and `/lyco reload` to customise.
 
-## 一點脈絡
+## Status
 
-開發以 AI Agent 輔助為主，不過口味判斷——好不好玩、哪個工具太強、複雜度有沒有開始失控——這種還是人在盯。完整的設計企劃在 `docs/PROJECT_PLAN.md`，開發交接記錄在 `HANDOFF.md`。
+`v0.9.33-ALPHA` WIP. The features are mostly all there, and **each release is tested in-game during development**. It just hasn't been through a full long-term run on a public multiplayer Paper server yet, and the content are almost entirely data-driven and tuned often. There will be bugs — saying so up front.
+
+## License
+
+Released under the **TinyYana Universal Software License (TYUSL) v1.0** — see [`LICENSE`](LICENSE). In short: free to use and modify, but you may not claim the plugin as your own work, nor make it the core of a monetized product/service, without TinyYana's prior written permission.

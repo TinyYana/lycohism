@@ -7,6 +7,14 @@ structures:
     min-y: 16
     max-y: 96
 
+  # v0.9.31 地獄廢址：地獄底層的古老腐壞中繼廢址，魂靈焰火仍燃。
+  # 地獄底板約在 y=30；設定 min-y/max-y 範圍對應地獄有效樓層。
+  infernal-relay:
+    enabled: true
+    chance-per-chunk: 0.006
+    min-y: 32
+    max-y: 90
+
   moss-altar:
     enabled: true
     # 約每 200 個合適區塊出現一座。
@@ -51,3 +59,10 @@ structures:
     chance-per-chunk: 0.004
     min-y: 60
     max-y: 140
+  sealed-shrine:
+    enabled: true
+    # 封印祠：深板岩平台＋紫水晶柱＋靈魂燈籠，中央封印石需解謎方可開箱。
+    # 主世界限定，約每 167 個合適區塊一座。
+    chance-per-chunk: 0.006
+    min-y: 60
+    max-y: 130

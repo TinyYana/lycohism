@@ -318,6 +318,28 @@ phenomena:
       ELDER_GUARDIAN: 1.0
     first-hint: "<white>暖海回應了你，指間凝出一點日輝核心。</white>"
 
+  # 焰輝碎片：v0.9.31 地獄深處的稀有素材。只從地獄特定怪物掉落（比燼華更稀有），
+  # 是輝能祭壇地獄配方的核心原料。requires-advancements 保持與燼華相同的地獄門檻。
+  infernal_shard:
+    name: "<gradient:#ff5a00:#ffd080>焰輝碎片</gradient>"
+    item-material: FIRE_CHARGE
+    lore:
+      - "<gray>從地獄深處的怪物身上凝結的焰輝結晶碎片。</gray>"
+      - "<dark_gray>在輝能祭壇以燼華為催化物提煉成品。</dark_gray>"
+    time:
+      start: 0
+      end: 24000
+    weather: ANY
+    environment: NETHER
+    requires-advancements:
+      - minecraft:story/enter_the_nether
+    chance: 0.0
+    mob-drops:
+      BLAZE: 0.25
+      GHAST: 0.20
+      WITHER_SKELETON: 0.10
+    first-hint: "<white>地獄深處的怪物留下了一枚焰輝碎片。</white>"
+
   # 蝕輝結晶：v0.8 BOSS「蝕影守望者」的專屬掉落，是設施升到三階的唯一鑰匙。
   # 刻意沒有自然來源（source-blocks 空、chance 0）——只能靠在暮蝕之境召喚並擊敗 BOSS 取得。
   # 掉落由 EclipseBoss 在程式裡直接給予，這裡只定義它的外觀與身份。

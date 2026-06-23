@@ -32,6 +32,11 @@ class Blueprint(private val plugin: Lycohism) {
                 meta.displayName(Messages.parse(Texts.render("items.blueprint.name", "structure" to structureName)).decoration(TextDecoration.ITALIC, false))
                 val lore = buildList {
                     addAll(Texts.renderLines("items.blueprint.lore", "structure" to structureName))
+                    val desc = Texts.lines("content-descriptions.$structureId")
+                    if (desc.isNotEmpty()) {
+                        add("")
+                        addAll(desc)
+                    }
                     add("")
                     add(Texts.line("items.blueprint.materials"))
                     materials.entries.sortedBy { it.key.name }.forEach { (material, count) ->

@@ -225,7 +225,7 @@ gui:
     facilities-lore:
       - "<gray>快速設定你自己的設施等級，測試修復／升級／Lv2 內容。</gray>"
     facilities-header-lore:
-      - "<gray>點擊循環該設施等級（0→1→2→0）。</gray>"
+      - "<gray>點擊循環該設施等級（0→1→2→3→0）。</gray>"
     facility-level: "<gray>目前等級：<white>{level}</white> / 3</gray>"
     click-facility: "<yellow>點擊切換等級。</yellow>"
     sounds: "<aqua>音效測試集</aqua>"
@@ -346,6 +346,30 @@ content-names:
   eclipse_dial: "<gradient:#ffd86b:#b07cff>日月儀</gradient>"
   eclipse_warden: "<gradient:#ffcf66:#b07cff>蝕影守望者</gradient>"
   attunement_engine: "<gradient:#ffd98a:#a8c8ff>自動調律機</gradient>"
+  seedling_cultivator: "<gradient:#a8e6a0:#d9f3a8>育苗機</gradient>"
+  phenomenon_condenser: "<gradient:#b0b8ff:#d6c4ff>現象凝縮台</gradient>"
+  infernal_shard: "<gradient:#ff5a00:#ffd080>焰輝碎片</gradient>"
+  infernal_relay: "<gradient:#ff7040:#d06030>地獄廢址</gradient>"
+  ember_forge: "<gradient:#ff7040:#ffd080>燼華鍛爐</gradient>"
+
+# 每個自動化機器的功能描述（供藍圖物品 lore 注入 + 右鍵狀態顯示）。
+content-descriptions:
+  attunement_engine:
+    - "<gray>耗<gold>日輝</gold>：石材加工（鵝卵石→石頭→石磚、沙→砂石、花崗岩→磨製花崗岩等）。</gray>"
+    - "<gray>耗<aqua>月輝</aqua>：深岩加工（深板岩→深板岩磚、鵝卵石深板岩→磨製深板岩、黑石→磨製黑石等）。</gray>"
+    - "<dark_gray>蓋好後右鍵高爐控制器認領；機器正上方放箱子當原料倉。</dark_gray>"
+  seedling_cultivator:
+    - "<gray>耗<aqua>月輝</aqua>：植物加工（仙人掌→綠色染料×2、甘蔗→砂糖×2、海帶→乾海帶×2、骨粉→骨頭）。</gray>"
+    - "<dark_gray>蓋好後右鍵堆肥桶控制器認領；機器正上方放箱子當植物素材倉。</dark_gray>"
+  phenomenon_condenser:
+    - "<gray>耗<aqua>月輝</aqua>：素材凝縮（腐肉→皮革、紙→書、墨囊→黑色染料×2、火藥棒→火藥粉×4、螢石粉→螢石）。</gray>"
+    - "<dark_gray>蓋好後右鍵講台控制器認領；機器正上方放箱子當素材倉。</dark_gray>"
+  infernal_relay:
+    - "<gray>地獄深處的古老廢址，魂靈焰火仍在燃燒。</gray>"
+    - "<dark_gray>右鍵魂靈焰火認領；認領後可建造燼華鍛爐提煉焰輝碎片。</dark_gray>"
+  ember_forge:
+    - "<gray>耗<gold>日輝</gold>：以燼華催化烈焰棒＋地獄疣，精煉焰輝碎片×3。</gray>"
+    - "<dark_gray>蓋好後空手右鍵中央熔岩塊查看用法；正下方地獄磚9塊基座＋四角磨製黑石磚柱。</dark_gray>"
 
 structures:
   tidal-shrine:
@@ -362,6 +386,8 @@ structures:
     chest-name: "<light_purple>月晷下的供奉</light_purple>"
   sundial:
     chest-name: "<gold>日晷下的供奉</gold>"
+  sealed-shrine:
+    chest-name: "<gradient:#b0b8ff:#ffd6ff>封印祠的遺藏</gradient>"
 
 items:
   dew_light:
@@ -373,7 +399,7 @@ items:
     name: "<gradient:#ffd6e8:#ffffff>花籤</gradient>"
     lore:
       - "<gray>記住一個地方，之後指引方向。</gray>"
-      - "<dark_gray>潛行右鍵記住、右鍵指引。</dark_gray>"
+      - "<dark_gray>Shift右鍵記住、右鍵指引。</dark_gray>"
   stonework_hammer:
     name: "<gradient:#cfd6df:#ffffff>石工槌</gradient>"
     lore:
@@ -393,7 +419,7 @@ items:
     name: "<gradient:#8fe8ff:#ffe08a>二階築造杖</gradient>"
     lore:
       - "<gray>第一次右鍵預覽，再次右鍵確認放置。</gray>"
-      - "<gray>潛行右鍵（對空亦可）切換：直線／牆面／地板／柱列。</gray>"
+      - "<gray>Shift右鍵（對空亦可）切換：直線／牆面／地板／柱列。</gray>"
       - "<dark_gray>從背包消耗相同的原版方塊。</dark_gray>"
   rain_bandage:
     name: "<gradient:#8fd3ff:#ffffff>雨紋繃帶</gradient>"
@@ -446,7 +472,7 @@ items:
     name: "<gradient:#ffd98a:#c0a8ff>輝能之鏡</gradient>"
     lore:
       - "<gray>右鍵引動<gold>日輝</gold>：抗火與力量的日之祝福。</gray>"
-      - "<gray>潛行右鍵引動<aqua>月輝</aqua>：夜視與緩降的月之祝福。</gray>"
+      - "<gray>Shift右鍵引動<aqua>月輝</aqua>：夜視與緩降的月之祝福。</gray>"
       - "<dark_gray>在輝能祭壇以金錠＋月輝核心＋蓄能晶煉成。</dark_gray>"
   solar_pick:
     name: "<gradient:#ffe07a:#ffb24a>日炎鎬</gradient>"
@@ -467,7 +493,7 @@ items:
     name: "<gradient:#9ad1ff:#e0f0ff>{structure} 藍圖</gradient>"
     lore:
       - "<gray>看向地面右鍵：顯示<green>幽靈輪廓</green>（綠=有、紅=缺）。</gray>"
-      - "<gray>潛行右鍵：用背包材料<white>直接建造</white>。</gray>"
+      - "<gray>Shift右鍵：用背包材料<white>直接建造</white>。</gray>"
       - "<dark_gray>建造 {structure} 的設計圖。</dark_gray>"
     materials: "<white>需要方塊：</white>"
     material-line: "<gray>• {material} ×{count}</gray>"
@@ -531,6 +557,22 @@ progression:
       details:
         - "<gray>書房中的雨後森林入口。</gray>"
       hint: "<gray>踏入地獄一次，書房的遠征入口便會解鎖。</gray>"
+    infernal_relay:
+      title: "<gradient:#ff7040:#ffd080>地獄廢址</gradient>"
+      lore:
+        - "<gray>古老的中繼廢址，魂靈焰火仍在燃燒。</gray>"
+      details:
+        - "<gray>在地獄深處尋找鑿裂地獄磚平台＋四角牆柱＋中央魂靈焰火的廢址。</gray>"
+        - "<gray>右鍵中央魂靈焰火認領廢址；此後可在輝能祭壇以燼華提煉焰輝碎片。</gray>"
+      hint: "<gray>深入地獄，尋找仍燃燒著魂靈焰火的古老廢址。</gray>"
+    ember_forge:
+      title: "<gradient:#ff7040:#ffd080>燼華鍛爐</gradient>"
+      lore:
+        - "<gray>地獄礦物的煉製需要更深的火。</gray>"
+      details:
+        - "<gray>燼華鍛爐：地獄磚9塊基座＋四角磨製黑石磚柱＋中央熔岩塊控制器。</gray>"
+        - "<gray>手持燼華右鍵熔岩塊，以烈焰棒＋地獄疣消耗日輝提煉焰輝碎片。</gray>"
+      hint: "<gray>建造燼華鍛爐（地獄磚3×3基座＋四角磨製黑石磚柱＋中央熔岩塊），空手右鍵查看配方。</gray>"
     radiant_vein:
       title: "<gold>地獄輝脈</gold>"
       lore:
@@ -639,7 +681,7 @@ progression:
       details:
         - "<gray>在輝能核心附近蓋出自動調律機（藍圖於工房 Lv2 製作），右鍵中央高爐認領。</gray>"
         - "<gray>正上方放箱子當原料倉；它每隔幾秒取一份原料、耗核心日輝、把成品放回箱子。</gray>"
-      hint: "<gray>到工房 Lv2 製作「自動調律機藍圖」，在核心 48 格內蓋好、右鍵高爐認領，正上方放個箱子丟入圓石。</gray>"
+      hint: "<gray>到工房 Lv2 製作「自動調律機藍圖」，在核心 48 格內蓋好、右鍵高爐認領，正上方放個箱子丟入鵝卵石。</gray>"
 
     eclipse_realm:
       title: "<gradient:#5a3a6a:#ffd86b>暮蝕之境</gradient>"
@@ -658,6 +700,33 @@ progression:
         - "<gray>在暮蝕之境的日月儀，手持<gold>日輝核心</gold>＋<aqua>月輝核心</aqua>右鍵核心即可召喚。</gray>"
         - "<gray>擊敗後掉落<gradient:#ffd86b:#b07cff>蝕輝結晶</gradient>——三階設施的鑰匙。</gray>"
       hint: "<gray>在暮蝕之境召喚並擊敗蝕影守望者，取得蝕輝結晶。</gray>"
+
+    seedling_cultivator:
+      title: "<white>育苗機</white>"
+      lore:
+        - "<gray>讓溫室裡的植物加工不再靠手做。</gray>"
+      details:
+        - "<gray>育苗機：月輝驅動，處理植物素材（仙人掌→染料、海帶→乾海帶等）。</gray>"
+        - "<gray>溫室 Lv2 器物頁製作藍圖，在核心 48 格內蓋好→右鍵堆肥桶認領。</gray>"
+      hint: "<gray>升級溫室到 Lv2，在器物頁製作「育苗機藍圖」，照藍圖蓋好後右鍵堆肥桶認領。</gray>"
+
+    phenomenon_condenser:
+      title: "<white>現象凝縮台</white>"
+      lore:
+        - "<gray>把普通素材凝縮成更精純的形態。</gray>"
+      details:
+        - "<gray>現象凝縮台：月輝驅動，處理學術素材（腐肉→皮革、紙→書等）。</gray>"
+        - "<gray>書房 Lv2 器物頁製作藍圖，在核心 48 格內蓋好→右鍵講台認領。</gray>"
+      hint: "<gray>升級書房到 Lv2，在器物頁製作「現象凝縮台藍圖」，照藍圖蓋好後右鍵講台認領。</gray>"
+
+    sealed_shrine:
+      title: "<white>封印祠</white>"
+      lore:
+        - "<gray>輝能奧義的試煉——解開封印，取走藏寶。</gray>"
+      details:
+        - "<gray>封印祠：主世界自然生成，有一座封印寶箱與鑿刻深板岩控制器。</gray>"
+        - "<gray>直接開箱會被封印；需掌握輝能核心奧義＋手持蓄能晶，右鍵控制器解封。</gray>"
+      hint: "<gray>先建造輝能核心，再去主世界尋找深板岩平台＋紫水晶柱的結構，手持蓄能晶右鍵中央鑿刻深板岩。</gray>"
 
     facility_growth_3:
       title: "<gradient:#ffd86b:#b07cff>三階設施</gradient>"
@@ -717,7 +786,7 @@ messages:
     confirm-vanilla: "<yellow>這個原版配方會消耗 Lycohism 道具。</yellow> <gray>10 秒內再點一次確認；Shift＋右鍵可永久不再詢問。</gray>"
     confirm-disabled: "<gray>已永久關閉原版合成提醒。</gray>"
   structure-break:
-    confirm: "<yellow>這個方塊屬於 {structure}。</yellow> <gray>10 秒內再挖一次確認；潛行破壞可永久不再詢問。</gray>"
+    confirm: "<yellow>這個方塊屬於 {structure}。</yellow> <gray>10 秒內再挖一次確認；Shift破壞可永久不再詢問。</gray>"
     confirm-disabled: "<gray>已永久關閉多方塊結構拆除提醒。</gray>"
   tools:
     dew-light-used: "<white>露光瓶化成微光，照亮接下來兩分鐘。</white>"
@@ -732,7 +801,7 @@ messages:
     leyline-probe-none-status: "<gold>探針</gold> <dark_gray>附近沒有礦脈</dark_gray>"
     held-status-separator: " <dark_gray>｜</dark_gray> "
     bookmark-remembered: "<white>花籤記住了這個地方。</white>"
-    bookmark-empty: "<gray>先潛行右鍵，記住一個地方。</gray>"
+    bookmark-empty: "<gray>先Shift右鍵，記住一個地方。</gray>"
     bookmark-other-world: "<gray>那個地方在另一個世界。</gray>"
     bookmark-arrived: "<white>你就在花籤記住的地方。</white>"
     bookmark-guide: "<white>指引：{arrow} <gray>還有 <white>{distance}</white> 格</gray>"
@@ -757,7 +826,7 @@ messages:
     lunar-spore-empty: "<gray>這裡沒有可催長的植物，或月輝不足。</gray>"
     compass-reading: "<aqua>星圖</aqua> {name} <gray>·</gray> {arrow} <gray>·</gray> <white>{distance}</white> 格"
     compass-none: "<gray>附近沒有已登記的能量塔。</gray>"
-    blueprint-preview: "<gray>半透明預覽：<green>綠=已符合</green>、<aqua>淺藍=待放置</aqua>。潛行右鍵建造。</gray>"
+    blueprint-preview: "<gray>半透明預覽：<green>綠=已符合</green>、<aqua>淺藍=待放置</aqua>。Shift右鍵建造。</gray>"
     blueprint-materials: "<gray>所需方塊：{materials}</gray>"
     blueprint-built: "<green>依藍圖建造完成。</green>"
     blueprint-missing: "<red>材料不足，無法依藍圖建造。</red>"
@@ -772,7 +841,7 @@ messages:
     workshop-required: "<red>需要先修復工房。</red>"
     workshop-repaired: "<green>工房回應了自然之物，已修復。</green>"
     workshop-crafted: "<green>工房製作了 {item}。</green>"
-    blueprint-crafted: "<green>工房畫出了 <white>{item}</white> 的藍圖。</green> <gray>右鍵看半透明輪廓，潛行右鍵扣材料蓋好（記得蓋在輝能核心附近）。</gray>"
+    blueprint-crafted: "<green>工房畫出了 <white>{item}</white> 的藍圖。</green> <gray>右鍵看半透明輪廓，Shift右鍵扣材料蓋好（記得蓋在輝能核心附近）。</gray>"
     workshop-status:
       - "<gray>工房等級：<white>{level}</white> / 3。</gray>"
       - "<gray>Lv1：工具製作、建材加工、雨息附魔。</gray>"
@@ -796,7 +865,7 @@ messages:
     greenhouse-status:
       - "<gray>溫室等級：<white>{level}</white> / 3。</gray>"
       - "<gray>Lv1：花脈與苔華培育（含發光苔蘚）、花脈剪、苔露膏與苔肥。</gray>"
-      - "<gray>Lv2（蓋升級溫室）：月華灑、更多進階培育產物。</gray>"
+      - "<gray>Lv2（蓋升級溫室）：月華灑、更多進階培育產物、<aqua>育苗機藍圖</aqua>（自動植物加工，需月輝核心）。</gray>"
       - "<gray>Lv3（蝕輝結晶）：培育產出翻倍。</gray>"
     cultivated: "<green>溫室培育出 <white>{amount}</white> 個 {item}。</green>"
     study-repaired: "<green>書房重新記起了你走過的路。</green>"
@@ -804,8 +873,8 @@ messages:
     study-status:
       - "<gray>書房等級：<white>{level}</white> / 3。</gray>"
       - "<gray>Lv1：手冊、圖鑑、發現紀錄、風標、月紗袋、星圖羅盤、遠征入口。</gray>"
-      - "<gray>Lv2（蓋升級書房）：標記最近能量塔到地圖。</gray>"
-      - "<gray>Lv3（蝕輝結晶）：全境預報——列出此刻此地可採集的自然現象。</gray>"
+      - "<gray>Lv2（蓋升級書房）：標記最近能量塔到地圖、<aqua>現象凝縮台藍圖</aqua>（自動素材凝縮，需月輝核心）。</gray>"
+      - "<gray>Lv3（蝕輝結晶）：全境預報——列出此刻此地可採集的自然現象；日/月輝個人上限×1.5。</gray>"
   expedition:
     entered: "<white>你循著雨痕，踏入了 {name}。</white>"
     title:
@@ -859,7 +928,7 @@ messages:
     not-repaired: "<red>要先把這個設施修復到 Lv1 才能升級。</red>"
     already: "<gray>這個設施已經是 Lv2 了。</gray>"
     no-structure: "<red>還沒蓋出升級結構。</red> <gray>把設施蓋進對應的剛性結構（站到它旁邊再升級）。</gray>"
-    blueprint-hint: "<gray>給了你一張<white>升級結構藍圖</white>：右鍵看半透明輪廓，照著蓋好（潛行右鍵可扣材料秒蓋），再回設施頁升級。</gray>"
+    blueprint-hint: "<gray>給了你一張<white>升級結構藍圖</white>：右鍵看半透明輪廓，照著蓋好（Shift右鍵可扣材料秒蓋），再回設施頁升級。</gray>"
     no-nexus: "<red>附近沒有你能存取的輝能核心。</red> <gray>流程：<gold>日／月輝塔</gold>→<yellow>中繼器</yellow>→<aqua>輝能核心</aqua>，再回來升級。</gray>"
     missing-materials: "<red>升級材料不足。</red>"
     missing-energy: "<red>核心的輝能不足。</red> <gray>讓日輝塔／月輝塔多產一些再來。</gray>"
@@ -878,7 +947,38 @@ messages:
     share-noop: "<gray>沒有變化（對方本來就{state}）。</gray>"
   automation:
     engine-registered: "<green>自動調律機已啟動。</green> <gray>在它正上方放一個箱子當原料倉；每隔幾秒會取一份原料、消耗附近<aqua>輝能核心</aqua>的日輝，把加工成品放回箱子。</gray>"
-    engine-exists: "<gray>這台自動調律機已經在運作了。</gray>"
+    engine-status:
+      - "<white>▌ 自動調律機（運作中）</white>"
+      - "<gray>耗<gold>日輝</gold>：鵝卵石→石頭、石頭→石磚、沙→砂石、花崗岩→磨製花崗岩...</gray>"
+      - "<gray>耗<aqua>月輝</aqua>：深板岩→深板岩磚、深板岩→磨製深板岩、黑石→磨製黑石...</gray>"
+      - "<dark_gray>正上方放箱子當原料倉。</dark_gray>"
+    cultivator-registered: "<green>育苗機已啟動。</green> <gray>在正上方放箱子當植物素材倉；每隔幾秒取一份、耗附近核心<aqua>月輝</aqua>、把加工成品放回箱子。</gray>"
+    cultivator-status:
+      - "<white>▌ 育苗機（運作中）</white>"
+      - "<gray>耗<aqua>月輝</aqua>：仙人掌→綠色染料×2、甘蔗→砂糖×2、海帶→乾海帶×2、骨粉→骨頭。</gray>"
+      - "<dark_gray>正上方放箱子當植物素材倉。</dark_gray>"
+    condenser-registered: "<green>現象凝縮台已啟動。</green> <gray>在正上方放箱子當素材倉；每隔幾秒取一份、耗附近核心<aqua>月輝</aqua>、把凝縮成品放回箱子。</gray>"
+    condenser-status:
+      - "<white>▌ 現象凝縮台（運作中）</white>"
+      - "<gray>耗<aqua>月輝</aqua>：腐肉→皮革、紙→書、墨囊→黑色染料×2、火藥棒→火藥粉×4、螢石粉→螢石。</gray>"
+      - "<dark_gray>正上方放箱子當素材倉。</dark_gray>"
+  infernal-relay:
+    claimed: "<green>古老的廢址回應了你，魂靈焰火躍動。</green> <gray>下一步：建造<gradient:#ff7040:#ffd080>燼華鍛爐</gradient>，可在其中以烈焰棒＋地獄疣提煉<gradient:#ff5a00:#ffd080>焰輝碎片</gradient>。</gray>"
+    exists: "<gray>這座廢址的魂靈焰火仍在燃燒，焰輝在空氣中流動。</gray>"
+  ember-forge:
+    guide:
+      - "<gradient:#ff7040:#ffd080>── 燼華鍛爐 ──</gradient>"
+      - "<gray>1. 把素材<white>丟</white>在鍛爐周圍（約 2.5 格內）。</gray>"
+      - "<gray>2. <white>手持燼華</white>（Lycohism 物品），右鍵中央熔岩塊。</gray>"
+      - "<gray>3. 消耗你身上的<gold>日輝</gold>煉成成品。</gray>"
+      - "<gray>目前配方：</gray>"
+  puzzle:
+    seal:
+      sealed: "<dark_gray>封印尚未解開。這個箱子對你還是封閉的。</dark_gray>"
+      hint-discovery: "<gray>祠心在輝能中沉睡。似乎只有掌握輝能法陣奧義的人，才能觸及其中的共鳴…</gray>"
+      hint-item: "<gray>封印的石面微微震動。手持某種輝能的結晶，感受它與石刻的頻率是否相符？</gray>"
+      unlocked: "<gradient:#b0b8ff:#ffd6ff>封印的紋路流動，祠心共鳴解開。</gradient>"
+      already-open: "<gray>這座祠對你已無封印。</gray>"
 
 commands:
   root: "<gray>Lycohism <white>v{version}</white> — 自然調律生存擴充。輸入 <yellow>/{label} help</yellow> 查看指令。</gray>"
@@ -909,9 +1009,9 @@ commands:
       - "<gray>— Lycohism 指令 —</gray>"
       - "<yellow>/{label} version</yellow> <gray>查看版本</gray>"
       - "<yellow>/{label} help</yellow> <gray>顯示此說明</gray>"
-      - "<yellow>/{label} workshop</yellow> <gray>開啟工房（或潛行右鍵工作台）</gray>"
-      - "<yellow>/{label} study</yellow> <gray>開啟書房（或潛行右鍵書櫃）</gray>"
-      - "<yellow>/{label} greenhouse</yellow> <gray>開啟溫室（或潛行右鍵花盆）</gray>"
+      - "<yellow>/{label} workshop</yellow> <gray>開啟工房（或Shift右鍵工作台）</gray>"
+      - "<yellow>/{label} study</yellow> <gray>開啟書房（或Shift右鍵書櫃）</gray>"
+      - "<yellow>/{label} greenhouse</yellow> <gray>開啟溫室（或Shift右鍵花盆）</gray>"
       - "<yellow>/{label} progress</yellow> <gray>查看調律之路（進度）</gray>"
       - "<yellow>/{label} nexus <share|unshare> <玩家></yellow> <gray>分享你的輝能核心存取</gray>"
       - "<yellow>/{label} upgrade <設施></yellow> <gray>用核心輝能把設施升到 Lv2</gray>"
@@ -971,13 +1071,13 @@ books:
         done:
           - "<dark_green><bold>✔ 工房</bold></dark_green>"
           - ""
-          - "<gold>潛行＋空手</gold>"
+          - "<gold>Shift＋空手</gold>"
           - "<black>右鍵工作台開啟。</black>"
           - "<black>製作工具、加工建材。</black>"
         hint:
           - "<dark_gray>· 工房</dark_gray>"
           - ""
-          - "<gold>潛行＋空手右鍵工作台</gold>"
+          - "<gold>Shift＋空手右鍵工作台</gold>"
           - "<black>開啟，備齊晨露×4＋</black>"
           - "<black>木板石材即可修復。</black>"
           - "<black>再右鍵工作台。</black>"
@@ -1023,7 +1123,7 @@ books:
         done:
           - "<dark_green><bold>✔ 書房</bold></dark_green>"
           - ""
-          - "<gold>潛行＋空手</gold>"
+          - "<gold>Shift＋空手</gold>"
           - "<black>右鍵書櫃開啟。</black>"
           - "<black>圖鑑與紀錄解鎖。</black>"
         hint:
@@ -1072,7 +1172,7 @@ books:
         done:
           - "<dark_green><bold>✔ 溫室</bold></dark_green>"
           - ""
-          - "<gold>潛行＋空手</gold>"
+          - "<gold>Shift＋空手</gold>"
           - "<black>右鍵花盆開啟。</black>"
           - "<black>培育植物與花脈剪。</black>"
         hint:
@@ -1150,6 +1250,60 @@ books:
           - ""
           - "<black>蓄能晶蓄能、立起日／月輝塔，</black>"
           - "<black>用中繼器把能量送進核心。</black>"
+      # 封印祠教學頁：有了蓄能晶後顯示，告訴玩家世界裡有這種可解謎結構。
+      - requires: [ sealed_shrine ]
+        title: "封印祠"
+        done:
+          - "<dark_green><bold>✔ 封印祠</bold></dark_green>"
+          - ""
+          - "<black>鑿刻深板岩的紋路已流動，</black>"
+          - "<black>封印解開了，藏寶取走了。</black>"
+        hint:
+          - "<dark_gray>· 封印祠</dark_gray>"
+          - ""
+          - "<black>在世界各地尋找</black>"
+          - "<dark_purple>深板岩平台＋紫水晶柱</dark_purple>"
+          - "<dark_purple>＋靈魂燈籠</dark_purple><black>的結構。</black>"
+          - ""
+          - "<black>寶箱被封印——</black>"
+          - "<black>需掌握輝能法陣奧義，</black>"
+          - "<black>並手持</black><gold>蓄能晶</gold><black>右鍵控制器。</black>"
+      # 育苗機教學頁：有了自動調律機後顯示，介紹溫室 Lv2 的月輝植物加工機。
+      - requires: [ seedling_cultivator ]
+        title: "育苗機"
+        done:
+          - "<dark_green><bold>✔ 育苗機</bold></dark_green>"
+          - ""
+          - "<black>月輝驅動的植物加工機。</black>"
+          - "<black>仙人掌→染料、甘蔗→糖</black>"
+          - "<black>海帶→乾海帶，以及更多。</black>"
+        hint:
+          - "<dark_gray>· 育苗機</dark_gray>"
+          - ""
+          - "<black>升級溫室到 Lv2，</black>"
+          - "<black>在器物頁製作藍圖。</black>"
+          - "<dark_green>苔蘚×9 基座</dark_green><black>＋</black>"
+          - "<dark_green>四角杜鵑花叢</dark_green><black>＋</black>"
+          - "<dark_green>中央堆肥桶</dark_green><black>認領。</black>"
+          - "<black>正上方放箱子當原料倉。</black>"
+      # 現象凝縮台教學頁：有了自動調律機後顯示，介紹書房 Lv2 的月輝學術凝縮機。
+      - requires: [ phenomenon_condenser ]
+        title: "現象凝縮台"
+        done:
+          - "<dark_green><bold>✔ 現象凝縮台</bold></dark_green>"
+          - ""
+          - "<black>月輝驅動的素材凝縮機。</black>"
+          - "<black>腐肉→皮革、紙→書</black>"
+          - "<black>墨囊→黑色染料，以及更多。</black>"
+        hint:
+          - "<dark_gray>· 現象凝縮台</dark_gray>"
+          - ""
+          - "<black>升級書房到 Lv2，</black>"
+          - "<black>在器物頁製作藍圖。</black>"
+          - "<dark_aqua>深板岩磚×9 基座</dark_aqua><black>＋</black>"
+          - "<dark_aqua>四角書架</dark_aqua><black>＋</black>"
+          - "<dark_aqua>中央講台</dark_aqua><black>認領。</black>"
+          - "<black>正上方放箱子當素材倉。</black>"
       # 自動調律機教學頁（v0.9.2 #1）：有了核心（已接觸輝能網）後顯示，講清楚用途與用法。
       - requires: [ energy_nexus ]
         title: "自動調律機"
@@ -1163,7 +1317,7 @@ books:
           - "<black>（藍圖在工房 Lv2 製作），</black>"
           - "<black>右鍵中央高爐認領。</black>"
           - "<black>正上方放一個箱子當原料倉，</black>"
-          - "<black>丟入圓石等建材即可。</black>"
+          - "<black>丟入鵝卵石等建材即可。</black>"
           - ""
           - "<black>它會每隔幾秒取一份原料、</black>"
           - "<black>耗一點核心日輝、把成品放回箱子。</black>"
@@ -1172,6 +1326,62 @@ books:
           - ""
           - "<black>先把輝能核心立起來；</black>"
           - "<black>之後基地能自己接手加工。</black>"
+      # 地獄廢址教學頁：有了 nether_gate（踏入地獄）後才顯示。
+      - requires: [ infernal_relay ]
+        title: "地獄廢址"
+        done:
+          - "<dark_green><bold>✔ 地獄廢址</bold></dark_green>"
+          - ""
+          - "<dark_red>魂靈焰火古老廢址，</dark_red>"
+          - "<dark_red>已認領中繼廢址。</dark_red>"
+          - ""
+          - "<black>下一步：建造</black>"
+          - "<gold>燼華鍛爐</gold><black>，提煉焰輝碎片。</black>"
+        hint:
+          - "<dark_gray>· 地獄廢址</dark_gray>"
+          - ""
+          - "<black>深入地獄地層，</black>"
+          - "<dark_red>鑿裂地獄磚基座</dark_red>"
+          - "<dark_red>＋四角牆柱＋魂靈焰火</dark_red>"
+          - "<black>的廢址。右鍵焰火認領。</black>"
+      # 焰輝碎片教學頁：首次取得時出現。
+      - requires: [ infernal_shard ]
+        title: "焰輝碎片"
+        done:
+          - "<dark_green><bold>✔ 焰輝碎片</bold></dark_green>"
+          - ""
+          - "<gold>烈焰</gold><black>留下的殘燼</black>"
+          - "<black>被凝成碎片。</black>"
+          - ""
+          - "<black>取自地獄生物掉落，</black>"
+          - "<black>或在燼華鍛爐提煉。</black>"
+        hint:
+          - "<dark_gray>· 焰輝碎片</dark_gray>"
+          - ""
+          - "<black>在地獄獵殺</black>"
+          - "<gold>烈焰人、地獄幽靈</gold>"
+          - "<gold>或凋靈骷髏</gold><black>取得。</black>"
+      # 燼華鍛爐教學頁：建造並首次右鍵後出現。
+      - requires: [ ember_forge ]
+        title: "燼華鍛爐"
+        done:
+          - "<dark_green><bold>✔ 燼華鍛爐</bold></dark_green>"
+          - ""
+          - "<gold>地獄磚基座</gold>"
+          - "<black>＋四角磨製黑石磚柱</black>"
+          - "<black>＋中央熔岩塊。</black>"
+          - ""
+          - "<black>手持燼華右鍵，</black>"
+          - "<black>用日輝煉製焰輝碎片。</black>"
+        hint:
+          - "<dark_gray>· 燼華鍛爐</dark_gray>"
+          - ""
+          - "<black>認領地獄廢址後，</black>"
+          - "<gold>地獄磚9塊（3×3）</gold>"
+          - "<black>做基座，四角立</black>"
+          - "<gold>磨製黑石磚柱</gold><black>，</black>"
+          - "<gold>中央放熔岩塊</gold><black>。</black>"
+          - "<black>空手右鍵看配方。</black>"
 
   compendium:
     title: "<dark_aqua>自然圖鑑</dark_aqua>"

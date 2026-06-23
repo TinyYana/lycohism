@@ -29,7 +29,9 @@ Lycohism 是**純伺服器端**（Paper）的 Minecraft 生存擴充插件，Kot
 
 行為寫在程式、數值/文案放 YAML（`src/main/resources/`），改完 `/lyco reload` 即生效：
 
-`config.yml`（輝能網路/設施升級/BOSS/自動化…）、`lang.yml`（所有玩家文本，MiniMessage 格式）、`phenomena.yml`、`tools.yml`、`facilities.yml`、`expeditions.yml`、`progression.yml`、`structures.yml`、`altars.yml`。
+`config.yml`（輝能網路/設施升級/BOSS/自動化…；含 `language: auto|zh|en` 語系切換）、`lang_zh.yml` / `lang_en.yml`（所有玩家文本，MiniMessage 格式；兩檔 key 結構必須一致，新增字串兩邊都要補）、`phenomena.yml`、`tools.yml`、`facilities.yml`、`expeditions.yml`、`progression.yml`、`structures.yml`、`altars.yml`。
+
+> 語系：`util/Texts` 依 `config.yml` 的 `language` 載入 `lang_<code>.yml`（`auto` 跟著 JVM locale）；純函式 seam 是 `Texts.resolveLanguage`。改玩家文本＝同時改 `lang_zh.yml` 與 `lang_en.yml`。
 
 新增內容優先「加一段 YAML」而非改核心程式。
 
@@ -38,7 +40,7 @@ Lycohism 是**純伺服器端**（Paper）的 Minecraft 生存擴充插件，Kot
 - 進入點 `Lycohism.kt`：所有 manager 在 `onEnable` 實例化、`reload()` 重載、`onDisable` 存檔。新 manager 照同一模式接上三處。
 - 關鍵套件：`energy/`（輝能池/服務/塔/核心 Nexus/自動化）、`expedition/`、`facility/`（工房/書房/溫室）、`multiblock/`（剛性多方塊框架）、`phenomenon/`、`progression/`（調律之路）、`tool/`、`listener/`、`boss/`、`world/`、`util/`、`gui/`。
 - 共用慣例：
-  - **GUI**：用 `gui/Menu`（filler/header/back/`centeredRow` 置中）統一外觀；玩家文本一律走 `util/Messages`（MiniMessage）＋ `util/Texts`（lang.yml）。
+  - **GUI**：用 `gui/Menu`（filler/header/back/`centeredRow` 置中）統一外觀；玩家文本一律走 `util/Messages`（MiniMessage）＋ `util/Texts`（lang_zh.yml / lang_en.yml）。
   - **多方塊**：一份 `Multiblock` 模板同時供驗證/幽靈預覽/藍圖建造/秒放；`StructureActivation` 負責認領+名牌+破壞失效移除。
   - **登記表持久化**：記憶體權威 ＋ 定時 autosave ＋ 關服存（`nexuses.yml`/`towers.yml`/`automations.yml` 等），不存方塊 PDC。
   - **稽核**：所有產出/輝能變動/認領/掉落單點呼叫 `util/Audit`。
@@ -49,7 +51,7 @@ Lycohism 是**純伺服器端**（Paper）的 Minecraft 生存擴充插件，Kot
 - **改動要外科手術式**：最小但正確的改動，放在程式結構該在的位置，別堆進 entrypoint。只移除自己造成的未使用 import/變數。
 - **偷懶但不偷工**（ponytail）：能用 stdlib/原生/既有依賴就別自造；能一行別五十行；不做臆測性抽象與「之後可能用到」的彈性。但**輸入驗證、錯誤處理、安全、無障礙、明確要求的東西不可省**。刻意的簡化用 `// ponytail:` 註記，寫明上限與升級路徑。
 - **不確定就講清楚**：列出假設與多種解讀，不要假裝確定；不要宣稱測過/建置過/部署過而其實沒有。
-- **文風**：玩家文本（`lang.yml`）與對外文件用**繁體台式中文**；避免中國用語（數據/服務器/信息/默認/文件/界面…）與「不是 X 而是 Y」「賦能/升維」這類 AI 套路。UI 標籤保持精簡，不硬塞語氣。
+- **文風**：中文玩家文本（`lang_zh.yml`）與對外中文文件用**繁體台式中文**；避免中國用語（數據/服務器/信息/默認/文件/界面…）與「不是 X 而是 Y」「賦能/升維」這類 AI 套路。英文側（`lang_en.yml`、英文文件）用自然、精簡的英文，對外文件以英文為主檔、`*.zh-TW.md` 為中文對照。UI 標籤保持精簡，不硬塞語氣。
 
 ## Git
 

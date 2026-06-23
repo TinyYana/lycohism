@@ -110,8 +110,8 @@ class EnergyService(private val plugin: Lycohism) {
         }
         val sun = plugin.energyManager.get(player, EnergyType.SUN)
         val moon = plugin.energyManager.get(player, EnergyType.MOON)
-        val sunCap = plugin.energyManager.cap(EnergyType.SUN)
-        val moonCap = plugin.energyManager.cap(EnergyType.MOON)
+        val sunCap = plugin.energyManager.capFor(player, EnergyType.SUN)
+        val moonCap = plugin.energyManager.capFor(player, EnergyType.MOON)
         val name = Messages.parse(
             Texts.render(
                 "messages.energy.bar",

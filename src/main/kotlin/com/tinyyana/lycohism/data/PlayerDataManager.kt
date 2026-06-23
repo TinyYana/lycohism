@@ -40,6 +40,7 @@ class PlayerDataManager(private val plugin: Lycohism) {
             data.confirmStructureBreaks = yaml.getBoolean("confirm-structure-breaks", true)
             data.sunEnergy = yaml.getInt("sun-energy", 0)
             data.moonEnergy = yaml.getInt("moon-energy", 0)
+            data.unsealed.addAll(yaml.getStringList("unsealed"))
         }
         cache[uuid] = data
         return data
@@ -57,6 +58,7 @@ class PlayerDataManager(private val plugin: Lycohism) {
         yaml.set("confirm-structure-breaks", data.confirmStructureBreaks)
         yaml.set("sun-energy", data.sunEnergy)
         yaml.set("moon-energy", data.moonEnergy)
+        yaml.set("unsealed", data.unsealed.toList())
         runCatching { saveAtomically(uuid, yaml) }
             .onFailure { plugin.logger.warning("Failed to save player data for $uuid: ${it.message}") }
     }

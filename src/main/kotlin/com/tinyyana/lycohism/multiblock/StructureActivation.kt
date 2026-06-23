@@ -7,6 +7,7 @@ import com.tinyyana.lycohism.util.Messages
 import com.tinyyana.lycohism.util.Texts
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Location
+import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.entity.Display
 import org.bukkit.entity.TextDisplay
@@ -61,8 +62,15 @@ object StructureActivation {
             }
         }
 
-        "energy_altar" -> {
-            plugin.playerDataManager.discover(player.uniqueId, "energy_altar")
+        "energy_altar", "ember_forge" -> {
+            plugin.playerDataManager.discover(player.uniqueId, id)
+            label(block, id)
+            plugin.structureLocator.record(id, block.location)
+            true
+        }
+
+        "infernal_relay" -> {
+            plugin.playerDataManager.discover(player.uniqueId, "infernal_relay")
             label(block, id)
             plugin.structureLocator.record(id, block.location)
             true
@@ -75,6 +83,28 @@ object StructureActivation {
                 plugin.playerDataManager.discover(player.uniqueId, "attunement_engine")
                 label(block, id)
                 plugin.structureLocator.record(id, block.location)
+                true
+            }
+        }
+
+        "seedling_cultivator" -> {
+            if (!plugin.automationManager.register(block, player.uniqueId)) {
+                false
+            } else {
+                plugin.playerDataManager.discover(player.uniqueId, "seedling_cultivator")
+                label(block, "seedling_cultivator")
+                plugin.structureLocator.record("seedling_cultivator", block.location)
+                true
+            }
+        }
+
+        "phenomenon_condenser" -> {
+            if (!plugin.automationManager.register(block, player.uniqueId)) {
+                false
+            } else {
+                plugin.playerDataManager.discover(player.uniqueId, "phenomenon_condenser")
+                label(block, "phenomenon_condenser")
+                plugin.structureLocator.record("phenomenon_condenser", block.location)
                 true
             }
         }
@@ -143,7 +173,13 @@ object StructureActivation {
         plugin.automationManager.all()
             .filter { it.world == world.name && near(bx, by, bz, it.x, it.y, it.z) }
             .forEach { engine ->
-                if (plugin.multiblockRegistry.get("attunement_engine")?.detectRotation(world, engine.x, engine.y, engine.z) == null) {
+                val structureId = when (world.getBlockAt(engine.x, engine.y, engine.z).type) {
+                    Material.BLAST_FURNACE -> "attunement_engine"
+                    Material.COMPOSTER -> "seedling_cultivator"
+                    Material.LECTERN -> "phenomenon_condenser"
+                    else -> null
+                }
+                if (structureId == null || plugin.multiblockRegistry.get(structureId)?.detectRotation(world, engine.x, engine.y, engine.z) == null) {
                     plugin.automationManager.removeAt(engine.world, engine.x, engine.y, engine.z)
                 }
             }

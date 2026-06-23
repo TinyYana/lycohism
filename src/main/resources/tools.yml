@@ -1,5 +1,5 @@
 # Lycohism 生活工具設定
-# 工具行為寫在程式碼，平衡數值放這裡；玩家可見名稱與 lore 統一放在 lang.yml。
+# 工具行為寫在程式碼，平衡數值放這裡；玩家可見名稱與 lore 統一放在 lang_zh.yml / lang_en.yml。
 
 tools:
 

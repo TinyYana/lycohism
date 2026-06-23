@@ -65,6 +65,6 @@ class StructureLocator(private val plugin: Lycohism) {
     }
 
     companion object {
-        val LANDMARK_IDS = listOf("moss-altar", "dew-well", "wind-circle", "rainfall-dungeon", "moondial", "sundial")
+        val LANDMARK_IDS = listOf("moss-altar", "dew-well", "wind-circle", "rainfall-dungeon", "moondial", "sundial", "sealed-shrine", "tidal-shrine")
     }
 }

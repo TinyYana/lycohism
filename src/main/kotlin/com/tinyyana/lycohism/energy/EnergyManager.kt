@@ -31,6 +31,12 @@ class EnergyManager(private val plugin: Lycohism) {
         EnergyType.MOON -> moonCap
     }
 
+    /** Returns the effective cap for [player]: ×1.5 when their study facility is Lv3. */
+    fun capFor(player: Player, type: EnergyType): Int {
+        val studyLevel = plugin.playerDataManager.get(player.uniqueId).studyLevel
+        return if (studyLevel >= 3) (cap(type) * 1.5).toInt() else cap(type)
+    }
+
     fun get(player: Player, type: EnergyType): Int {
         val data = plugin.playerDataManager.get(player.uniqueId)
         return when (type) {
@@ -47,7 +53,7 @@ class EnergyManager(private val plugin: Lycohism) {
     fun add(player: Player, type: EnergyType, amount: Int, persist: Boolean = true): Int {
         if (amount <= 0) return 0
         val current = get(player, type)
-        val stored = (current + amount).coerceAtMost(cap(type))
+        val stored = (current + amount).coerceAtMost(capFor(player, type))
         val added = stored - current
         if (added > 0) set(player, type, stored, persist)
         return added

@@ -1,365 +1,378 @@
-# Lycohism 玩法與特色全覽（v0.9.2-ALPHA）
+# Lycohism — Features & Mechanics Overview (v0.9.33-ALPHA)
 
-> 這份是「目前為止做出來的東西」的完整清單與說明，盡量詳盡。對照用的還有：
-> - 玩家向、講「卡關處」的輕量教學 → [`TUTORIAL.md`](TUTORIAL.md)
-> - 設計定位與長期路線圖 → [`PROJECT_PLAN.md`](PROJECT_PLAN.md)
+*[繁體中文版](FEATURES.zh-TW.md)*
+
+> This is a thorough list and explanation of "everything built so far". For reference, see also:
+> - the lighter, player-facing tutorial focused on "where people get stuck" → [`TUTORIAL.md`](TUTORIAL.md)
 >
-> 數值大多寫在 `src/main/resources/*.yml`，可即時 `/lyco reload`。本文標「可調」的代表在設定檔裡。
-> 本文以目前工作樹的 **v0.9.2-ALPHA 程式與預設 YAML** 為準；「已實作但一般玩家目前到不了」的內容會另外標出，不把企劃當成已完成玩法。
+> Most numbers live in `src/main/resources/*.yml` and can be `/lyco reload`ed live. Anything marked "tunable" here is in a config file.
+> This document reflects the current working tree's **v0.9.33-ALPHA WIP code and default YAML**. Each release is tested in-game during development, but passing compile/unit tests and solo testing is not the same as a long-term multiplayer Paper acceptance run.
 
 ---
 
-## 0. 一句話定位
+## 0. One-line positioning
 
-Lycohism 是**純伺服器端**的生存擴充：不裝客戶端模組，就在原版生存上疊一層「自然魔法 / 生活工具 / 基地成長 / 探索推進」。核心節奏是：
+Lycohism is a **server-side** survival expansion: no client mod, just a layer of "nature magic / living tools / base growth / exploration" laid over vanilla survival. The core rhythm is:
 
-> **觀察自然 → 採集自然現象 → 轉化成工具與設施 → 蓄輝能、蓋據點 → 遠征取專屬素材 → 挑戰 BOSS → 把基地推到頂。**
+> **Observe nature → harvest phenomena → turn them into tools and facilities → store radiance, build a base → expedition for exclusive materials → challenge a BOSS → push the base to its peak.**
 
-每次上線都能完成一個小推進，由「調律之路」給你下一步。
+Every session can finish one small step forward, with the "Path of Attunement" pointing you to the next.
 
 ---
 
-## 1. 自然現象（採集系統）
+## 1. Natural phenomena (the harvesting system)
 
-世界多了一層會「回應時間 / 天氣 / 月相 / 地點」的掉落物。破壞對應方塊、且當下環境條件成立，就有機率掉。資料全在 `phenomena.yml`，新增一種只要加一段 YAML。
+The world gains a layer of drops that "respond to time / weather / moon phase / place". Break the matching block while the environment condition holds, and there's a chance to get it. All data lives in `phenomena.yml`; adding one is just a YAML block.
 
-| 現象 | 主要取得條件 | 用途方向 |
+| Phenomenon | Main acquisition condition | Use direction |
 |---|---|---|
-| **晨露** morning_dew | 清晨、植被（草、花） | 最早的萬用素材，修工房、做初階工具 |
-| **雨息** rain_breath | 雨天、水邊 | 雨紋繃帶、農作滋養等 |
-| **花脈** flower_vein | 花叢、櫻花林 | 溫室培育、花脈剪 |
-| **月露** moon_dew | 夜晚、滿月、高處 | 月相系工具、合成 |
-| **風痕** wind_trace | 山地、高處 | 風標、星圖羅盤 |
-| **地脈砂** leyline_sand | 洞窟、深層 | 地脈探針 |
-| **苔華** moss_bloom | 雨後森林（遠征）專屬 | 溫室專屬產物、恢復系工具 |
-| **燼華** ember_bloom | 地獄（採集／怪物掉落） | 右鍵裂開＝30 秒抗火 |
-| **輝脈晶** radiant_ore | 地獄、金紋黑石 | 二階工具與祭壇造物核心礦材 |
-| **月輝核心** moon_core | 永夜荒原（遠征）專屬 | 輝能之鏡（月之力）、召喚 BOSS 的一半 |
-| **日輝核心** sun_core | 潮汐深淵（遠征）專屬 | 召喚 BOSS 的另一半（日線對位月線） |
-| **蝕輝結晶** eclipse_crystal | 蝕影守望者 BOSS 掉落 | 設施升三階的唯一鑰匙 |
+| **Morning Dew** morning_dew | Dawn, vegetation (grass, flowers) | The earliest all-purpose material; repair the workshop, make early tools |
+| **Rain Breath** rain_breath | Rain, near water | Rain Bandage, crop tending, etc. |
+| **Flower Vein** flower_vein | Flower clusters, cherry groves | Greenhouse cultivation, Flower Vein Shears |
+| **Moon Dew** moon_dew | Night, full moon, high up | Moon-phase tools, crafting |
+| **Wind Trace** wind_trace | Mountains, high up | Wind Vane, Star Compass |
+| **Leyline Sand** leyline_sand | Caves, deep | Leyline Probe |
+| **Moss Bloom** moss_bloom | Rainfall Forest (expedition) exclusive | Greenhouse-exclusive products, restorative tools |
+| **Ember Bloom** ember_bloom | Nether (harvest / mob drops) | Right-click to shatter = 30s Fire Resistance |
+| **Infernal Shard** infernal_shard | Nether mob drops, or refined at the altar | Nether material line; currently used to open follow-up content |
+| **Radiant Ore** radiant_ore | Nether, gilded blackstone | Core mineral for tier-2 tools and altar creations |
+| **Moon Core** moon_core | Moonless Waste (expedition) exclusive | Radiant Focus (moon power), one half of the BOSS summon |
+| **Sun Core** sun_core | Tidal Depths (expedition) exclusive | The other half of the BOSS summon (sun line mirrors moon line) |
+| **Eclipse Crystal** eclipse_crystal | Eclipse Warden BOSS drop | The only key to tier-3 facilities |
 
-機制重點：
-- **不靠背**：手持某些工具（風標、地脈探針）時，畫面會即時提示「此時此地能採什麼」。
-- **多人公平**：遠征專屬核心除了採集／開箱，也能靠**擊殺怪物**取得（`mob-drops`），不必跟人搶箱。
-- **首次提示**：每種現象第一次採到會跳一行 first-hint。
-- **素材本身也能用**：手持雨息右鍵作物會推進 2 個生長階段；燼華右鍵消耗 1 個，給 30 秒抗火。
+Mechanic highlights:
+- **No memorising**: while holding certain tools (Wind Vane, Leyline Probe), the screen tells you in real time "what's harvestable here and now".
+- **Multiplayer-fair**: expedition-exclusive cores can also be obtained by **killing mobs** (`mob-drops`), not just harvesting/chests, so you don't have to fight over loot.
+- **First-time hint**: the first time you harvest each phenomenon, a one-line first-hint pops up.
+- **Materials are usable themselves**: hold Rain Breath and right-click a crop to push 2 growth stages; Ember Bloom right-click consumes 1 for 30s Fire Resistance.
 
-### 預設採集條件與機率
+### Default harvest conditions and rates
 
-機率是每次破壞符合來源方塊時各自判定；伺服器可在 `phenomena.yml` 調整。
+Rates are rolled independently each time you break a matching source block; servers can tune them in `phenomena.yml`.
 
-| id | 精確條件 | 預設機率 | 來源方塊 |
+| id | Exact condition | Default rate | Source blocks |
 |---|---|---:|---|
-| `morning_dew` | 一般世界，0–3000 tick | 20% | 短草、高草、蕨、大型蕨、蒲公英、罌粟、矢車菊、雛菊、雛草 |
-| `rain_breath` | 一般世界、下雨 | 18% | 甘蔗、荷葉、藤蔓、苔蘚、海草 |
-| `flower_vein` | 一般世界、全天候 | 18% | 粉紅花瓣、櫻花樹葉、盛開杜鵑葉、蘭花、紫紅球花、鈴蘭、各色鬱金香、凋零玫瑰 |
-| `moon_dew` | 一般世界、13000–23000 tick、晴天、滿月（月相 0） | 16% | 粉紅花瓣、櫻花樹葉、盛開杜鵑葉、雛菊、鈴蘭、蘭花 |
-| `wind_trace` | 一般世界、Y=96–320 | 12% | 草地、石頭、安山岩、礫石、雪、雪塊 |
-| `leyline_sand` | 一般世界、Y=-64–32 | 8% | 石頭、深板岩、凝灰岩、方解石、滴水石塊 |
-| `moss_bloom` | 僅雨後森林 | 35% | 苔蘚、紅樹林葉／根、杜鵑葉、大／小型垂滴葉 |
-| `ember_bloom` | 地獄、已完成 `enter_the_nether` | 30% | 地獄疙瘩塊、扭曲疙瘩塊、蕈光體、兩種蕈菇與藤蔓；另有地獄怪物掉落 |
-| `radiant_ore` | 地獄、已完成 `enter_the_nether` | 100% | 插件在新區塊生成的金紋黑石礦脈 |
-| `moon_core` | 僅永夜荒原 | 25% | 黑橡木葉、發光地衣、伏聆、蘑菇；另有怪物掉落 |
-| `sun_core` | 僅潮汐深淵 | 25% | 海磷石、海燈籠、海帶、珊瑚；另有怪物掉落與神殿寶箱 |
-| `eclipse_crystal` | 無自然來源 | — | 擊敗蝕影守望者取得 |
+| `morning_dew` | Overworld, 0–3000 ticks | 20% | Short/tall grass, fern, large fern, dandelion, poppy, cornflower, oxeye daisy, daisy |
+| `rain_breath` | Overworld, raining | 18% | Sugar cane, lily pad, vines, moss, seagrass |
+| `flower_vein` | Overworld, any time | 18% | Pink petals, cherry leaves, flowering azalea leaves, orchids, allium, lily of the valley, tulips, wither rose |
+| `moon_dew` | Overworld, 13000–23000 ticks, clear, full moon (phase 0) | 16% | Pink petals, cherry leaves, flowering azalea leaves, daisy, lily of the valley, orchids |
+| `wind_trace` | Overworld, Y=96–320 | 12% | Grass block, stone, andesite, gravel, snow, snow block |
+| `leyline_sand` | Overworld, Y=-64–32 | 8% | Stone, deepslate, tuff, calcite, dripstone block |
+| `moss_bloom` | Rainfall Forest only | 35% | Moss, mangrove leaves/roots, azalea leaves, big/small dripleaf |
+| `ember_bloom` | Nether, completed `enter_the_nether` | 30% | Nether wart block, warped wart block, shroomlight, both fungi and vines; also Nether mob drops |
+| `infernal_shard` | Nether, completed `enter_the_nether` | no block source | Blaze 25%, ghast 20%, wither skeleton 10%; also refined at the altar |
+| `radiant_ore` | Nether, completed `enter_the_nether` | 100% | Gilded blackstone veins the plugin generates in new chunks |
+| `moon_core` | Moonless Waste only | 25% | Dark oak leaves, glow lichen, sculk, mushrooms; also mob drops |
+| `sun_core` | Tidal Depths only | 25% | Prismarine, sea lantern, kelp, coral; also mob drops and shrine chests |
+| `eclipse_crystal` | no natural source | — | Obtained by defeating the Eclipse Warden |
 
 ---
 
-## 2. 工具（生活工具）
+## 2. Tools (living tools)
 
-工具行為寫在程式、平衡數值放 `tools.yml`、名稱與 lore 放 `lang.yml`。多數在設施 GUI 裡用素材製作；右鍵啟動，只認主手（避免雙手誤觸）。
+Tool behaviour is in code, balance numbers in `tools.yml`, names and lore in `lang_<lang>.yml`. Most are crafted from materials in a facility GUI; right-click to activate, main hand only (to avoid off-hand misfires).
 
-### 採集 / 觀測
-- **露光瓶** dew_light：消耗品，右鍵給一段夜視，用後留空瓶。下礦比插火把舒服。
-- **風標** wind_vane：右鍵讀當下時間 / 天氣 / 月相，提示現在可採的現象。
-- **地脈探針** leyline_probe：短距離掃描附近原版礦脈，action bar 持續顯示讀數（不取代正常探礦）。
-- **花籤** flower_bookmark：潛行右鍵記住一個地點，右鍵指引方向與距離。
-- **星圖羅盤** star_compass：右鍵讀出最近能量塔的方向與距離（書房 Lv1）。
-- **調律手冊** tuning_manual：右鍵翻開「下一個小步驟」。
-  - 第一次採到自然現象時會自動送一本；修好書房後也可直接從書房閱讀。
+### Harvest / observation
+- **Dewlight Vial** dew_light: consumable, right-click for a stretch of night vision, leaves an empty bottle. Nicer than placing torches when mining.
+- **Wind Vane** wind_vane: right-click to read the current time / weather / moon phase, hinting at what's harvestable now.
+- **Leyline Probe** leyline_probe: short-range scan of nearby vanilla ore veins, with a persistent action-bar readout (doesn't replace normal prospecting).
+- **Flower Bookmark** flower_bookmark: sneak+right-click to remember a place, right-click to be guided to its direction and distance.
+- **Star Compass** star_compass: right-click to read the direction and distance of the nearest energy tower (Study Lv1).
+- **Attunement Manual** tuning_manual: right-click to open "the next small step".
+  - One is auto-granted the first time you harvest a phenomenon; once the study is repaired you can read it there directly.
 
-### 建造
-- **石工槌** stonework_hammer：右鍵石材方塊，原地循環變體（圓石→石→石磚→鑿製石磚），消耗耐久。**先右鍵預覽、再右鍵確認**，並有短冷卻（阻尼感、防連點）。二階（強化）一次塑形相連平面 3×3。
-- **築造杖** building_wand：對著點擊面，往一直線延伸放置；從背包消耗相同的原版方塊。二階有**模式**（直線／牆面／地板／柱列），**潛行右鍵（對空亦可）切換**；同樣是預覽→確認＋冷卻。
-- **藍圖** blueprint：右鍵半透明預覽某個多方塊結構；潛行右鍵扣材料一鍵蓋好。
+### Building
+- **Stonework Hammer** stonework_hammer: right-click a stone block to cycle its variant in place (cobble→stone→stone bricks→chiseled), spending durability. **Preview on first right-click, confirm on the second**, with a short cooldown (a damped feel, anti-spam). Tier II shapes a connected 3×3 face at once.
+- **Building Wand** building_wand: extends placement in a line along the face you click; consumes the same vanilla blocks from your inventory. Tier II has **modes** (line / wall / floor / column), switched with **sneak+right-click (even into the air)**; same preview→confirm + cooldown.
+- **Blueprint** blueprint: right-click for a translucent preview of a multiblock structure; sneak+right-click to build it instantly using materials.
 
-### 植物 / 恢復
-- **花脈剪** flower_vein_shears：右鍵未成熟作物＝催熟，成熟作物＝採收並補種；催熟比採收更耗耐久。
-- **苔肥** moss_fertile：右鍵植物，對一小塊區域施骨粉（原版生長規則）。
-- **苔露膏** moss_balm：消耗品，右鍵得一段溫和持續再生（與繃帶的立即小補區隔）。
-- **雨紋繃帶** rain_bandage：消耗品，右鍵恢復少量生命，不取代食物與藥水。
+### Plants / restoration
+- **Flower Vein Shears** flower_vein_shears: right-click an immature crop = ripen, a mature crop = harvest and replant; ripening costs more durability than harvesting.
+- **Moss Fertilizer** moss_fertile: right-click a plant to bone-meal a small area (vanilla growth rules).
+- **Moss Balm** moss_balm: consumable, right-click for a stretch of gentle Regeneration (distinct from the bandage's instant small heal).
+- **Rain Bandage** rain_bandage: consumable, right-click to restore a little health; doesn't replace food and potions.
 
-### 輝能 / 後期
-- **蓄能晶** energy_crystal：可攜帶的輝能電池；池滿後溢流自動注入背包裡的晶體，右鍵把晶體能量倒回玩家池。
-- **輝能之鏡** radiant_focus：右鍵消耗日輝（抗火＋力量）、潛行右鍵消耗月輝（夜視＋緩降）。需月輝核心，於輝能祭壇煉製。
-- **日炎鎬** solar_pick：右鍵消耗日輝得一段急迫（挖掘加速）。工房 Lv2。
-- **月華灑** lunar_spore：右鍵植物，消耗月輝對一片區域施骨粉。溫室 Lv2。
+### Radiance / late-game
+- **Energy Crystal** energy_crystal: a portable radiance battery; when your pool overflows it auto-fills the crystal in your inventory, and right-click pours the crystal's energy back into your pool.
+- **Radiant Focus** radiant_focus: right-click spends Sunlight (Fire Resistance + Strength), sneak+right-click spends Moonlight (Night Vision + Slow Falling). Needs a Moon Core, forged at the Radiance Altar.
+- **Solar Pickaxe** solar_pick: right-click spends Sunlight for a stretch of Haste (mining speed). Workshop Lv2.
+- **Lunar Spore** lunar_spore: right-click a plant to spend Moonlight and bone-meal an area. Greenhouse Lv2.
 
-### 收納 / 移動
-- **月紗袋** moon_pouch：自動收納撿到的自然現象，右鍵一次取出全部。
-- **雨痕門符** rain_gate：主世界右鍵前往第一個遠征、遠征世界右鍵返回；可重複使用。**目前只由管理員給予，正常玩家路線改由書房遠征頁直接進出。**
+### Storage / movement
+- **Moon Pouch** moon_pouch: auto-stores natural phenomena you pick up, right-click to release all at once.
+- **Rainmark Gate** rain_gate: right-click in the Overworld to travel to the first expedition, right-click in the expedition world to return; reusable. **Currently admin-given only; the normal player route is in and out via the study's expedition page.**
 
-> 工具普遍有「製作即解鎖」的發現紀錄，會推進調律之路。
+> Tools generally have a "craft = unlock" discovery record that advances the Path of Attunement.
 
-### 預設操作數值
+### Default operation numbers
 
-- 露光瓶：夜視 120 秒；雨紋繃帶：立即恢復 4 點生命（2 顆心）；苔露膏：再生 II 10 秒。
-- 苔肥：3×3 區域；月華灑：消耗月輝 25，作用 5×5；花脈剪催熟會消耗 2 點耐久。
-- 地脈探針：水平 8 格、垂直 12 格，每 3 秒重掃一次；月紗袋容量 256 個現象素材。
-- 日炎鎬：消耗日輝 25，給急迫 II 60 秒；輝能之鏡日／月模式各消耗 30，主要效果 8 分鐘，月模式緩降 1 分鐘。
-- 築造杖 Lv1 最長放 5 格；Lv2 最長 8 格並提供直線、3×3 牆、5×5 地板、柱列四模式。
+- Dewlight Vial: night vision 120s; Rain Bandage: instantly restores 4 health (2 hearts); Moss Balm: Regeneration II 10s.
+- Moss Fertilizer: 3×3 area; Lunar Spore: spends 25 Moonlight, 5×5 area; Flower Vein Shears ripening costs 2 durability.
+- Leyline Probe: 8 blocks horizontal, 12 vertical, rescans every 3s; Moon Pouch capacity 256 phenomenon materials.
+- Solar Pickaxe: spends 25 Sunlight, Haste II 60s; Radiant Focus sun/moon modes each spend 30, main effect 8 minutes, moon mode Slow Falling 1 minute.
+- Building Wand Lv1 places up to 5 blocks; Lv2 up to 8 with line, 3×3 wall, 5×5 floor and column modes.
 
 ---
 
-## 3. 設施：工房 / 書房 / 溫室
+## 3. Facilities: Workshop / Study / Greenhouse
 
-三座家用設施，**每位玩家獨立等級**（存在 PlayerData）。資料驅動：`facilities.yml`。
+Three home facilities, **each with a per-player level** (stored in PlayerData). Data-driven: `facilities.yml`.
 
-### 開啟手勢（最容易卡的點）
-**潛行 + 空手 + 右鍵** 對應方塊：
-- 工房 → 工作台
-- 書房 → 書架
-- 溫室 → 花盆
+### Opening gesture (the easiest snag)
+**Sneak + empty hand + right-click** the matching block:
+- Workshop → crafting table
+- Study → bookshelf
+- Greenhouse → flower pot
 
-空手是故意的，否則放方塊／開工作台都會誤開選單。也可用 `/lyco workshop|study|greenhouse`（但用方塊比較有「在用基地」的感覺）。
+Empty hand is deliberate, otherwise placing blocks / opening the table would misfire the menu. You can also use `/lyco workshop|study|greenhouse` (but blocks feel more like "using the base").
 
-### 等級與內容
-每座都要先用素材**修復／開墾／整理**到 Lv1，才有功能。升級要消耗材料＋附近核心的輝能。**GUI 會隨等級自適應長大**（自動調整大小與返回鍵位置）。
+### Levels and content
+Each must first be **repaired / reclaimed / set in order** to Lv1 with materials before it has any function. Upgrading costs materials + radiance from a nearby Nexus. **The GUI adapts as it levels up** (auto-resizing and repositioning the back button).
 
-**工房**（加工據點）
-- Lv1：工具製作、建材整組轉換、雨息附魔（給主手工具加經驗修補）。
-- Lv2（需蓋升級結構）：二階石工槌、日炎鎬、加工產量加倍＋更多配方、附魔順帶**耐久 III**。
-- Lv3（需蝕輝結晶）：附魔再追加一個**戰鬥附魔**（依類型給鋒利／力量／保護／效率）。
+**Workshop** (crafting post)
+- Lv1: tool crafting, batch material conversion, Rain-Breath enchant (adds Mending to a main-hand tool).
+- Lv2 (needs an upgrade structure): Stonework Hammer II, Solar Pickaxe, double processing yield + more recipes, enchant also adds **Unbreaking III**.
+- Lv3 (needs an Eclipse Crystal): enchant also adds a **combat enchant** (Sharpness / Power / Protection / Efficiency by type).
 
-**書房**（紀錄）
-- Lv1：調律手冊、自然圖鑑、發現紀錄、風標、月紗袋、星圖羅盤、遠征入口。
-- Lv2：把最近能量塔標到一張鎖定地圖。
-- Lv3：**全境預報**——列出此刻此地所有可採集的自然現象。
+**Study** (records)
+- Lv1: Attunement Manual, Nature Compendium, Discovery Record, Wind Vane, Moon Pouch, Star Compass, expedition entrance.
+- Lv2: mark the nearest energy tower onto a locked map; can craft the **Phenomenon Condenser Blueprint**.
+- Lv3: **regional forecast** — lists every natural phenomenon harvestable here and now; personal Sun/Moon caps ×1.5 (default 200→300).
 
-**溫室**（植物）
-- Lv1：花脈與苔華培育（含發光苔蘚）、花脈剪、苔露膏、苔肥。
-- Lv2：月華灑、更多進階培育產物。
-- Lv3：培育**產出翻倍**。
+**Greenhouse** (plants)
+- Lv1: Flower Vein & Moss Bloom cultivation (incl. glow lichen), Flower Vein Shears, Moss Balm, Moss Fertilizer.
+- Lv2: Lunar Spore, more advanced cultivation products; can craft the **Seedling Cultivator Blueprint**.
+- Lv3: cultivation **output doubled**.
 
-### 升級流程
-1. **Lv1→Lv2**：在設施頁點「升級」。沒蓋升級結構的話，它會直接塞一張**藍圖**給你；照輪廓蓋好那個多方塊（工作台／書架／花盆為核心的有機小角落），站旁邊再點一次升級。要消耗核心輝能＋材料。
-2. **Lv2→Lv3**：不用升級結構，改用**蝕輝結晶**＋更多核心輝能＋材料。
-- 升級後的內容只在升級結構旁（或用指令）存取——那座結構就是「升級版設施」的本體。
+### Upgrade flow
+1. **Lv1→Lv2**: click "Upgrade" on the facility page. If you haven't built the upgrade structure, it hands you a **blueprint**; build that multiblock per the outline (an organic little corner centred on the crafting table / bookshelf / flower pot), stand beside it and click upgrade again. Costs Nexus radiance + materials.
+2. **Lv2→Lv3**: no upgrade structure; uses an **Eclipse Crystal** + more Nexus radiance + materials.
+- Upgraded content is only accessible beside the upgrade structure (or via command) — that structure *is* the "upgraded facility".
 
-### 預設修復與升級成本
+### Default repair and upgrade costs
 
-| 動作 | 預設成本 |
+| Action | Default cost |
 |---|---|
-| 修復工房至 Lv1 | 晨露×4、橡木材×8、圓石×8 |
-| 整理書房至 Lv1 | 雨息×2、書架×4、講台×1 |
-| 開墾溫室至 Lv1 | 花脈×4、玻璃×8、苔蘚方塊×4 |
-| 任一設施 Lv1→Lv2 | 對應二階結構、附近可用核心日輝 500＋月輝 500、金磚×2、紫水晶方塊×2 |
-| 任一設施 Lv2→Lv3 | 附近可用核心日輝 1200＋月輝 1200、蝕輝結晶×1、獄髓錠×1、輝脈晶×6；不需另一座升級結構 |
+| Repair Workshop to Lv1 | Morning Dew ×4, oak planks ×8, cobblestone ×8 |
+| Set Study in order to Lv1 | Rain Breath ×2, bookshelf ×4, lectern ×1 |
+| Reclaim Greenhouse to Lv1 | Flower Vein ×4, glass ×8, moss block ×4 |
+| Any facility Lv1→Lv2 | Matching tier-2 structure, nearby usable Nexus Sunlight 500 + Moonlight 500, gold blocks ×2, amethyst blocks ×2 |
+| Any facility Lv2→Lv3 | Nearby usable Nexus Sunlight 1200 + Moonlight 1200, Eclipse Crystal ×1, netherite ingot ×1, Radiant Ore ×6; no second upgrade structure needed |
 
 ---
 
-## 4. 多方塊與建造框架
+## 4. Multiblocks and the building framework
 
-一套 `Multiblock` 框架同時供：**形狀＋數量驗證、幽靈預覽、藍圖一鍵建造、管理員秒放**。模板用「分層字元圖」在程式裡定義一次，到處重用。目前的模板：
+One `Multiblock` framework powers all of: **shape + count validation, ghost preview, one-click blueprint build, admin instant-place**. Templates are defined once in code as "layered character maps" and reused everywhere. Current templates:
 
-- 能量：`energy_relay`（中繼器）、`sun_tower`/`moon_tower`（日／月輝塔，即日晷／月晷）、`energy_nexus`（輝能核心）、`energy_altar`（輝能祭壇）。
-- 設施升級：`workshop_tier_2`、`study_tier_2`、`greenhouse_tier_2`。
-- BOSS：`eclipse_dial`（日月儀，召喚蝕影守望者的祭壇）。
-- 自動化（v0.9.1）：`attunement_engine`（自動調律機，接輝能網路的加工機關）。
+- Energy: `energy_relay` (Relay), `sun_tower`/`moon_tower` (Sun/Moon Tower, i.e. Sundial/Moondial), `energy_nexus` (Radiance Nexus), `energy_altar` (Radiance Altar).
+- Facility upgrades: `workshop_tier_2`, `study_tier_2`, `greenhouse_tier_2`.
+- BOSS: `eclipse_dial` (Eclipse Dial, the altar that summons the Eclipse Warden).
+- Automation: `attunement_engine`, `seedling_cultivator`, `phenomenon_condenser`.
+- Exploration: `infernal_relay` (player-facing name "Infernal Ruins"; currently a discovery/recipe entry, no actual energy transfer).
 
-放好結構**右鍵核心方塊**即「啟動」：登記（塔／核心／中繼）並在上方浮一個名牌。破壞結構時，附近登記會重新驗證、失效就停止運作（並有「破壞確認」防誤拆）。
-
----
-
-## 5. 輝能系統（日與月）
-
-模型刻意單純：
-
-- **被動蓄能**：你站在見天的地方就自己蓄——白天蓄**日輝**、晚上蓄**月輝**。畫面上方 boss bar 是目前量。
-- **溢流**：池滿後溢流自動注入背包裡的**蓄能晶**（像會自充電的電池）。
-- **集中網路**：**塔產能 → 中繼器接力 → 核心儲存 → 拿去升級設施 / 召喚 BOSS**。
-  - 塔：日塔白天產、月塔晚上產，塔頂要見天。**本版塔只有自然生成 / 管理員 / 藍圖放出來的才產能**（玩家手堆暫不產，留待後續版本）。
-  - 核心（nexus）：基地能量倉，蓋在塔水平約 48 格內（可調），靠近會看到流動光束。有 owner 與分權（`/lyco nexus share/unshare`）。
-  - 中繼器：塔離核心太遠時接力，一段約 48 格串過去。
-- **能量出口**：輝能之鏡、日炎鎬、月華灑、設施升級、召喚 BOSS、**自動調律機**（v0.9.1，持續性出口）。
-
-**自動調律機**（`attunement_engine`，v0.9.1 第一個自動化設備）：剛性多方塊（中央高爐為控制器），右鍵高爐認領後接上附近的輝能核心。在機器**正上方放一個箱子／木桶**當原料倉，它每隔幾秒取一份原料、扣核心輝能、把加工成品放回容器——讓基地接手原本在工房一格格點的建材加工。配方資料驅動於 `config.yml > automation`：**日輝線**跑明亮石材（圓石→石→石磚、花崗岩／閃長岩／安山岩拋光等），**月輝線**跑深色岩石（深板岩／黑石／凝灰岩磚等）。**取得**（v0.9.2）：工房 Lv2 製作「自動調律機藍圖」；調律手冊與調律之路都會在接觸輝能核心後介紹它。
-
-**輝能祭壇**（高階合成）用法和工房不同：把素材**丟**在祭壇周圍 → **手持催化物右鍵**中央附魔台 → 消耗身上輝能煉成。空手右鍵祭壇會列出三步驟與全部配方。
-
-預設數值：玩家日／月池各 200；見天每秒 +2，對應塔 16 格內變成 ×3；蓄能晶日／月各可存 100。核心日／月各存 5000；核心、中繼器、塔之間每段最多水平 48 格；每座連通、見天且處於正確時段的塔每秒向核心輸入 10。Boss bar 只在主手或副手拿著 Lycohism 物品時顯示，蓄能本身不受影響。
+Once placed, **right-click the core block** to "activate": it registers (tower / nexus / relay) and floats a nameplate above. When a structure is broken, nearby registrations re-validate and stop working if invalidated (with a "break confirm" to prevent accidental teardown).
 
 ---
 
-## 6. 遠征（獨立世界）
+## 5. The radiance system (sun & moon)
 
-書房的遠征介面前往主世界以外、各自獨立且持久的世界（第一次進入才建立）。遠征不洗主世界進度，是讓你帶素材回來。每個世界資料驅動於 `expeditions.yml`：地形演算法、強制生態、永雨／永夜、被動蓄能倍率、主題危害怪、解鎖門檻。
+The model is deliberately simple:
 
-| 世界 | 主題 | 地形演算法 | 專屬素材 | 特色 |
+- **Passive gathering**: stand somewhere under open sky and you gather on your own — **Sunlight** by day, **Moonlight** by night. The boss bar at the top of the screen is your current amount.
+- **Overflow**: once the pool is full, the surplus auto-fills the **Energy Crystal** in your inventory (like a self-charging battery).
+- **Concentration network**: **towers produce → relays carry → the Nexus stores → spend it upgrading facilities / summoning a BOSS**.
+  - Towers: sun by day, moon by night, with an open-sky top. **This version's towers only produce if generated naturally / by admin / from a blueprint** (player-stacked ones don't produce yet, left for a later version).
+  - Nexus: the base's energy store, placed within ~48 horizontal blocks of a tower (tunable); a flowing beam appears when near. Has an owner and access sharing (`/lyco nexus share/unshare`).
+  - Relay: carries when a tower is too far from the Nexus, ~48 blocks per hop.
+- **Energy outlets**: Radiant Focus, Solar Pickaxe, Lunar Spore, facility upgrades, summoning a BOSS, and the three **automation machines** (a continuous outlet).
+
+**Attunement Engine** (`attunement_engine`, the first automation device, v0.9.1): a rigid multiblock (central blast furnace as controller); right-click the furnace to claim it and link a nearby Radiance Nexus. Place a chest/barrel **directly above** as the input bin, and every few seconds it takes one input, spends Nexus radiance, and returns the product to the container — letting the base take over the block-by-block material processing you'd otherwise click in the workshop. Recipes are data-driven in `config.yml > automation`: the **Sunlight line** runs bright stone (cobble→stone→stone bricks, granite/diorite/andesite polishing, etc.), the **Moonlight line** runs dark rock (deepslate / blackstone / tuff bricks, etc.). **Acquisition** (v0.9.2): craft the "Attunement Engine Blueprint" at Workshop Lv2; the manual and Path of Attunement both introduce it once you've touched a Nexus.
+
+v0.9.3 added two more looks and routes: the Greenhouse Lv2 **Seedling Cultivator** (central composter, plant-processing flavour) and the Study Lv2 **Phenomenon Condenser** (central lectern, material-condensing flavour). All three reuse the chest-above, 48-block Nexus and the same recipe config. This also means the code **doesn't yet split recipes by machine**: any of the three can handle every recipe in the config file; whether to split is a post-playtest decision.
+
+**Radiance Altar** (high-tier crafting) works differently from the workshop: **drop** materials around the altar → **hold a catalyst and right-click** the central enchanting table → spend your radiance to refine. Empty-hand right-click the altar to list the three steps and all recipes.
+
+Default numbers: player Sun/Moon pools 200 each (300 at Study Lv3); +2 per second under open sky, ×3 within 16 blocks of the matching tower; Energy Crystal stores 100 each of sun/moon. Nexus stores 5000 each; max 48 horizontal blocks per hop between Nexus, relay and tower; each connected, sky-open tower in the right period feeds 10/s into the Nexus. The boss bar only shows while holding a Lycohism item in the main or off hand; gathering itself is unaffected.
+
+---
+
+## 6. Expeditions (separate worlds)
+
+The study's expedition screen travels to separate, persistent worlds beyond the Overworld (created on first entry). Expeditions don't wipe Overworld progress; they let you bring materials back. Each world is data-driven in `expeditions.yml`: terrain algorithm, forced biome, eternal rain/night, passive-gathering multiplier, themed hazard mob, unlock gate.
+
+| World | Theme | Terrain algorithm | Exclusive material | Notes |
 |---|---|---|---|---|
-| **雨後森林** rainfall_forest | 晝、潮濕、苔蘚（紅樹林／沼澤／叢林） | RAINFALL | 苔華 | 永雨；回流溫室的農業／恢復系 |
-| **永夜荒原** moonless_waste | 夜、荒蕪（幽暗／黑森林／風蝕） | MOONLESS | 月輝核心 | 永夜＝唯一能整天穩定蓄月輝；月線 |
-| **潮汐深淵** tidal_depths | 暖海，正常日夜循環 | OCEAN | 日輝核心 | 被動蓄能倍率 ×2；日線（對位永夜荒原）；專屬**潮汐神殿**與小王 |
-| **暮蝕之境** eclipse_realm | 永遠陰暗的蝕（脊狀尖峰＋裂谷） | ECLIPSE | （戰場）蝕輝結晶 | BOSS 戰場；出生點自然生成大型戰場＋日月儀 |
+| **Rainfall Forest** rainfall_forest | Day, wet, mossy (mangrove/swamp/jungle) | RAINFALL | Moss Bloom | Eternal rain; feeds back into greenhouse farming/restoration |
+| **Moonless Waste** moonless_waste | Night, barren (dark/dark-forest/wind-eroded) | MOONLESS | Moon Core | Eternal night = the only place to gather Moonlight all day; moon line |
+| **Tidal Depths** tidal_depths | Warm sea, normal day/night cycle | OCEAN | Sun Core | Passive-gathering ×2; sun line (mirrors Moonless Waste); exclusive **Tidal Shrine** and mini-boss |
+| **Eclipse Realm** eclipse_realm | Eternally dim eclipse (ridged peaks + ravines) | ECLIPSE | (battlefield) Eclipse Crystal | BOSS battlefield; spawn naturally generates a large battlefield + Eclipse Dial |
 
-兩項橫切到所有遠征 / 後期維度的機制：
-- **地表＋地底都換皮**：地形演算法不只改地表，地表下也會散佈各風格的主題礦袋（如暮蝕的紫水晶／黑石、海洋的稜鏡／海燈籠、永夜的幽匿）。挖下去也認得出身在哪。
-- **高難度維度怪物整體強化**：永夜荒原 / 暮蝕之境 / 潮汐深淵裡，自然生成的生物加血、加速、放大、附力量（`expedition-mob-boost` 可調）。本插件自己的召喚（危害怪、BOSS、小王）不重複加成。
+Two mechanics cut across all expeditions / late-game dimensions:
+- **Surface and underground both reskinned**: the terrain algorithm changes more than the surface — themed ore pockets in each style scatter below too (Eclipse's amethyst/blackstone, Ocean's prismarine/sea lanterns, Moonless's sculk). You can tell where you are even while digging.
+- **High-difficulty dimension mobs buffed overall**: in the Moonless Waste / Eclipse Realm / Tidal Depths, naturally spawned creatures get more health, speed, size and Strength (`expedition-mob-boost`, tunable). The plugin's own summons (hazard mobs, BOSS, mini-boss) don't stack the boost.
 
-前三個遠征（雨後森林／永夜荒原／潮汐深淵）只要求完成原版 `minecraft:story/enter_the_nether`；**暮蝕之境是日月兩線的收束點，要先走過潮汐深淵（日）與永夜荒原（月）兩線才解鎖**（門檻＝`lycohism:progression/tidal_depths` + `lycohism:progression/lunar_waste`，與調律之路一致）。一般玩家從書房遠征頁進入並回到原出發點；世界為全服共用、第一次進入才建立，之後持久保存。
+The first three expeditions (Rainfall Forest / Moonless Waste / Tidal Depths) only require completing vanilla `minecraft:story/enter_the_nether`; **the Eclipse Realm is where the sun and moon lines converge, and unlocks only after walking both the Tidal Depths (sun) and Moonless Waste (moon) lines** (gate = `lycohism:progression/tidal_depths` + `lycohism:progression/lunar_waste`, consistent with the Path of Attunement). Normal players enter from the study's expedition page and return to their departure point; worlds are server-shared, created on first entry and persisted afterwards.
 
-> **v0.9 修正**：書房遠征頁格位已從 3 擴成 4，暮蝕之境正式接上正常玩家路線——四個遠征全部可見、可進。暮蝕在未走完日月兩線前顯示為鎖定，並有專屬提示說明解法（先走潮汐深淵與永夜荒原）。進入後出生點自然生成日月儀，手持日輝核心＋月輝核心右鍵即可召喚蝕影守望者。（v0.8.2 之前因格位不足而到不了的問題已解決。）
-
----
-
-## 7. BOSS 與小王
-
-**蝕影守望者**（暮蝕之境，主 BOSS）
-- 日月支線在此收束：**手持日輝核心＋月輝核心**右鍵暮蝕之境的日月儀核心召喚。
-- 本體是大幅強化的凋零靈（沿用其原生 boss bar 與飛行／頭骨 AI），有**技能組**：暗蝕彈幕（連射蓄能頭骨）、蝕之爆發（失明＋凋零＋擊退）、蝕引（把玩家拉近）；半血進入**月相**更狂暴並召喚隨從。
-- 戰場與日月儀在玩家進入暮蝕之境時於出生點**自然生成**（固定高度的圓形稜堡）。
-- 擊敗掉落**蝕輝結晶**——設施升三階的鑰匙。
-- 預設 450 生命；每約 3 秒隨機施放一種技能，半血進月相後獲得速度 II、力量 II，並召喚兩隻隨從。戰場內會阻止凋零爆炸與改方塊破壞場地。
-
-**潮汐守望者**（潮汐深淵，小王）
-- 海床上的**潮汐神殿**（稜鏡神殿）守護者，強化版遠古守衛。
-- 神殿寶箱給日輝核心；潮汐深淵不再生其他世界的共用塔／壇，只生這個專屬結構，讓海洋有自己的樣子。
-- 本體是 200 生命的遠古守衛；神殿寶箱預設含日輝核心×2、海磷晶體×6、海洋之心×1。
+> **v0.9 fix**: the study's expedition page expanded from 3 slots to 4, and the Eclipse Realm is now formally on the normal player route — all four expeditions are visible and enterable. The Eclipse shows as locked until you've walked both sun and moon lines, with a dedicated hint explaining the solution (walk the Tidal Depths and Moonless Waste first). After entering, the spawn naturally generates an Eclipse Dial; hold a Sun Core + Moon Core and right-click to summon the Eclipse Warden. (The pre-v0.8.2 problem of being unable to reach it for lack of slots is resolved.)
 
 ---
 
-## 8. 調律之路（progression）
+## 7. BOSS and mini-boss
 
-書房可開「調律之路」：一條里程碑，第一個未完成章節就是你現在的目標並給提示，後面先藏起來。也對映到原版 advancement 樹（可見分岔）。完成條件可混用：發現紀錄、原版進度、設施等級。資料在 `progression.yml`、文字在 `lang.yml`。
+**Eclipse Warden** (Eclipse Realm, main BOSS)
+- The sun and moon side-lines converge here: **hold a Sun Core + Moon Core** and right-click the Eclipse Dial core in the Eclipse Realm to summon.
+- The body is a heavily buffed Wither (reusing its native boss bar and flight/skull AI), with a **skill set**: dark-eclipse barrage (rapid charged skulls), eclipse burst (Blindness + Wither + knockback), eclipse pull (drags players in); at half health it enters a **moon phase**, more frenzied and summoning minions.
+- The battlefield and Eclipse Dial are **generated naturally** at the Eclipse Realm spawn when a player enters (a circular bastion at a fixed height).
+- Defeating it drops an **Eclipse Crystal** — the key to tier-3 facilities.
+- Default 450 health; casts a random skill roughly every 3s, gains Speed II and Strength II in the moon phase and summons two minions. Within the battlefield, wither explosions and block changes are blocked.
 
-骨幹（v0.8.2 起兩線對稱）：
+**Tidal Warden** (Tidal Depths, mini-boss)
+- Guardian of the **Tidal Shrine** (a prismarine temple) on the seabed, a buffed Elder Guardian.
+- The shrine chest gives a Sun Core; the Tidal Depths don't generate other worlds' shared towers/altars, only this exclusive structure, giving the ocean its own character.
+- The body is a 200-health Elder Guardian; the shrine chest defaults to Sun Core ×2, prismarine crystals ×6, heart of the sea ×1.
+
+---
+
+## 8. Path of Attunement (progression)
+
+The study opens the "Path of Attunement": a chain of milestones where the first uncompleted chapter is your current objective and gives a hint, with later ones hidden. It also maps onto the vanilla advancement tree (a visible fork). Completion conditions can mix: discovery records, vanilla advancements, facility levels. Data is in `progression.yml`, text in `lang_<lang>.yml`.
+
+The backbone (two symmetric lines since v0.8.2):
 
 ```
-覺醒 → 工房 → 初階工具 → 雨 → 書房 → 溫室 → 夜 → 地獄門檻 → 輝脈 → 遠征 → 遠征產出 → 輝能
-                                                                              │（日月分岔）
-        ┌── 日線：日輝塔 → 潮汐深淵(日輝核心) → 日之調律(日炎鎬)
-   輝能 ┼── 月線：月輝塔 → 永夜荒原(月輝核心) → 月之調律(輝能之鏡)
-        └── 中立：輝能核心 → 輝能祭壇 → 中繼網 → 設施升級(Lv2)
+Awakening → Workshop → First Tools → Rain → Study → Greenhouse → Night → Nether Gate → Radiant Vein → Expedition → Expedition Yield → Radiance
+                                                                                                          │ (sun/moon fork)
+        ┌── Sun line: Sun Tower → Tidal Depths (Sun Core) → Sun Attunement (Solar Pickaxe)
+Radiance ┼── Moon line: Moon Tower → Moonless Waste (Moon Core) → Moon Attunement (Radiant Focus)
+        └── Neutral: Radiance Nexus → Radiance Altar → Relay network → Facility Upgrade (Lv2)
                                                     │
                           ┌─────────────────────────┘
-   蝕收束：暮蝕之境（需走過日月兩線的遠征）→ 蝕影守望者(打 BOSS) → 三階設施(Lv3)
+   Eclipse convergence: Eclipse Realm (needs both sun & moon expedition lines) → Eclipse Warden (beat the BOSS) → Tier-3 Facilities (Lv3)
 ```
 
-設計重點：**日線與月線一碗水端平**——形狀完全對稱（塔→專屬遠征(核心)→調律(力量)）；輝能網路／據點拆成不偏日月的中立支線。蝕的章節要**走過日月兩線**才開啟，BOSS 召喚也要兩種核心，真正收束兩條線。
+Design highlights: **the sun and moon lines are treated equally** — fully symmetric shapes (tower → exclusive expedition (core) → attunement (power)); the radiance network/base is split out as a neutral side-line favouring neither. The eclipse chapter opens only after **walking both sun and moon lines**, and the BOSS summon needs both cores, truly converging the two.
+
+v0.9.3 / v0.9.31 added four more visible chapters: Sealed Shrine, Seedling Cultivator, Phenomenon Condenser and Infernal Ruins. These are side-lines and don't change the backbone above.
 
 ---
 
-## 9. 世界生成的獎勵結構
+## 9. Worldgen reward structures
 
-新生成的區塊（主世界 / 遠征）會偶爾長出 Lycohism 地標（`structures.yml` 可調出現率與高度）：
+Newly generated chunks (Overworld / expeditions) occasionally grow Lycohism landmarks (`structures.yml` tunes rate and height):
 
-- **苔生調律壇**、**露語井**（主世界）、**風痕石環**、**雨後地窖**（雨後森林限定）。
-- **月晷 / 日晷**（月輝塔 / 日輝塔；自然生成的會直接產能）。
-- **潮汐神殿**（潮汐深淵限定，內含日輝核心寶箱＋潮汐守望者）。
-- 地獄：**輝脈晶礦脈**（金紋黑石，破壞得輝脈晶）。
+- **Moss Attunement Altar**, **Dewspeak Well** (Overworld), **Wind-Trace Stone Circle**, **Rain-Soaked Cellar** (Rainfall Forest only).
+- **Moondial / Sundial** (Moon Tower / Sun Tower; naturally generated ones produce directly).
+- **Tidal Shrine** (Tidal Depths only, containing a Sun Core chest + Tidal Warden).
+- Overworld: **Sealed Shrine** (deepslate platform + amethyst pillars; chest unsealed per individual player).
+- Nether: **Radiant Ore vein** (gilded blackstone, breaks for Radiant Ore), **Infernal Ruins** (soul-fire controller; hints at ember refining once discovered).
 
-各結構都附寶箱獎勵，並登記到結構定位器（`/lyco locate` 可指南針導引）。
+Each structure comes with chest rewards and registers with the structure locator (`/lyco locate` can guide a compass).
 
-| 結構 | 每個合適新區塊的預設嘗試率 | 固定寶箱內容／作用 |
+| Structure | Default attempt rate per suitable new chunk | Fixed chest contents / effect |
 |---|---:|---|
-| 苔生調律壇 | 2% | 主世界：花脈×3；遠征：苔華×3；另有骨粉×6 |
-| 露語井 | 0.4% | 晨露×4、玻璃瓶×3 |
-| 風痕石環 | 1.2% | 風痕×3、羽毛×6 |
-| 雨後地窖 | 4%，僅雨後森林 | 苔華×5、苔露膏×1、雨紋繃帶×1；內有低速溺屍生怪磚 |
-| 月晷／月輝塔 | 1% | 主世界給紫水晶；遠征給月輝核心×2＋紫水晶碎片×4；同時登記為產能塔 |
-| 日晷／日輝塔 | 0.4%，主世界 | 蓄能晶×1、螢石粉×4；同時登記為產能塔 |
-| 潮汐神殿 | 3%，僅潮汐深淵 | 日輝核心×2、海磷晶體×6、海洋之心×1，並生成潮汐守望者 |
-| 輝脈晶礦脈 | 35%，地獄 Y=16–96 | 生成兩小簇金紋黑石；符合進度的玩家挖掘必掉輝脈晶 |
+| Moss Attunement Altar | 2% | Overworld: Flower Vein ×3; expedition: Moss Bloom ×3; plus bone meal ×6 |
+| Dewspeak Well | 0.4% | Morning Dew ×4, glass bottles ×3 |
+| Wind-Trace Stone Circle | 1.2% | Wind Trace ×3, feathers ×6 |
+| Rain-Soaked Cellar | 4%, Rainfall Forest only | Moss Bloom ×5, Moss Balm ×1, Rain Bandage ×1; contains a slow drowned spawner |
+| Moondial / Moon Tower | 1% | Overworld gives amethyst; expedition gives Moon Core ×2 + amethyst shards ×4; also registers as a producing tower |
+| Sundial / Sun Tower | 0.4%, Overworld | Energy Crystal ×1, glowstone dust ×4; also registers as a producing tower |
+| Tidal Shrine | 3%, Tidal Depths only | Sun Core ×2, prismarine crystals ×6, heart of the sea ×1, and spawns a Tidal Warden |
+| Radiant Ore vein | 35%, Nether Y=16–96 | Generates two small clusters of gilded blackstone; eligible players always get Radiant Ore from mining |
+| Sealed Shrine | 0.6%, Overworld Y=60–130 | Radiant Ore ×2, Morning Dew ×3, Energy Crystal ×2, amethyst shards ×8; needs the Radiance Nexus discovered and an Energy Crystal in hand to unseal |
+| Infernal Ruins | 0.6%, Nether ~Y=30–75 | Right-click the central soul fire to record the discovery and unlock the ember-refining hint; no energy transfer currently |
 
-嘗試率不等於保證生成率：地形高度、坡度、水體與落點驗證失敗時，該區塊可能不放置結構。
-
----
-
-## 10. 指令
-
-`/lycohism`（別名 `/lyco`）。一般玩家：
-
-- `/lyco help`、`/lyco version`
-- `/lyco workshop|study|greenhouse`：開設施
-- `/lyco progress`：開調律之路
-- `/lyco upgrade <設施>`：升級設施（也可在 GUI 按鈕）
-- `/lyco nexus share|unshare <玩家>`：分享／取消分享你的核心
-
-管理員（`lycohism.admin`，預設 OP）：
-
-- `/lyco reload`、`/lyco debug`
-- `/lyco admin`：管理面板（給物品、調階段、設施等級、重載、音效測試）
-- `/lyco give <id> [數量]`：給自然現象 / 工具
-- `/lyco stage <id>`：設定進度章節
-- `/lyco build <結構> [ghost]`：秒放／預覽多方塊
-- `/lyco blueprint <結構>`：拿藍圖
-- `/lyco locate <結構>`：指南針指向最近的該結構
-- `/lyco expedition`：略過解鎖直接前往（測試用）
+Attempt rate isn't a guaranteed generation rate: when terrain height, slope, water bodies or landing validation fail, that chunk may place no structure.
 
 ---
 
-## 11. 製作、煉製與設施產物查表
+## 10. Commands
 
-### 一般工具製作成本
+`/lycohism` (alias `/lyco`). Normal players:
 
-配方按鈕只會在玩家曾經接觸過所需 Lycohism 素材後揭露；原版材料不會被隱藏。
+- `/lyco help`, `/lyco version`
+- `/lyco workshop|study|greenhouse`: open a facility
+- `/lyco progress`: open the Path of Attunement
+- `/lyco upgrade <facility>`: upgrade a facility (also a GUI button)
+- `/lyco nexus share|unshare <player>`: share / unshare your Nexus
 
-| 位置 | 物品 | 預設成本 |
+Admin (`lycohism.admin`, default OP):
+
+- `/lyco reload`, `/lyco debug`
+- `/lyco admin`: admin panel (give items, set stage, facility levels, reload, sound test)
+- `/lyco give <id> [amount]`: give a phenomenon / tool
+- `/lyco stage <id>`: set a progression chapter
+- `/lyco build <structure> [ghost]`: instant-place / preview a multiblock
+- `/lyco blueprint <structure>`: get a blueprint
+- `/lyco locate <structure>`: point a compass at the nearest such structure
+- `/lyco expedition`: travel directly, skipping unlock (testing)
+
+---
+
+## 11. Crafting, refining and facility-product tables
+
+### General tool crafting costs
+
+A recipe button is only revealed after the player has touched the required Lycohism material; vanilla materials are never hidden.
+
+| Location | Item | Default cost |
 |---|---|---|
-| 工房 Lv1 | 露光瓶 | 晨露×1、玻璃瓶×1 |
-| 工房 Lv1 | 花籤 | 晨露×2、紙×1 |
-| 工房 Lv1 | 石工槌 | 晨露×2、圓石×3、木棒×2、鐵錠×2 |
-| 工房 Lv1 | 雨紋繃帶 | 雨息×1、紙×2、線×1 |
-| 工房 Lv1 | 地脈探針 | 地脈砂×3、銅錠×2、紅石×1 |
-| 工房 Lv1 | 蓄能晶 | 月露×3、紫水晶碎片×4、玻璃×1 |
-| 工房 Lv2 | 二階石工槌 | 石工槌×1、輝脈晶×4、鐵錠×4 |
-| 工房 Lv2 | 日炎鎬 | 蓄能晶×1、鑽石鎬×1、金磚×1 |
-| 書房 Lv1 | 風標 | 月露×1、風痕×2、時鐘×1、銅錠×2 |
-| 書房 Lv1 | 月紗袋 | 月露×4、收納袋×1、線×2 |
-| 書房 Lv1 | 星圖羅盤 | 風痕×4、月露×2、指南針×1 |
-| 溫室 Lv1 | 花脈剪 | 花脈×2、鐵錠×1 |
-| 溫室 Lv1 | 苔露膏 | 苔華×2、鑲金西瓜片×1 |
-| 溫室 Lv1 | 苔肥 | 苔華×1、骨粉×3 |
-| 溫室 Lv2 | 月華灑 | 苔華×2、蓄能晶×1、發光莓果×8 |
+| Workshop Lv1 | Dewlight Vial | Morning Dew ×1, glass bottle ×1 |
+| Workshop Lv1 | Flower Bookmark | Morning Dew ×2, paper ×1 |
+| Workshop Lv1 | Stonework Hammer | Morning Dew ×2, cobblestone ×3, sticks ×2, iron ingots ×2 |
+| Workshop Lv1 | Rain Bandage | Rain Breath ×1, paper ×2, string ×1 |
+| Workshop Lv1 | Leyline Probe | Leyline Sand ×3, copper ingots ×2, redstone ×1 |
+| Workshop Lv1 | Energy Crystal | Moon Dew ×3, amethyst shards ×4, glass ×1 |
+| Workshop Lv2 | Stonework Hammer II | Stonework Hammer ×1, Radiant Ore ×4, iron ingots ×4 |
+| Workshop Lv2 | Solar Pickaxe | Energy Crystal ×1, diamond pickaxe ×1, gold block ×1 |
+| Study Lv1 | Wind Vane | Moon Dew ×1, Wind Trace ×2, clock ×1, copper ingots ×2 |
+| Study Lv1 | Moon Pouch | Moon Dew ×4, bundle ×1, string ×2 |
+| Study Lv1 | Star Compass | Wind Trace ×4, Moon Dew ×2, compass ×1 |
+| Greenhouse Lv1 | Flower Vein Shears | Flower Vein ×2, iron ingot ×1 |
+| Greenhouse Lv1 | Moss Balm | Moss Bloom ×2, glistering melon slice ×1 |
+| Greenhouse Lv1 | Moss Fertilizer | Moss Bloom ×1, bone meal ×3 |
+| Greenhouse Lv2 | Lunar Spore | Moss Bloom ×2, Energy Crystal ×1, glow berries ×8 |
+| Greenhouse Lv2 | Seedling Cultivator Blueprint | Morning Dew ×2, bone meal ×8, paper ×1 |
+| Study Lv2 | Phenomenon Condenser Blueprint | Rain Breath ×2, amethyst shards ×4, paper ×1 |
 
-工房的雨息附魔另需雨息×8、月露×4、書×1與玩家 15 級經驗；Lv2 會同時加耐久 III，Lv3 再依物品類型加鋒利／力量／保護／效率。
+The workshop's Rain-Breath enchant additionally needs Rain Breath ×8, Moon Dew ×4, book ×1 and 15 player experience levels; Lv2 also adds Unbreaking III, Lv3 adds Sharpness/Power/Protection/Efficiency by item type.
 
-### 輝能祭壇配方
+### Radiance Altar recipes
 
-| 成品 | 催化物 | 丟在祭壇旁的素材 | 玩家輝能 |
+| Product | Catalyst | Materials dropped by the altar | Player radiance |
 |---|---|---|---|
-| 輝能之鏡×1 | 金錠 | 月輝核心×1、蓄能晶×1 | 日 50、月 50 |
-| 月輝核心×1 | 紫水晶方塊 | 紫水晶碎片×4、螢石×1 | 月 120 |
-| 燼華×2 | 烈焰粉 | 岩漿塊×1、螢石粉×2 | 日 80 |
-| 築造杖×1 | 木棒 | 輝脈晶×4、銅錠×4、鷹架×8 | 日 60、月 20 |
-| 二階築造杖×1 | `BREEZE_ROD` | 築造杖×1、輝脈晶×8、鑽石×2 | 日 120、月 80 |
+| Radiant Focus ×1 | Gold ingot | Moon Core ×1, Energy Crystal ×1 | Sun 50, Moon 50 |
+| Moon Core ×1 | Amethyst block | Amethyst shards ×4, glowstone ×1 | Moon 120 |
+| Ember Bloom ×2 | Blaze powder | Magma block ×1, glowstone dust ×2 | Sun 80 |
+| Infernal Shard ×3 | Ember Bloom | Blaze rods ×2, nether wart ×4 | Sun 60 |
+| Building Wand ×1 | Stick | Radiant Ore ×4, copper ingots ×4, scaffolding ×8 | Sun 60, Moon 20 |
+| Building Wand II ×1 | `BREEZE_ROD` | Building Wand ×1, Radiant Ore ×8, diamonds ×2 | Sun 120, Moon 80 |
 
-### 工房加工與溫室培育
+### Workshop processing and greenhouse cultivation
 
-- 工房 Lv1：圓石→石頭、石頭→石磚、沙→砂岩；一次最多處理一組。
-- 工房 Lv2：上述產量 ×2，另開深板岩→深板岩磚、花崗岩／閃長岩／安山岩→對應拋光石材。
-- 溫室 Lv1 的花脈路線：骨粉、種子、甘蔗、苔蘚、櫻花樹苗、孢子花、火把花種子。
-- 溫室 Lv1 的苔華路線：黏土、紅樹林胎生苗、發光莓果、史萊姆球、瓶子草莢果、發光地衣。
-- 溫室 Lv2：大型垂滴葉、仙人掌、杜鵑、盛開杜鵑、甜莓；Lv3 所有培育產量再 ×2。
-
----
-
-## 12. 橫切系統與設定
-
-- **稽核 LOG**（`Audit`）：所有產出與輝能變動（自然 / 怪物掉落、設施 / 祭壇合成、寶箱、管理員給予、輝能增減、設施升級、BOSS 掉落）都記到獨立檔，供多人伺服器查刷／經濟 / bug。
-- **原版合成守衛**：用 Lycohism 素材去做原版合成時會先警告（避免誤吃珍貴素材）。
-- **破壞確認**：破壞屬於完整多方塊的方塊時，先要求確認，潛行可關閉提醒。
-- **設定檔**：`config.yml`（輝能網路、設施升級、BOSS、高難度怪物強化…）、`tools.yml`、`facilities.yml`、`phenomena.yml`、`structures.yml`、`expeditions.yml`、`progression.yml`、`altars.yml`、`lang.yml`。改完 `/lyco reload` 即生效。
-
-原版合成守衛與結構破壞確認都採「10 秒內再做一次才確認」；在提示時用潛行操作，可把對應提醒永久關閉並存進玩家資料。
+- Workshop Lv1: cobble→stone, stone→stone bricks, sand→sandstone; one batch at most at a time.
+- Workshop Lv2: the above ×2 yield, plus deepslate→deepslate bricks and granite/diorite/andesite→matching polished stone.
+- Greenhouse Lv1 Flower Vein route: bone meal, seeds, sugar cane, moss, cherry sapling, spore blossom, torchflower seeds.
+- Greenhouse Lv1 Moss Bloom route: clay, mangrove propagule, glow berries, slimeball, pitcher pod, glow lichen.
+- Greenhouse Lv2: big dripleaf, cactus, azalea, flowering azalea, sweet berries; Lv3 all cultivation yields ×2 again.
 
 ---
 
-## 13. 規劃中 / 下一版
+## 12. Cross-cutting systems and config
 
-- **v0.9＝打磨／收斂版（本版定位）**：不加大型新系統，專注把既有內容收口——進度線連貫性（暮蝕之境接上正常玩家路線）、UX 卡點（暮蝕鎖定提示）、GUI 排版一致性（設施器物頁改為動態置中、隨等級對稱成長）、音效多樣化（章節依類型播不同短動機、啟用原本只在 admin 測試碰得到的 harp/flute/bell）。
-- **自動化設備（v0.9.1 起，v0.9.2 擴充）**：自動調律機（`attunement_engine`）——接輝能網路的剛性多方塊加工機，見 §4／§5。日輝線＋月輝線配方已落地；後續擴充（培育類自動化、每機台選配方 GUI、產率調校）待實玩口味。
-- **v0.9.3 焦點主題（已細化成可動工規格）**：解謎結構（封印門禁，解掉「先到者搬箱」公平性）→ 廢棄能量網（撿現成修復認領）→ 世界 BOSS（全服共享、吃前兩者框架）。規格見 [`PROJECT_PLAN.md`](PROJECT_PLAN.md) §「Repo 補充：v0.9.3 規劃」。依「一版一主題」原則逐一實作。
-- **Spigot 相容性**：暫不處理。程式重度使用 Paper 的 Adventure/MiniMessage；若日後要真的跑在 Spigot 伺服器核心需 shade `adventure-platform-bukkit` 重構。發布到 SpigotMC 下載站則可標「需要 Paper」即可，多數伺服器本來就跑 Paper 或其分支。
+- **Audit log** (`Audit`): every production and radiance change (natural / mob drops, facility / altar crafting, chests, admin gives, radiance gain/loss, facility upgrades, BOSS drops) is recorded to a separate file, for multiplayer servers to trace dupes / economy / bugs.
+- **Vanilla crafting guard**: warns before you use a Lycohism material in a vanilla recipe (to avoid wasting precious materials).
+- **Break confirm**: breaking a block that's part of a complete multiblock asks for confirmation first; sneaking disables the warning.
+- **Config files**: `config.yml` (radiance network, facility upgrades, BOSS, high-difficulty mob buffs...), `tools.yml`, `facilities.yml`, `phenomena.yml`, `structures.yml`, `expeditions.yml`, `progression.yml`, `altars.yml`, `lang_<lang>.yml`. `/lyco reload` applies changes live.
 
-> 本系統仍為 ALPHA，數值會持續依實玩調整。
+Both the vanilla crafting guard and structure break-confirm use a "do it again within 10 seconds to confirm" pattern; sneaking during the prompt permanently disables that warning and saves it to player data.
+
+---
+
+## 13. Current WIP / next steps
+
+- **v0.9.33 working tree**: Sealed Shrine, the three automation machines, Study Lv3 caps, Infernal Ruins and the ember material line are all in code; offline test/build passes and each version is tested in-game, with a long-term multiplayer Paper run still to come.
+- **Loose ends**: the Sealed Shrine only locks the chest, not the whole structure against teardown; the three automation machines share a recipe pool; the Infernal Ruins are exploration/recipe only, not yet a real derelict energy network.
+- **Spigot compatibility**: not handled for now. The code leans heavily on Paper's Adventure/MiniMessage.
+
+> This system is still ALPHA; content will keep being tuned from actual play.

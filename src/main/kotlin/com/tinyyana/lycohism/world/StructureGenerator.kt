@@ -33,6 +33,8 @@ class StructureGenerator(private val plugin: Lycohism) : Listener {
     private var sundial = Settings(true, 0.01, 60, 140)
     private var radiantOre = Settings(true, 0.35, 16, 96)
     private var tidalShrine = Settings(true, 0.03, 30, 62)
+    private var sealedShrine = Settings(true, 0.006, 60, 130)
+    private var infernalRelay = Settings(true, 0.006, 32, 90)
 
     init {
         load()
@@ -48,6 +50,8 @@ class StructureGenerator(private val plugin: Lycohism) : Listener {
         sundial = settings(root, "sundial", sundial)
         radiantOre = settings(root, "radiant-ore", radiantOre)
         tidalShrine = settings(root, "tidal-shrine", tidalShrine)
+        sealedShrine = settings(root, "sealed-shrine", sealedShrine)
+        infernalRelay = settings(root, "infernal-relay", infernalRelay)
     }
 
     @EventHandler
@@ -55,6 +59,7 @@ class StructureGenerator(private val plugin: Lycohism) : Listener {
         val chunk = event.chunk
         if (chunk.world.environment == World.Environment.NETHER) {
             if (roll(chunk, radiantOre, ORE_SALT)) radiantOre(chunk)
+            if (roll(chunk, infernalRelay, RELAY_SALT)) infernalRelay(chunk)
             return
         }
         val expedition = plugin.expeditionManager.expeditionAt(chunk.world)
@@ -76,6 +81,31 @@ class StructureGenerator(private val plugin: Lycohism) : Listener {
         if (roll(chunk, windCircle, CIRCLE_SALT)) findSite(chunk, 3, windCircle, CIRCLE_SALT, 4)?.let { windCircle(it); return }
         if (roll(chunk, moondial, MOONDIAL_SALT)) findSite(chunk, 2, moondial, MOONDIAL_SALT, 3)?.let { moondial(it, expedition != null); return }
         if (mainWorld && roll(chunk, sundial, SUNDIAL_SALT)) findSite(chunk, 2, sundial, SUNDIAL_SALT, 3)?.let(::sundial)
+        if (mainWorld && roll(chunk, sealedShrine, SHRINE2_SALT)) findSite(chunk, 2, sealedShrine, SHRINE2_SALT, 3)?.let { sealedShrine(it) }
+    }
+
+    /**
+     * 地獄廢址：在地獄底層（y 32–90）找到一個開放的地板位，放置 infernal_relay 多方塊。
+     * findSite 使用地表高度圖，在地獄無法用（指向天花板）；改用自訂的地板掃描。
+     */
+    private fun infernalRelay(chunk: Chunk) {
+        val random = Random(StructureRoll.seed(chunk.world.seed xor RELAY_SALT, chunk.x, chunk.z))
+        val cx = (chunk.x shl 4) + 2 + random.nextInt(12)
+        val cz = (chunk.z shl 4) + 2 + random.nextInt(12)
+        val y = netherFloorY(chunk.world, cx, cz) ?: return
+        plugin.multiblockRegistry.get("infernal_relay")?.place(chunk.world, cx, y, cz)
+        plugin.structureLocator.record("infernal_relay", org.bukkit.Location(chunk.world, cx.toDouble(), y.toDouble(), cz.toDouble()))
+    }
+
+    /** Scans downward from y=75 to find the first solid Nether floor with two clear blocks above. */
+    private fun netherFloorY(world: World, x: Int, z: Int): Int? {
+        for (y in 75 downTo 30) {
+            if (world.getBlockAt(x, y, z).type.isSolid &&
+                !world.getBlockAt(x, y + 1, z).type.isSolid &&
+                !world.getBlockAt(x, y + 2, z).type.isSolid
+            ) return y
+        }
+        return null
     }
 
     /** Generates two small, visible gilded-blackstone veins; breaking them yields radiant_ore. */
@@ -249,6 +279,38 @@ class StructureGenerator(private val plugin: Lycohism) : Listener {
         })
     }
 
+    /**
+     * 封印祠 — a dark deepslate platform with amethyst-block corner pillars and soul lanterns.
+     * The central chiseled-deepslate controller is a puzzle seal: right-click while holding an
+     * energy crystal (after discovering the nexus) to open the reward chest. Hint is given by
+     * the failure messages in lang.yml rather than in-structure text.
+     */
+    private fun sealedShrine(site: Site) {
+        for (dx in -2..2) for (dz in -2..2) {
+            val surfaceY = site.surface.getValue(dx to dz)
+            for (fillY in surfaceY..site.y) {
+                site.world.getBlockAt(site.x + dx, fillY, site.z + dz).type = Material.DEEPSLATE_BRICKS
+            }
+            site.world.getBlockAt(site.x + dx, site.y, site.z + dz).type = Material.POLISHED_DEEPSLATE
+        }
+        listOf(-2 to -2, -2 to 2, 2 to -2, 2 to 2).forEach { (dx, dz) ->
+            site.world.getBlockAt(site.x + dx, site.y + 1, site.z + dz).type = Material.AMETHYST_BLOCK
+            site.world.getBlockAt(site.x + dx, site.y + 2, site.z + dz).type = Material.AMETHYST_BLOCK
+            site.world.getBlockAt(site.x + dx, site.y + 3, site.z + dz).type = Material.SOUL_LANTERN
+        }
+        site.world.getBlockAt(site.x, site.y + 1, site.z).type = Material.CHISELED_DEEPSLATE
+        placeChest(site, 0, 1, 2, "structures.sealed-shrine.chest-name", listOfNotNull(
+            phenomenon("radiant_ore", 2),
+            phenomenon("morning_dew", 3),
+            plugin.energyCrystal.createItem(2),
+            ItemStack(Material.AMETHYST_SHARD, 8),
+        ))
+        val controllerLoc = org.bukkit.Location(site.world, site.x.toDouble(), (site.y + 1).toDouble(), site.z.toDouble())
+        val chestLoc = org.bukkit.Location(site.world, site.x.toDouble(), (site.y + 1).toDouble(), (site.z + 2).toDouble())
+        plugin.sealManager.register(controllerLoc, chestLoc)
+        plugin.structureLocator.record("sealed-shrine", org.bukkit.Location(site.world, site.x.toDouble(), site.y.toDouble(), site.z.toDouble()))
+    }
+
     private fun placeChest(site: Site, dx: Int, dy: Int, dz: Int, namePath: String, rewards: List<ItemStack>) {
         val block = site.world.getBlockAt(site.x + dx, site.y + dy, site.z + dz)
         block.type = Material.CHEST
@@ -324,6 +386,8 @@ class StructureGenerator(private val plugin: Lycohism) : Listener {
         const val SUNDIAL_SALT = 613L
         const val ORE_SALT = 719L
         const val SHRINE_SALT = 827L
+        const val SHRINE2_SALT = 937L
+        const val RELAY_SALT = 1031L
         const val TIDAL_WARDEN_HEALTH = 200.0
         val ORE_REPLACEABLE = setOf(Material.NETHERRACK, Material.BLACKSTONE, Material.BASALT)
     }

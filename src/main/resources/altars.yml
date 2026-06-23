@@ -37,6 +37,17 @@ recipes:
     energy-sun: 80
     result: "ember_bloom:2"
 
+  # 鍛焰：手持燼華，以烈焰棒＋地獄疣在燼華鍛爐精煉焰輝碎片×3（地獄系造物的核心原料）。
+  # altar = ember_forge；catalyst = ember_bloom（Lycohism id），不衝突現有的 BLAZE_POWDER 催化配方。
+  infernal_shard:
+    altar: ember_forge
+    catalyst: ember_bloom
+    ingredients:
+      - "BLAZE_ROD:2"
+      - "NETHER_WART:4"
+    energy-sun: 60
+    result: "infernal_shard:3"
+
   building_wand:
     catalyst: STICK
     ingredients:
