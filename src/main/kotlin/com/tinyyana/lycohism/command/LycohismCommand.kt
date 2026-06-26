@@ -25,13 +25,13 @@ class LycohismCommand(private val plugin: Lycohism) : TabExecutor {
         args: Array<out String>,
     ): Boolean {
         if (args.isEmpty()) {
-            Messages.send(sender, Texts.render("commands.root", "version" to plugin.pluginMeta.version, "label" to label))
+            Messages.send(sender, Texts.render("commands.root", "version" to plugin.description.version, "label" to label))
             return true
         }
 
         when (args[0].lowercase()) {
             "help" -> sendHelp(sender, label)
-            "version" -> Messages.send(sender, Texts.render("commands.version", "version" to plugin.pluginMeta.version))
+            "version" -> Messages.send(sender, Texts.render("commands.version", "version" to plugin.description.version))
             "reload" -> {
                 if (!requireAdmin(sender)) return true
                 plugin.reload()

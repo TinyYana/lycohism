@@ -1,5 +1,6 @@
 package com.tinyyana.lycohism.multiblock
 
+import com.tinyyana.lycohism.util.toCenterLocation
 import org.bukkit.Color
 import org.bukkit.Material
 import org.bukkit.Particle

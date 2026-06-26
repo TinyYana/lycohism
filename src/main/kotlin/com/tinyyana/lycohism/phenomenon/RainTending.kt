@@ -5,6 +5,7 @@ import com.tinyyana.lycohism.util.Items
 import com.tinyyana.lycohism.util.ConfigFiles
 import com.tinyyana.lycohism.util.Messages
 import com.tinyyana.lycohism.util.Texts
+import com.tinyyana.lycohism.util.toCenterLocation
 import org.bukkit.Sound
 import org.bukkit.Particle
 import org.bukkit.block.Block

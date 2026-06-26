@@ -6,8 +6,7 @@ import com.tinyyana.lycohism.util.Keys
 import com.tinyyana.lycohism.util.Messages
 import com.tinyyana.lycohism.util.Items
 import com.tinyyana.lycohism.util.Texts
-import io.papermc.paper.datacomponent.DataComponentTypes
-import net.kyori.adventure.text.format.TextDecoration
+import com.tinyyana.lycohism.util.modifyMeta
 import org.bukkit.Material
 import org.bukkit.Particle
 import org.bukkit.Sound
@@ -75,8 +74,8 @@ class MoonPouch(private val plugin: Lycohism) {
     }
 
     private fun updateMeta(item: ItemStack, contents: LinkedHashMap<String, Int>) {
-        item.editMeta { meta ->
-            meta.displayName(Messages.parse(displayName).decoration(TextDecoration.ITALIC, false))
+        item.modifyMeta { meta ->
+            Messages.applyDisplayName(meta, displayName)
             val lore = loreLines.toMutableList()
             lore.add("")
             lore.add(Texts.render("messages.tools.moon-pouch-capacity", "stored" to contents.values.sum().toString(), "capacity" to capacity.toString()))
@@ -84,18 +83,16 @@ class MoonPouch(private val plugin: Lycohism) {
                 val label = plugin.phenomenonManager.get(id)?.displayName ?: id
                 lore.add(Texts.render("messages.tools.moon-pouch-entry", "item" to label, "amount" to amount.toString()))
             }
-            meta.lore(lore.map { Messages.parse(it).decoration(TextDecoration.ITALIC, false) })
+            Messages.applyLore(meta, lore)
             meta.persistentDataContainer.set(Keys.itemId, PersistentDataType.STRING, ID)
             meta.persistentDataContainer.set(Keys.pouchContents, PersistentDataType.STRING, encode(contents))
             meta.setEnchantmentGlintOverride(true)
         }
-        // A 月紗袋 uses its own PDC-backed storage. Removing the vanilla bundle
-        // component prevents inventory clicks from turning it back into a normal bundle.
-        item.unsetData(DataComponentTypes.BUNDLE_CONTENTS)
+        // ponytail: vanilla bundle UI may flash on left-click; ToolUseListener already cancels right-click
     }
 
     private fun readContents(item: ItemStack): LinkedHashMap<String, Int> {
-        val encoded = item.itemMeta.persistentDataContainer.get(Keys.pouchContents, PersistentDataType.STRING)
+        val encoded = item.itemMeta?.persistentDataContainer?.get(Keys.pouchContents, PersistentDataType.STRING)
             ?: return linkedMapOf()
         return encoded.split(';').mapNotNull { token ->
             val parts = token.split('=', limit = 2)

@@ -8,6 +8,7 @@ import com.tinyyana.lycohism.util.ConfigFiles
 import com.tinyyana.lycohism.util.Messages
 import com.tinyyana.lycohism.util.Texts
 import com.tinyyana.lycohism.util.Items
+import com.tinyyana.lycohism.util.modifyMeta
 import com.tinyyana.lycohism.tool.MoonPouch
 import com.tinyyana.lycohism.tool.WindVane
 import org.bukkit.Material
@@ -65,7 +66,7 @@ class Study(private val plugin: Lycohism) {
                     addAll(Texts.lines("gui.study.repair-lore"))
                     add("")
                     add(Texts.line("gui.common.requires"))
-                    addAll(FacilityUi.costLines(Cost.parse(repairCost, plugin)))
+                    addAll(FacilityUi.costLines(Cost.parse(repairCost, plugin), player.locale))
                     add("")
                     add(Texts.line("gui.common.click-repair"))
                 }),
@@ -76,7 +77,7 @@ class Study(private val plugin: Lycohism) {
             inv.setItem(SLOT_PROGRESS, Menu.button(Material.NETHER_STAR, Texts.line("gui.study.progress-leaf"), Texts.lines("gui.study.progress-lore")))
             inv.setItem(SLOT_EXPEDITION, Menu.button(Material.FILLED_MAP, Texts.line("gui.study.expedition-leaf"), Texts.lines("gui.study.expedition-lore")))
             inv.setItem(SLOT_STATUS, Menu.button(Material.LECTERN, Texts.line("gui.study.status"), Texts.renderLines("gui.study.status-lore", "level" to stored.toString())))
-            if (stored in 1 until FacilityUpgrade.MAX_LEVEL) inv.setItem(SLOT_UPGRADE, FacilityUi.upgradeButton(plugin, "study", stored))
+            if (stored in 1 until FacilityUpgrade.MAX_LEVEL) inv.setItem(SLOT_UPGRADE, FacilityUi.upgradeButton(plugin, "study", stored, player.locale))
             else inv.setItem(SLOT_UPGRADE, FacilityUi.maxedButton())
         }
         player.openInventory(inv)
@@ -99,7 +100,7 @@ class Study(private val plugin: Lycohism) {
     private fun toolEntries(player: Player, effective: Int): List<ToolEntry> {
         val data = plugin.playerDataManager.rememberInventoryMaterials(player)
         fun craftEntry(create: () -> ItemStack, cost: List<String>, onClick: () -> Unit) =
-            ToolEntry(FacilityUi.withCost(create(), Cost.parse(cost, plugin), "gui.common.click-craft", data), onClick)
+            ToolEntry(FacilityUi.withCost(create(), Cost.parse(cost, plugin), "gui.common.click-craft", data, player.locale), onClick)
         return buildList {
             add(craftEntry({ plugin.windVane.createItem() }, plugin.windVane.cost) {
                 craftTool(player, plugin.windVane.cost, WindVane.ID) { plugin.windVane.createItem() }
@@ -296,9 +297,9 @@ class Study(private val plugin: Lycohism) {
         view.addRenderer(TowerMarkerRenderer(towerCursorType()))
         val towerName = Texts.line("content-names.${if (nearest.type == com.tinyyana.lycohism.energy.EnergyType.SUN) "sun_tower" else "moon_tower"}")
         val map = ItemStack(Material.FILLED_MAP).apply {
-            editMeta(org.bukkit.inventory.meta.MapMeta::class.java) { meta ->
+            modifyMeta(org.bukkit.inventory.meta.MapMeta::class.java) { meta ->
                 meta.mapView = view
-                meta.displayName(Messages.parse(Texts.render("gui.study.map-mark-name", "name" to towerName)).decoration(net.kyori.adventure.text.format.TextDecoration.ITALIC, false))
+                Messages.applyDisplayName(meta, Texts.render("gui.study.map-mark-name", "name" to towerName))
             }
         }
         Items.give(player, map)
@@ -333,7 +334,7 @@ class Study(private val plugin: Lycohism) {
     private fun putCraftButton(inv: Inventory, slot: Int, player: Player, item: ItemStack, cost: List<String>) {
         val requirements = Cost.parse(cost, plugin)
         val data = plugin.playerDataManager.rememberInventoryMaterials(player)
-        inv.setItem(slot, FacilityUi.withCost(item, requirements, "gui.common.click-craft", data))
+        inv.setItem(slot, FacilityUi.withCost(item, requirements, "gui.common.click-craft", data, player.locale))
     }
 
     private fun recipeUnlocked(player: Player, requirements: List<Cost.Requirement>): Boolean =
@@ -345,7 +346,7 @@ class Study(private val plugin: Lycohism) {
     }
 
     private fun sendMissing(player: Player, requirements: List<Cost.Requirement>) {
-        Messages.send(player, Texts.render("messages.common.missing-materials", "costs" to FacilityUi.describe(requirements)))
+        Messages.send(player, Texts.render("messages.common.missing-materials", "costs" to FacilityUi.describe(requirements, player.locale)))
     }
 
     private fun level(player: Player): Int = plugin.playerDataManager.get(player.uniqueId).studyLevel

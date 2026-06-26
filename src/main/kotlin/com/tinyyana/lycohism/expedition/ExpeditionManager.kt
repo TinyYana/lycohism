@@ -6,7 +6,6 @@ import com.tinyyana.lycohism.util.ConfigFiles
 import com.tinyyana.lycohism.util.Keys
 import com.tinyyana.lycohism.util.Messages
 import com.tinyyana.lycohism.util.Texts
-import net.kyori.adventure.title.Title
 import org.bukkit.GameRule
 import org.bukkit.Location
 import org.bukkit.NamespacedKey
@@ -20,7 +19,6 @@ import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
 import org.bukkit.persistence.PersistentDataType
-import java.time.Duration
 
 /**
  * Loads expeditions from expeditions.yml and owns their separate worlds: lazy creation,
@@ -122,12 +120,11 @@ class ExpeditionManager(private val plugin: Lycohism) {
         player.playSound(player.location, Sound.BLOCK_PORTAL_TRIGGER, 0.35f, 1.35f)
         player.teleport(safeSpawn(world))
         player.world.spawnParticle(Particle.RAIN, player.location.add(0.0, 1.0, 0.0), 30, 1.0, 1.0, 1.0, 0.0)
-        player.showTitle(
-            Title.title(
-                Messages.parse(Texts.line("messages.expedition.title.${expedition.id}", expedition.displayName)),
-                Messages.parse(Texts.line("messages.expedition.subtitle.${expedition.id}", "")),
-                Title.Times.times(Duration.ofMillis(500), Duration.ofSeconds(3), Duration.ofSeconds(1)),
-            ),
+        @Suppress("DEPRECATION")
+        player.sendTitle(
+            Messages.format(Texts.line("messages.expedition.title.${expedition.id}", expedition.displayName)),
+            Messages.format(Texts.line("messages.expedition.subtitle.${expedition.id}", "")),
+            10, 60, 20,
         )
         player.playSound(player.location, Sound.BLOCK_AMETHYST_BLOCK_RESONATE, 0.8f, 0.8f)
         player.playSound(player.location, Sound.BLOCK_BEACON_AMBIENT, 0.2f, 1.6f)
@@ -165,9 +162,8 @@ class ExpeditionManager(private val plugin: Lycohism) {
     }
 
     /** Locks the world to permanent night for the 永夜荒原 atmosphere (and round-the-clock 月輝). */
-    @Suppress("DEPRECATION") // GameRule.DO_DAYLIGHT_CYCLE field is deprecated upstream but still the supported handle.
     private fun lockNight(world: World) {
-        world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false)
+        world.setGameRule(GameRule.ADVANCE_TIME, false)
         world.time = 18000
     }
 
@@ -184,9 +180,8 @@ class ExpeditionManager(private val plugin: Lycohism) {
     }
 
     /** Locks the world to permanent rain so the "雨後森林" atmosphere never cycles away. */
-    @Suppress("DEPRECATION") // GameRule.DO_WEATHER_CYCLE field is deprecated upstream but still the supported handle.
     private fun lockRain(world: World) {
-        world.setGameRule(GameRule.DO_WEATHER_CYCLE, false)
+        world.setGameRule(GameRule.ADVANCE_WEATHER, false)
         world.setStorm(true)
         world.isThundering = false
         world.weatherDuration = Int.MAX_VALUE
@@ -204,7 +199,7 @@ class ExpeditionManager(private val plugin: Lycohism) {
     // ---- Origin storage (player PDC) ---------------------------------------
 
     private fun saveOrigin(player: Player, location: Location) {
-        val world = location.world
+        val world = location.world ?: return
         val encoded = listOf(
             world.name,
             location.x, location.y, location.z,

@@ -3,6 +3,7 @@ package com.tinyyana.lycohism.listener
 import com.tinyyana.lycohism.Lycohism
 import com.tinyyana.lycohism.util.Messages
 import com.tinyyana.lycohism.util.Texts
+import com.tinyyana.lycohism.util.toCenterLocation
 import org.bukkit.GameMode
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener

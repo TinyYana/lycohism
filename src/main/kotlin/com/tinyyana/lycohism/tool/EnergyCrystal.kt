@@ -6,7 +6,7 @@ import com.tinyyana.lycohism.util.ConfigFiles
 import com.tinyyana.lycohism.util.Keys
 import com.tinyyana.lycohism.util.Messages
 import com.tinyyana.lycohism.util.Texts
-import net.kyori.adventure.text.format.TextDecoration
+import com.tinyyana.lycohism.util.modifyMeta
 import org.bukkit.Material
 import org.bukkit.Particle
 import org.bukkit.Sound
@@ -43,9 +43,9 @@ class EnergyCrystal(private val plugin: Lycohism) {
     }
 
     fun createItem(amount: Int = 1): ItemStack = ItemStack(Material.AMETHYST_SHARD, amount).apply {
-        editMeta { meta ->
-            meta.displayName(Messages.parse(displayName).decoration(TextDecoration.ITALIC, false))
-            meta.lore(loreLines.map { Messages.parse(it).decoration(TextDecoration.ITALIC, false) })
+        modifyMeta { meta ->
+            Messages.applyDisplayName(meta, displayName)
+            Messages.applyLore(meta, loreLines)
             meta.persistentDataContainer.set(Keys.itemId, PersistentDataType.STRING, ID)
             meta.setEnchantmentGlintOverride(true)
         }
@@ -57,7 +57,7 @@ class EnergyCrystal(private val plugin: Lycohism) {
     fun freeSpace(item: ItemStack, type: EnergyType): Int = (capacity - stored(item, type)).coerceAtLeast(0)
 
     private fun setStored(item: ItemStack, type: EnergyType, value: Int) {
-        item.editMeta { it.persistentDataContainer.set(key(type), PersistentDataType.INTEGER, value.coerceIn(0, capacity)) }
+        item.modifyMeta { it.persistentDataContainer.set(key(type), PersistentDataType.INTEGER, value.coerceIn(0, capacity)) }
     }
 
     /** Adds overflow charge to the crystal; returns the amount actually stored. */

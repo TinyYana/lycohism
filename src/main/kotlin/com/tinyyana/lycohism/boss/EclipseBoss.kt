@@ -5,6 +5,7 @@ import com.tinyyana.lycohism.facility.Cost
 import com.tinyyana.lycohism.util.Keys
 import com.tinyyana.lycohism.util.Messages
 import com.tinyyana.lycohism.util.Texts
+import com.tinyyana.lycohism.util.getNearbyPlayers
 import org.bukkit.Location
 import org.bukkit.Particle
 import org.bukkit.Sound
@@ -74,7 +75,7 @@ class EclipseBoss(private val plugin: Lycohism) : Listener {
         }
         Cost.consume(player, cost)
         summon(block.location.add(0.5, 2.0, 0.5))
-        plugin.server.broadcast(Messages.parse(Texts.render("messages.boss.summoned", "player" to player.name)))
+        plugin.server.broadcastMessage(Messages.format(Texts.render("messages.boss.summoned", "player" to player.name)))
     }
 
     /** Spawns the buffed Wither and starts its single phase-shift watcher. */
@@ -82,7 +83,8 @@ class EclipseBoss(private val plugin: Lycohism) : Listener {
         val world = loc.world ?: return
         world.strikeLightningEffect(loc)
         world.spawn(loc, Wither::class.java) { wither ->
-            wither.customName(Messages.parse(Texts.line("content-names.$ENTITY_NAME_ID")))
+            @Suppress("DEPRECATION")
+            wither.setCustomName(Messages.format(Texts.line("content-names.$ENTITY_NAME_ID")))
             wither.isCustomNameVisible = true
             wither.persistentDataContainer.set(Keys.bossTag, PersistentDataType.INTEGER, PHASE_ONE)
             wither.getAttribute(Attribute.MAX_HEALTH)?.let {

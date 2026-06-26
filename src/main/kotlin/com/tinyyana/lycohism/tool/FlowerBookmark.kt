@@ -6,7 +6,7 @@ import com.tinyyana.lycohism.util.ConfigFiles
 import com.tinyyana.lycohism.util.Keys
 import com.tinyyana.lycohism.util.Messages
 import com.tinyyana.lycohism.util.Texts
-import net.kyori.adventure.text.format.TextDecoration
+import com.tinyyana.lycohism.util.modifyMeta
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.Particle
@@ -46,9 +46,9 @@ class FlowerBookmark(private val plugin: Lycohism) {
 
     fun createItem(): ItemStack {
         val item = ItemStack(Material.PAPER)
-        item.editMeta { meta ->
-            meta.displayName(Messages.parse(displayName).decoration(TextDecoration.ITALIC, false))
-            meta.lore(loreLines.map { Messages.parse(it).decoration(TextDecoration.ITALIC, false) })
+        item.modifyMeta { meta ->
+            Messages.applyDisplayName(meta, displayName)
+            Messages.applyLore(meta, loreLines)
             meta.persistentDataContainer.set(Keys.itemId, PersistentDataType.STRING, ID)
             meta.setEnchantmentGlintOverride(true)
         }
@@ -58,9 +58,10 @@ class FlowerBookmark(private val plugin: Lycohism) {
     /** Saves the player's current location onto the held bookmark. */
     fun remember(player: Player, item: ItemStack) {
         val loc = player.location
-        item.editMeta { meta ->
+        val worldName = loc.world?.name ?: return
+        item.modifyMeta { meta ->
             val pdc = meta.persistentDataContainer
-            pdc.set(Keys.bookmarkWorld, PersistentDataType.STRING, loc.world.name)
+            pdc.set(Keys.bookmarkWorld, PersistentDataType.STRING, worldName)
             pdc.set(Keys.bookmarkX, PersistentDataType.INTEGER, loc.blockX)
             pdc.set(Keys.bookmarkY, PersistentDataType.INTEGER, loc.blockY)
             pdc.set(Keys.bookmarkZ, PersistentDataType.INTEGER, loc.blockZ)
@@ -73,7 +74,7 @@ class FlowerBookmark(private val plugin: Lycohism) {
 
     /** Shows the direction and distance to the remembered location. */
     fun guide(player: Player, item: ItemStack) {
-        val pdc = item.itemMeta.persistentDataContainer
+        val pdc = item.itemMeta?.persistentDataContainer ?: return
         val worldName = pdc.get(Keys.bookmarkWorld, PersistentDataType.STRING)
         if (worldName == null) {
             Messages.actionBar(player, Texts.line("messages.tools.bookmark-empty"))

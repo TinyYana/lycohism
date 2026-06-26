@@ -19,7 +19,7 @@ class StructureLocator(private val plugin: Lycohism) {
     fun ids(): List<String> = (plugin.multiblockRegistry.ids() + LANDMARK_IDS).distinct()
 
     fun record(id: String, location: Location) {
-        val entry = Entry(id, location.world.name, location.blockX, location.blockY, location.blockZ)
+        val entry = Entry(id, location.world?.name ?: return, location.blockX, location.blockY, location.blockZ)
         if (entries.any { it.id == id && it.world == entry.world && it.x == entry.x && it.y == entry.y && it.z == entry.z }) return
         entries += entry
         save()

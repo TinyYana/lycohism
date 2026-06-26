@@ -1,6 +1,6 @@
-# Lycohism 文字設定
+﻿# Lycohism 文字設定
 # 所有玩家看得到的文字都集中在這裡，方便改字、改語氣、改顏色，不需重新編譯。
-# 格式為 MiniMessage：https://docs.advntr.dev/minimessage/format.html
+# 格式為 MiniMessage（自製解析器，支援 Spigot 1.16+）：<color>、<bold>、<reset>、<gradient:c1:c2>text</gradient>
 #
 # 注意：書本頁面是「淺色羊皮紙」底，請使用深色（black / dark_gray / dark_green /
 # dark_purple / dark_aqua / dark_red …）才看得清楚，不要用 white / gray / yellow。
@@ -737,6 +737,15 @@ progression:
         - "<gray>Lv3：工房戰鬥附魔、書房全境預報、溫室產出翻倍。</gray>"
       hint: "<gray>備齊蝕輝結晶與核心輝能，在設施頁點「升級 → Lv3」。</gray>"
 
+    solar_lunar_unity:
+      title: "<yellow>日月合一</yellow>"
+      lore:
+        - "<gray>日月兩道匯於一處，蝕之輝光洗淨了裂痕。</gray>"
+      details:
+        - "<gray>走完日線（潮汐深淵）與月線（永夜荒原）。</gray>"
+        - "<gray>擊敗蝕影守望者，取得蝕輝結晶。</gray>"
+        - "<gray>三座設施全部升至 Lv3。</gray>"
+      hint: "<gray>完成日月兩條主線，再把三設施升到頂，這個里程碑就會亮起。</gray>"
 terms:
   none: "<dark_gray>無</dark_gray>"
   list-separator: "、"
@@ -1581,3 +1590,39 @@ books:
         label: "星圖羅盤"
       - id: lunar_spore
         label: "月華灑"
+
+# 原版素材的顯示名稱（配方成本用）。key 為 Material 名稱小寫，值為該語系的顯示名。
+# 只需補上有用到的素材；沒列到的會自動 title-case fallback（英文）。
+vanilla-names:
+  amethyst_shard: 紫水晶碎片
+  blaze_rod: 烈焰棒
+  bone_meal: 骨粉
+  book: 書
+  bookshelf: 書架
+  bundle: 收納袋
+  clock: 時鐘
+  cobblestone: 圓石
+  compass: 指南針
+  copper_ingot: 銅錠
+  diamond: 鑽石
+  diamond_pickaxe: 鑽石鎬
+  ender_pearl: 終界珍珠
+  glass: 玻璃
+  glass_bottle: 玻璃瓶
+  glistering_melon_slice: 光芒西瓜片
+  glowstone: 螢光石
+  glowstone_dust: 螢光石粉
+  glow_berries: 發光漿果
+  gold_block: 金塊
+  gold_ingot: 金錠
+  iron_ingot: 鐵錠
+  lectern: 講台
+  magma_block: 岩漿塊
+  moss_block: 苔蘚塊
+  nether_wart: 地獄疣
+  oak_planks: 橡木板
+  paper: 紙
+  redstone: 紅石粉
+  scaffolding: 鷹架
+  stick: 木棍
+  string: 線

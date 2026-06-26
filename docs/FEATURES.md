@@ -1,4 +1,4 @@
-# Lycohism — Features & Mechanics Overview (v0.9.34-ALPHA)
+# Lycohism — Features & Mechanics Overview (v1.0.0-BETA)
 
 *[繁體中文版](FEATURES.zh-TW.md)*
 

@@ -5,8 +5,7 @@ import com.tinyyana.lycohism.util.Items
 import com.tinyyana.lycohism.util.Keys
 import com.tinyyana.lycohism.util.Messages
 import com.tinyyana.lycohism.util.Texts
-import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.TextDecoration
+import com.tinyyana.lycohism.util.modifyMeta
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -24,9 +23,9 @@ class TuningManual(private val plugin: Lycohism) {
 
     fun createItem(): ItemStack {
         val item = ItemStack(Material.BOOK)
-        item.editMeta { meta ->
-            meta.displayName(noItalic(Texts.line("books.manual.item-name")))
-            meta.lore(Texts.lines("books.manual.item-lore").map { noItalic(it) })
+        item.modifyMeta { meta ->
+            Messages.applyDisplayName(meta, Texts.line("books.manual.item-name"))
+            Messages.applyLore(meta, Texts.lines("books.manual.item-lore"))
             meta.persistentDataContainer.set(Keys.itemId, PersistentDataType.STRING, ID)
             meta.setEnchantmentGlintOverride(true)
         }
@@ -44,18 +43,17 @@ class TuningManual(private val plugin: Lycohism) {
     fun open(player: Player) {
         val discoveries = plugin.playerDataManager.get(player.uniqueId).discoveries
         val book = ItemStack(Material.WRITTEN_BOOK)
-        book.editMeta { meta ->
+        book.modifyMeta { meta ->
             val bookMeta = meta as BookMeta
-            bookMeta.title(Messages.parse(Texts.line("books.manual.title")))
-            bookMeta.author(Component.text("Lycohism"))
-            bookMeta.pages(buildPages(discoveries))
+            @Suppress("DEPRECATION") bookMeta.setTitle(Texts.line("books.manual.title"))
+            @Suppress("DEPRECATION") bookMeta.setAuthor("Lycohism")
+            @Suppress("DEPRECATION") bookMeta.setPages(buildPages(discoveries))
         }
         player.openBook(book)
     }
 
-    private fun buildPages(discoveries: Set<String>): List<Component> {
-        val pages = mutableListOf<Component>()
-        pages.add(page(Texts.lines("books.manual.cover")))
+    private fun buildPages(discoveries: Set<String>): List<String> {
+        val pages = mutableListOf(page(Texts.lines("books.manual.cover")))
 
         for (entry in Texts.entries("books.manual.entries")) {
             val requires = stringList(entry["requires"])
@@ -69,10 +67,8 @@ class TuningManual(private val plugin: Lycohism) {
         return pages
     }
 
-    private fun page(lines: List<String>): Component = Messages.parse(lines.joinToString("\n"))
+    private fun page(lines: List<String>): String = Messages.loreLine(lines.joinToString("\n"))
 
-    private fun noItalic(text: String): Component =
-        Messages.parse(text).decoration(TextDecoration.ITALIC, false)
 
     private fun stringList(value: Any?): List<String> =
         (value as? List<*>)?.map { it.toString() } ?: emptyList()

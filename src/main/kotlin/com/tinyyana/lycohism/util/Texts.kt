@@ -5,25 +5,35 @@ import org.bukkit.configuration.file.YamlConfiguration
 import java.util.Locale
 
 /**
- * Editable text layer backed by a per-language lang file (lang_zh.yml / lang_en.yml).
- * All player-facing prose (book pages, GUI labels, common messages) lives here so it
- * can be reworded or recoloured without touching code. Loaded once on enable and
- * refreshed on /lycohism reload.
+ * Editable text layer backed by lang_zh.yml and lang_en.yml.
+ * Both files are always loaded so per-player locale lookups work without a reload.
  *
- * Which file is active comes from config.yml `language` (auto|zh|en); `auto` follows
- * the server's JVM locale so a zh-region host defaults to Chinese, everyone else English.
+ * The plugin-wide default language (from config.yml `language`) drives the no-arg
+ * variants of line()/lines()/render(). Per-player lookups use lineInLang()/linesInLang()
+ * with the lang code from langCodeFor(player.locale).
  */
 object Texts {
 
-    private var yaml: YamlConfiguration? = null
+    /** The plugin's configured language code ("zh" or "en"). */
+    var activeLanguage: String = "en"
+        private set
+
+    private val langs = mutableMapOf<String, YamlConfiguration>()
 
     fun load(plugin: Lycohism) {
         val setting = plugin.config.getString("language", "auto") ?: "auto"
-        val code = resolveLanguage(setting, Locale.getDefault().language)
-        // ponytail: each language is its own on-disk file; switching language reads a
-        // different file rather than migrating an admin's edits. Fine for ALPHA.
-        yaml = ConfigFiles.load(plugin, "lang_$code.yml")
+        activeLanguage = resolveLanguage(setting, Locale.getDefault().language)
+        // ponytail: load both so per-player locale lookups work without a reload
+        langs["zh"] = ConfigFiles.load(plugin, "lang_zh.yml")
+        langs["en"] = ConfigFiles.load(plugin, "lang_en.yml")
     }
+
+    /**
+     * Maps a Bukkit player locale string (e.g. "zh_TW", "ja_JP", "es_es") to the
+     * nearest supported lang code. zh_* → "zh"; everything else → "en".
+     */
+    fun langCodeFor(playerLocale: String): String =
+        if (playerLocale.lowercase().startsWith("zh")) "zh" else "en"
 
     /**
      * Resolves the bundled language code from the config [setting], falling back to the
@@ -37,17 +47,32 @@ object Texts {
             else -> if (serverLanguage.lowercase().startsWith("zh")) "zh" else "en"
         }
 
-    /** A single line, falling back to [default] when the path is missing. */
-    fun line(path: String, default: String = path): String = yaml?.getString(path) ?: default
+    // ── per-locale API (use when you have a specific player) ────────────────
 
-    /** A list of lines, falling back to [default] when the path is missing or empty. */
-    fun lines(path: String, default: List<String> = emptyList()): List<String> {
-        val list = yaml?.getStringList(path) ?: return default
-        return if (list.isEmpty()) default else list
+    /** A single line in the given lang, falling back to EN then to [default]. */
+    fun lineInLang(path: String, lang: String, default: String = path): String =
+        yaml(lang).getString(path) ?: yaml("en").getString(path) ?: default
+
+    /** A list of lines in the given lang, falling back to EN then to [default]. */
+    fun linesInLang(path: String, lang: String, default: List<String> = emptyList()): List<String> {
+        val list = yaml(lang).getStringList(path)
+        if (list.isNotEmpty()) return list
+        val en = yaml("en").getStringList(path)
+        return if (en.isNotEmpty()) en else default
     }
 
+    // ── plugin-wide API (use the configured default language) ────────────────
+
+    /** A single line, falling back to [default] when the path is missing. */
+    fun line(path: String, default: String = path): String =
+        lineInLang(path, activeLanguage, default)
+
+    /** A list of lines, falling back to [default] when the path is missing or empty. */
+    fun lines(path: String, default: List<String> = emptyList()): List<String> =
+        linesInLang(path, activeLanguage, default)
+
     /** A list of structured entries (each a map), used for data-driven book pages. */
-    fun entries(path: String): List<Map<*, *>> = yaml?.getMapList(path) ?: emptyList()
+    fun entries(path: String): List<Map<*, *>> = yaml(activeLanguage).getMapList(path)
 
     /** Replaces {placeholders} in [path]'s line with the given pairs. */
     fun line(path: String, default: String, vararg replacements: Pair<String, String>): String {
@@ -69,4 +94,6 @@ object Texts {
         for ((key, value) in replacements) result = result.replace("{$key}", value)
         return result
     }
+
+    private fun yaml(lang: String) = langs[lang] ?: langs["en"]!!
 }

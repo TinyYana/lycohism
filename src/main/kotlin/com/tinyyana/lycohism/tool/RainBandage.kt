@@ -6,7 +6,7 @@ import com.tinyyana.lycohism.util.ConfigFiles
 import com.tinyyana.lycohism.util.Keys
 import com.tinyyana.lycohism.util.Messages
 import com.tinyyana.lycohism.util.Texts
-import net.kyori.adventure.text.format.TextDecoration
+import com.tinyyana.lycohism.util.modifyMeta
 import org.bukkit.Material
 import org.bukkit.Particle
 import org.bukkit.Sound
@@ -41,9 +41,9 @@ class RainBandage(private val plugin: Lycohism) {
 
     fun createItem(amount: Int = 1): ItemStack {
         val item = ItemStack(Material.PAPER, amount)
-        item.editMeta { meta ->
-            meta.displayName(Messages.parse(displayName).decoration(TextDecoration.ITALIC, false))
-            meta.lore(loreLines.map { Messages.parse(it).decoration(TextDecoration.ITALIC, false) })
+        item.modifyMeta { meta ->
+            Messages.applyDisplayName(meta, displayName)
+            Messages.applyLore(meta, loreLines)
             meta.persistentDataContainer.set(Keys.itemId, PersistentDataType.STRING, ID)
             meta.setEnchantmentGlintOverride(true)
         }

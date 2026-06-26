@@ -2,7 +2,7 @@ package com.tinyyana.lycohism.gui
 
 import com.tinyyana.lycohism.util.Messages
 import com.tinyyana.lycohism.util.Texts
-import net.kyori.adventure.text.format.TextDecoration
+import com.tinyyana.lycohism.util.modifyMeta
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.inventory.Inventory
@@ -34,7 +34,7 @@ object Menu {
     /** Creates a filled inventory bound to [holder] with a breadcrumb [title]. */
     fun create(holder: BackedHolder, title: String, size: Int = COMPACT_SIZE): Inventory {
         require(size == ROOT_SIZE || size == COMPACT_SIZE || size == EXTENDED_SIZE || size == LARGE_SIZE) { "Menu size must be 18, 27, 36, or 54." }
-        val inv = Bukkit.createInventory(holder, size, Messages.parse(title))
+        val inv = Bukkit.createInventory(holder, size, Messages.format(title))
         holder.backing = inv
         fill(inv)
         return inv
@@ -99,10 +99,10 @@ object Menu {
 
     fun button(material: Material, name: String, lore: List<String>): ItemStack {
         val item = ItemStack(material)
-        item.editMeta { meta ->
-            meta.displayName(Messages.parse(name).decoration(TextDecoration.ITALIC, false))
+        item.modifyMeta { meta ->
+            Messages.applyDisplayName(meta, name)
             if (lore.isNotEmpty()) {
-                meta.lore(lore.map { Messages.parse(it).decoration(TextDecoration.ITALIC, false) })
+                Messages.applyLore(meta, lore)
             }
         }
         return item

@@ -81,7 +81,7 @@ class Greenhouse(private val plugin: Lycohism) {
                     addAll(Texts.lines("gui.greenhouse.repair-lore"))
                     add("")
                     add(Texts.line("gui.common.requires"))
-                    addAll(FacilityUi.costLines(Cost.parse(repairCost, plugin)))
+                    addAll(FacilityUi.costLines(Cost.parse(repairCost, plugin), player.locale))
                     add("")
                     add(Texts.line("gui.common.click-repair"))
                 }),
@@ -90,7 +90,7 @@ class Greenhouse(private val plugin: Lycohism) {
             inv.setItem(SLOT_CULTIVATE, Menu.button(Material.BONE_MEAL, Texts.line("gui.greenhouse.cultivate-leaf"), Texts.lines("gui.greenhouse.cultivate-lore")))
             inv.setItem(SLOT_TOOLS, Menu.button(Material.SHEARS, Texts.line("gui.greenhouse.tools-leaf"), Texts.lines("gui.greenhouse.tools-lore")))
             inv.setItem(SLOT_STATUS, Menu.button(Material.OAK_SAPLING, Texts.line("gui.greenhouse.status"), Texts.renderLines("gui.greenhouse.status-lore", "level" to stored.toString())))
-            if (stored in 1 until FacilityUpgrade.MAX_LEVEL) inv.setItem(SLOT_UPGRADE, FacilityUi.upgradeButton(plugin, "greenhouse", stored))
+            if (stored in 1 until FacilityUpgrade.MAX_LEVEL) inv.setItem(SLOT_UPGRADE, FacilityUi.upgradeButton(plugin, "greenhouse", stored, player.locale))
             else inv.setItem(SLOT_UPGRADE, FacilityUi.maxedButton())
         }
         player.openInventory(inv)
@@ -135,7 +135,7 @@ class Greenhouse(private val plugin: Lycohism) {
     private fun toolEntries(player: Player, effective: Int): List<ToolEntry> {
         val data = plugin.playerDataManager.rememberInventoryMaterials(player)
         fun craftEntry(create: () -> ItemStack, cost: List<String>, onClick: () -> Unit) =
-            ToolEntry(FacilityUi.withCost(create(), Cost.parse(cost, plugin), "gui.common.click-craft", data), onClick)
+            ToolEntry(FacilityUi.withCost(create(), Cost.parse(cost, plugin), "gui.common.click-craft", data, player.locale), onClick)
         return buildList {
             add(craftEntry({ plugin.flowerVeinShears.createItem() }, plugin.flowerVeinShears.cost) { craftShears(player) })
             // 雨後森林專屬產出：只能用苔華製作，給遠征一個「非去不可」的回流理由。
@@ -303,7 +303,7 @@ class Greenhouse(private val plugin: Lycohism) {
     private fun putCraftButton(inv: Inventory, slot: Int, player: Player, item: ItemStack, cost: List<String>) {
         val requirements = Cost.parse(cost, plugin)
         val data = plugin.playerDataManager.rememberInventoryMaterials(player)
-        inv.setItem(slot, FacilityUi.withCost(item, requirements, "gui.common.click-craft", data))
+        inv.setItem(slot, FacilityUi.withCost(item, requirements, "gui.common.click-craft", data, player.locale))
     }
 
     private fun recipeUnlocked(player: Player, requirements: List<Cost.Requirement>): Boolean =
@@ -335,11 +335,11 @@ class Greenhouse(private val plugin: Lycohism) {
     private fun level(player: Player): Int = plugin.playerDataManager.get(player.uniqueId).greenhouseLevel
 
     private fun sendMissing(player: Player, reqs: List<Cost.Requirement>) {
-        Messages.send(player, Texts.render("messages.common.missing-materials", "costs" to FacilityUi.describe(reqs)))
+        Messages.send(player, Texts.render("messages.common.missing-materials", "costs" to FacilityUi.describe(reqs, player.locale)))
     }
 
-    private fun prettyName(material: Material): String =
-        VanillaItems.tag(material)
+    private fun prettyName(material: Material, playerLocale: String = ""): String =
+        VanillaItems.tag(material, Texts.langCodeFor(playerLocale))
 
     companion object {
         private const val FILE_NAME = "facilities.yml"

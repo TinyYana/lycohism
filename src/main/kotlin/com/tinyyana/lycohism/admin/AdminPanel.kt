@@ -23,6 +23,7 @@ import com.tinyyana.lycohism.util.Items
 import com.tinyyana.lycohism.util.Messages
 import com.tinyyana.lycohism.util.SoundMusic
 import com.tinyyana.lycohism.util.Texts
+import com.tinyyana.lycohism.util.modifyMeta
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.entity.Player
@@ -77,7 +78,7 @@ class AdminPanel(private val plugin: Lycohism) : Listener {
             Texts.line("gui.admin.header"),
             *Texts.renderLines(
                 "gui.admin.header-lore",
-                "version" to plugin.pluginMeta.version,
+                "version" to plugin.description.version,
                 "debug" to Texts.line(if (plugin.debug) "terms.enabled" else "terms.disabled"),
             ).toTypedArray(),
         ))
@@ -159,7 +160,7 @@ class AdminPanel(private val plugin: Lycohism) : Listener {
                 Texts.line("progression.stages.$id.title", id),
                 listOf(Texts.render("gui.admin.stage-id", "id" to id), Texts.line("gui.admin.click-stage")),
             )
-            if (id == current) item.editMeta { it.setEnchantmentGlintOverride(true) }
+            if (id == current) item.modifyMeta { it.setEnchantmentGlintOverride(true) }
             inv.setItem(STAGE_SLOTS[index], item)
         }
         inv.setItem(STAGE_BACK_SLOT, Menu.back())

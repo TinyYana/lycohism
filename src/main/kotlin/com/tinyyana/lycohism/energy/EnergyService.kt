@@ -5,7 +5,9 @@ import com.tinyyana.lycohism.tool.EnergyCrystal
 import com.tinyyana.lycohism.util.Items
 import com.tinyyana.lycohism.util.Messages
 import com.tinyyana.lycohism.util.Texts
-import net.kyori.adventure.bossbar.BossBar
+import org.bukkit.boss.BarColor
+import org.bukkit.boss.BarStyle
+import org.bukkit.boss.BossBar
 import org.bukkit.HeightMap
 import org.bukkit.Particle
 import org.bukkit.World
@@ -48,13 +50,13 @@ class EnergyService(private val plugin: Lycohism) {
     fun stop() {
         task?.cancel()
         task = null
-        bars.keys.mapNotNull(plugin.server::getPlayer).forEach { p -> bars[p.uniqueId]?.let(p::hideBossBar) }
+        bars.keys.mapNotNull(plugin.server::getPlayer).forEach { p -> bars[p.uniqueId]?.removePlayer(p) }
         bars.clear()
     }
 
     /** Drops a player's boss bar on quit so it isn't leaked. */
     fun clear(player: Player) {
-        bars.remove(player.uniqueId)?.let(player::hideBossBar)
+        bars.remove(player.uniqueId)?.removePlayer(player)
     }
 
     private fun tick() {
@@ -112,7 +114,7 @@ class EnergyService(private val plugin: Lycohism) {
         val moon = plugin.energyManager.get(player, EnergyType.MOON)
         val sunCap = plugin.energyManager.capFor(player, EnergyType.SUN)
         val moonCap = plugin.energyManager.capFor(player, EnergyType.MOON)
-        val name = Messages.parse(
+        val name = Messages.format(
             Texts.render(
                 "messages.energy.bar",
                 "sun" to sun.toString(), "sun_cap" to sunCap.toString(),
@@ -120,15 +122,15 @@ class EnergyService(private val plugin: Lycohism) {
             ),
         )
         val progress = ((sun + moon).toFloat() / (sunCap + moonCap)).coerceIn(0f, 1f)
-        val color = if (isDay(player.world)) BossBar.Color.YELLOW else BossBar.Color.BLUE
+        val color = if (isDay(player.world)) BarColor.YELLOW else BarColor.BLUE
         val bar = bars[player.uniqueId]
         if (bar == null) {
-            bars[player.uniqueId] = BossBar.bossBar(name, progress, color, BossBar.Overlay.PROGRESS)
-                .also(player::showBossBar)
+            bars[player.uniqueId] = plugin.server.createBossBar(name, color, BarStyle.SOLID)
+                .also { it.addPlayer(player) }
         } else {
-            bar.name(name)
-            bar.progress(progress)
-            bar.color(color)
+            bar.setTitle(name)
+            bar.setProgress(progress.toDouble())
+            bar.setColor(color)
         }
     }
 

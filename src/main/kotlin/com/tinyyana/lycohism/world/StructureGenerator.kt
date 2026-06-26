@@ -269,7 +269,8 @@ class StructureGenerator(private val plugin: Lycohism) : Listener {
             if (!world.isChunkLoaded(gx shr 4, gz shr 4)) return@Runnable
             val loc = org.bukkit.Location(world, gx + 0.5, gy.toDouble(), gz + 0.5)
             val guardian = world.spawnEntity(loc, EntityType.ELDER_GUARDIAN) as? org.bukkit.entity.ElderGuardian ?: return@Runnable
-            guardian.customName(Messages.parse(Texts.line("content-names.tidal_warden")))
+            @Suppress("DEPRECATION")
+            guardian.setCustomName(Messages.format(Texts.line("content-names.tidal_warden")))
             guardian.isCustomNameVisible = true
             guardian.removeWhenFarAway = false
             guardian.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH)?.let {
@@ -315,7 +316,8 @@ class StructureGenerator(private val plugin: Lycohism) : Listener {
         val block = site.world.getBlockAt(site.x + dx, site.y + dy, site.z + dz)
         block.type = Material.CHEST
         val chest = block.state as Chest
-        chest.customName(Messages.parse(Texts.line(namePath)))
+        @Suppress("DEPRECATION")
+        chest.setCustomName(Messages.format(Texts.line(namePath)))
         val inventory = chest.snapshotInventory
         rewards.forEach { inventory.addItem(it) }
         chest.update(true, false)

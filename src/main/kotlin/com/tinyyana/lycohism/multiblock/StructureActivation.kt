@@ -5,7 +5,6 @@ import com.tinyyana.lycohism.energy.EnergyType
 import com.tinyyana.lycohism.util.Keys
 import com.tinyyana.lycohism.util.Messages
 import com.tinyyana.lycohism.util.Texts
-import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.block.Block
@@ -120,7 +119,7 @@ object StructureActivation {
         val world = block.world
         val name = labelText(id)
         world.spawn(Location(world, block.x + 0.5, block.y + labelHeight(id), block.z + 0.5), TextDisplay::class.java) { display ->
-            display.text(name)
+            display.setText(name)
             display.billboard = Display.Billboard.CENTER
             display.isSeeThrough = true
             display.brightness = Display.Brightness(15, 15)
@@ -220,7 +219,7 @@ object StructureActivation {
                 if (x != null && y != null && z != null) return LabelAnchor(id, x, y, z)
             }
         }
-        val id = plugin.multiblockRegistry.ids().firstOrNull { display.text() == labelText(it) } ?: return null
+        val id = plugin.multiblockRegistry.ids().firstOrNull { display.getText() == labelText(it) } ?: return null
         val location = display.location
         return LabelAnchor(
             id,
@@ -230,8 +229,8 @@ object StructureActivation {
         )
     }
 
-    private fun labelText(id: String) =
-        Messages.parse(Texts.line("content-names.$id", id)).decoration(TextDecoration.ITALIC, false)
+    private fun labelText(id: String): String =
+        Messages.loreLine(Texts.line("content-names.$id", id))
 
     private fun labelHeight(id: String): Double = when (id) {
         "sun_tower", "moon_tower" -> 19.5

@@ -212,3 +212,12 @@ progression:
       advancement-parent: eclipse_warden
       requires:
         facilities: { workshop: 3 }
+
+    # v1.0 終章：日月合一。走完日月兩線、擊敗蝕影守望者、三設施全升至 Lv3 後觸發。
+    solar_lunar_unity:
+      icon: NETHER_STAR
+      advancement-sound: minecraft:ui.toast.challenge_complete
+      advancement-parent: facility_growth_3
+      requires:
+        facilities: { workshop: 3, study: 3, greenhouse: 3 }
+        discoveries: [ eclipse_warden ]

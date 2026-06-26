@@ -1,30 +1,40 @@
 package com.tinyyana.lycohism.util
 
-import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import org.bukkit.inventory.meta.ItemMeta
 
-/**
- * Central place for player-facing text. Uses MiniMessage so message styling stays
- * data-driven (config / future content files) rather than hardcoded colour codes.
- */
 object Messages {
 
-    private val mm = MiniMessage.miniMessage()
-
-    /** Prefix prepended to [send]. Set from config.yml on enable/reload. */
     var prefix: String = "[Lycohism] "
 
-    fun parse(text: String): Component = mm.deserialize(text)
+    /** Parses MiniMessage tags and legacy `&` codes to `§` sequences. */
+    fun format(text: String): String = MiniText.parse(text)
 
-    /** Sends a prefixed, MiniMessage-formatted line to a player or the console. */
     fun send(sender: CommandSender, text: String) {
-        sender.sendMessage(mm.deserialize(prefix + text))
+        sender.sendMessage(format(prefix + text))
     }
 
-    /** Sends an action-bar message (no prefix) for lightweight, repeatable feedback. */
     fun actionBar(player: Player, text: String) {
-        player.sendActionBar(mm.deserialize(text))
+        @Suppress("DEPRECATION")
+        player.spigot().sendMessage(
+            net.md_5.bungee.api.ChatMessageType.ACTION_BAR,
+            net.md_5.bungee.api.chat.TextComponent(format(text)),
+        )
     }
+
+    fun applyDisplayName(meta: ItemMeta, text: String) {
+        @Suppress("DEPRECATION")
+        meta.setDisplayName(format(text))
+    }
+
+    fun applyLore(meta: ItemMeta, lines: List<String>) {
+        @Suppress("DEPRECATION")
+        meta.setLore(lines.map(::format))
+    }
+
+    fun loreLine(text: String): String = format(text)
+
+    @Suppress("DEPRECATION")
+    fun getLore(meta: ItemMeta): MutableList<String> = meta.lore?.toMutableList() ?: mutableListOf()
 }
