@@ -10,7 +10,8 @@ repositories {
 }
 
 dependencies {
-    compileOnly(libs.paper.api)
+    // ponytail: compile against local Spigot API to surface all Paper-only calls as errors
+    compileOnly(files("D:/02 Games/Minecraft/MinecraftServer/SpigotBuildTool/Spigot/Spigot-API/target/spigot-api-26.2-R0.1-SNAPSHOT-shaded.jar"))
     implementation(libs.kotlin.stdlib)
     testImplementation(kotlin("test"))
 }

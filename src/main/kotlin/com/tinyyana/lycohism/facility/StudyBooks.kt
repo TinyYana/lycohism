@@ -3,7 +3,7 @@ package com.tinyyana.lycohism.facility
 import com.tinyyana.lycohism.Lycohism
 import com.tinyyana.lycohism.util.Messages
 import com.tinyyana.lycohism.util.Texts
-import net.kyori.adventure.text.Component
+import com.tinyyana.lycohism.util.modifyMeta
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -55,18 +55,18 @@ class StudyBooks(private val plugin: Lycohism) {
         )
     }
 
-    private fun openBook(player: Player, title: String, pages: List<Component>) {
+    private fun openBook(player: Player, title: String, pages: List<String>) {
         val book = ItemStack(Material.WRITTEN_BOOK)
-        book.editMeta { meta ->
+        book.modifyMeta { meta ->
             val bookMeta = meta as BookMeta
-            bookMeta.title(Messages.parse(title))
-            bookMeta.author(Component.text("Lycohism"))
-            bookMeta.pages(pages)
+            @Suppress("DEPRECATION") bookMeta.setTitle(title)
+            @Suppress("DEPRECATION") bookMeta.setAuthor("Lycohism")
+            @Suppress("DEPRECATION") bookMeta.setPages(pages)
         }
         player.openBook(book)
     }
 
-    private fun page(lines: List<String>): Component = Messages.parse(lines.joinToString("\n"))
+    private fun page(lines: List<String>): String = Messages.loreLine(lines.joinToString("\n"))
 
     private fun stringList(value: Any?): List<String> =
         (value as? List<*>)?.map { it.toString() } ?: emptyList()

@@ -6,7 +6,7 @@ import com.tinyyana.lycohism.util.Keys
 import com.tinyyana.lycohism.util.ConfigFiles
 import com.tinyyana.lycohism.util.Messages
 import com.tinyyana.lycohism.util.Texts
-import net.kyori.adventure.text.format.TextDecoration
+import com.tinyyana.lycohism.util.modifyMeta
 import org.bukkit.Material
 import org.bukkit.World
 import org.bukkit.block.Block
@@ -72,11 +72,11 @@ class PhenomenonManager(private val plugin: Lycohism) {
 
     fun createItem(phenomenon: Phenomenon, amount: Int = 1): ItemStack {
         val item = ItemStack(phenomenon.baseMaterial, amount)
-        item.editMeta { meta ->
+        item.modifyMeta { meta ->
             val localizedName = Texts.line("content-names.${phenomenon.id}", phenomenon.displayName)
-            meta.displayName(Messages.parse(localizedName).decoration(TextDecoration.ITALIC, false))
+            Messages.applyDisplayName(meta, localizedName)
             if (phenomenon.lore.isNotEmpty()) {
-                meta.lore(phenomenon.lore.map { Messages.parse(it).decoration(TextDecoration.ITALIC, false) })
+                Messages.applyLore(meta, phenomenon.lore)
             }
             meta.persistentDataContainer.set(Keys.itemId, PersistentDataType.STRING, phenomenon.id)
         }
@@ -189,7 +189,7 @@ class PhenomenonManager(private val plugin: Lycohism) {
         moonPhases.isEmpty() || ((world.fullTime / 24000L) % 8L).toInt() in moonPhases
 
     private fun conditionsMatch(phenomenon: Phenomenon, location: Location): Boolean {
-        val world = location.world
+        val world = location.world ?: return false
         return world.environment == phenomenon.environment &&
             (phenomenon.worlds.isEmpty() || world.name in phenomenon.worlds) &&
             location.blockY in phenomenon.minY..phenomenon.maxY &&

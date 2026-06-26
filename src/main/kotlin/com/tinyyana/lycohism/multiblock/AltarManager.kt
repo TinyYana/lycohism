@@ -83,7 +83,8 @@ class AltarManager(private val plugin: Lycohism) {
         val recipe = recipes.firstOrNull { it.altarId == altarId && it.catalyst == catalystKey } ?: return Result.NO_RECIPE
 
         val centre = block.location.add(0.5, 0.5, 0.5)
-        val dropped = centre.world.getNearbyEntities(centre, RADIUS, RADIUS, RADIUS).filterIsInstance<Item>()
+        val world = centre.world ?: return Result.INVALID
+        val dropped = world.getNearbyEntities(centre, RADIUS, RADIUS, RADIUS).filterIsInstance<Item>()
         val pool = HashMap<String, Int>()
         dropped.forEach { pool.merge(key(it.itemStack), it.itemStack.amount, Int::plus) }
         if (recipe.ingredients.any { (k, c) -> (pool[k] ?: 0) < c }) return Result.MISSING_INGREDIENTS
@@ -107,10 +108,10 @@ class AltarManager(private val plugin: Lycohism) {
         plugin.energyManager.spend(player, EnergyType.SUN, recipe.sunCost)
         plugin.energyManager.spend(player, EnergyType.MOON, recipe.moonCost)
 
-        centre.world.spawnParticle(Particle.END_ROD, centre, 40, 0.8, 0.8, 0.8, 0.02)
-        centre.world.spawnParticle(Particle.WITCH, centre, 30, 0.6, 0.6, 0.6, 0.01)
-        centre.world.playSound(centre, Sound.BLOCK_AMETHYST_BLOCK_RESONATE, 1.0f, 1.0f)
-        centre.world.dropItem(centre.clone().add(0.0, 1.0, 0.0), result)
+        world.spawnParticle(Particle.END_ROD, centre, 40, 0.8, 0.8, 0.8, 0.02)
+        world.spawnParticle(Particle.WITCH, centre, 30, 0.6, 0.6, 0.6, 0.01)
+        world.playSound(centre, Sound.BLOCK_AMETHYST_BLOCK_RESONATE, 1.0f, 1.0f)
+        world.dropItem(centre.clone().add(0.0, 1.0, 0.0), result)
         plugin.playerDataManager.discover(player.uniqueId, recipe.resultId)
         Audit.log(player, "altar-craft", "${recipe.resultId} x${recipe.resultAmount}")
         return Result.CRAFTED
@@ -135,7 +136,7 @@ class AltarManager(private val plugin: Lycohism) {
 
     /** Streams end-rod particles from [from] up into the altar [centre]. */
     private fun converge(from: org.bukkit.Location, centre: org.bukkit.Location) {
-        val world = centre.world
+        val world = centre.world ?: return
         val dx = centre.x - from.x; val dy = centre.y + 1.0 - from.y; val dz = centre.z - from.z
         val steps = maxOf(2, Math.sqrt(dx * dx + dy * dy + dz * dz).toInt() * 2)
         for (i in 0..steps) {
@@ -149,7 +150,8 @@ class AltarManager(private val plugin: Lycohism) {
             dropped.firstOrNull { key(it.itemStack) == ingredient }?.itemStack?.clone()?.apply { amount = 1 }
         }.take(PEDESTAL_OFFSETS.size).forEachIndexed { index, stack ->
             val (dx, dz) = PEDESTAL_OFFSETS[index]
-            val display = centre.world.spawn(
+            val w = centre.world ?: return@forEachIndexed
+            val display = w.spawn(
                 centre.clone().add(dx, -0.25, dz),
                 ItemDisplay::class.java,
             ) { entity ->

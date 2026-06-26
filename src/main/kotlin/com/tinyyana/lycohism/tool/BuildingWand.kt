@@ -6,7 +6,7 @@ import com.tinyyana.lycohism.util.Items
 import com.tinyyana.lycohism.util.Keys
 import com.tinyyana.lycohism.util.Messages
 import com.tinyyana.lycohism.util.Texts
-import net.kyori.adventure.text.format.TextDecoration
+import com.tinyyana.lycohism.util.modifyMeta
 import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.Sound
@@ -35,10 +35,10 @@ class BuildingWand(private val plugin: Lycohism) {
     }
 
     fun createItem(tier2: Boolean = false): ItemStack = ItemStack(if (tier2) Material.BREEZE_ROD else Material.BLAZE_ROD).apply {
-        editMeta { meta ->
+        modifyMeta { meta ->
             val id = if (tier2) TIER_2_ID else ID
-            meta.displayName(Messages.parse(Texts.line("items.$id.name")).decoration(TextDecoration.ITALIC, false))
-            meta.lore(Texts.lines("items.$id.lore").map { Messages.parse(it).decoration(TextDecoration.ITALIC, false) })
+            Messages.applyDisplayName(meta, Texts.line("items.$id.name"))
+            Messages.applyLore(meta, Texts.lines("items.$id.lore"))
             meta.persistentDataContainer.set(Keys.itemId, PersistentDataType.STRING, id)
             if (tier2) meta.persistentDataContainer.set(Keys.wandMode, PersistentDataType.STRING, Mode.LINE.name)
             meta.setEnchantmentGlintOverride(true)
@@ -49,7 +49,7 @@ class BuildingWand(private val plugin: Lycohism) {
         if (Items.idOf(item) != TIER_2_ID) return Mode.LINE
         val current = mode(item)
         val next = Mode.entries[(current.ordinal + 1) % Mode.entries.size]
-        item.editMeta { it.persistentDataContainer.set(Keys.wandMode, PersistentDataType.STRING, next.name) }
+        item.modifyMeta { it.persistentDataContainer.set(Keys.wandMode, PersistentDataType.STRING, next.name) }
         return next
     }
 

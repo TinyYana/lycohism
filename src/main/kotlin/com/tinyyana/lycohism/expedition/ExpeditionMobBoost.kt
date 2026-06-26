@@ -65,10 +65,7 @@ class ExpeditionMobBoost(private val plugin: Lycohism) : Listener {
     private fun applyScale(entity: LivingEntity, value: Double) {
         runCatching {
             val attribute = Registry.ATTRIBUTE.get(NamespacedKey.minecraft("scale")) ?: return
-            val instance = entity.getAttribute(attribute) ?: run {
-                entity.registerAttribute(attribute)
-                entity.getAttribute(attribute)
-            }
+            val instance = entity.getAttribute(attribute)
             instance?.baseValue = value
         }.onFailure { plugin.debugLog("Could not scale boosted mob: ${it.message}") }
     }

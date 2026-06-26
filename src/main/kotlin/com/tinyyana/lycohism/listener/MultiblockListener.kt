@@ -5,6 +5,7 @@ import com.tinyyana.lycohism.energy.NexusManager
 import com.tinyyana.lycohism.gui.NexusHolder
 import com.tinyyana.lycohism.util.Messages
 import com.tinyyana.lycohism.util.Texts
+import com.tinyyana.lycohism.util.toCenterLocation
 import org.bukkit.Sound
 import org.bukkit.block.Block
 import org.bukkit.entity.Player

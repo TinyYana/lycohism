@@ -1,4 +1,4 @@
-# Lycohism 玩法與特色全覽（v0.9.34-ALPHA）
+# Lycohism 玩法與特色全覽（v1.0.0-BETA）
 
 *[English version](FEATURES.md)*
 

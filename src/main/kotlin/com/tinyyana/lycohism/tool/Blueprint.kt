@@ -7,7 +7,7 @@ import com.tinyyana.lycohism.util.Keys
 import com.tinyyana.lycohism.util.Messages
 import com.tinyyana.lycohism.util.Texts
 import com.tinyyana.lycohism.util.VanillaItems
-import net.kyori.adventure.text.format.TextDecoration
+import com.tinyyana.lycohism.util.modifyMeta
 import org.bukkit.Material
 import org.bukkit.block.BlockFace
 import org.bukkit.entity.Player
@@ -28,8 +28,8 @@ class Blueprint(private val plugin: Lycohism) {
         val structureName = Texts.line("content-names.$structureId", structureId)
         val materials = plugin.multiblockRegistry.get(structureId)?.materialCounts().orEmpty()
         return ItemStack(Material.PAPER).apply {
-            editMeta { meta ->
-                meta.displayName(Messages.parse(Texts.render("items.blueprint.name", "structure" to structureName)).decoration(TextDecoration.ITALIC, false))
+            modifyMeta { meta ->
+                Messages.applyDisplayName(meta, Texts.render("items.blueprint.name", "structure" to structureName))
                 val lore = buildList {
                     addAll(Texts.renderLines("items.blueprint.lore", "structure" to structureName))
                     val desc = Texts.lines("content-descriptions.$structureId")
@@ -43,7 +43,7 @@ class Blueprint(private val plugin: Lycohism) {
                         add(Texts.render("items.blueprint.material-line", "material" to VanillaItems.tag(material), "count" to count.toString()))
                     }
                 }
-                meta.lore(lore.map { Messages.parse(it).decoration(TextDecoration.ITALIC, false) })
+                Messages.applyLore(meta, lore)
                 meta.persistentDataContainer.set(Keys.itemId, PersistentDataType.STRING, ID)
                 meta.persistentDataContainer.set(Keys.blueprintTarget, PersistentDataType.STRING, structureId)
                 meta.setEnchantmentGlintOverride(true)

@@ -6,7 +6,8 @@ import com.tinyyana.lycohism.util.ConfigFiles
 import com.tinyyana.lycohism.util.Keys
 import com.tinyyana.lycohism.util.Messages
 import com.tinyyana.lycohism.util.Texts
-import net.kyori.adventure.text.format.TextDecoration
+import com.tinyyana.lycohism.util.modifyMeta
+import com.tinyyana.lycohism.util.toCenterLocation
 import org.bukkit.Material
 import org.bukkit.Particle
 import org.bukkit.Sound
@@ -58,10 +59,10 @@ class StoneworkHammer(private val plugin: Lycohism) {
 
     fun createItem(reinforced: Boolean = false): ItemStack {
         val item = ItemStack(baseMaterial)
-        item.editMeta { meta ->
+        item.modifyMeta { meta ->
             val id = if (reinforced) REINFORCED_ID else ID
-            meta.displayName(Messages.parse(Texts.line("items.$id.name", displayName)).decoration(TextDecoration.ITALIC, false))
-            meta.lore(Texts.lines("items.$id.lore").ifEmpty { loreLines }.map { Messages.parse(it).decoration(TextDecoration.ITALIC, false) })
+            Messages.applyDisplayName(meta, Texts.line("items.$id.name", displayName))
+            Messages.applyLore(meta, Texts.lines("items.$id.lore").ifEmpty { loreLines })
             meta.persistentDataContainer.set(Keys.itemId, PersistentDataType.STRING, id)
             meta.setEnchantmentGlintOverride(true)
         }

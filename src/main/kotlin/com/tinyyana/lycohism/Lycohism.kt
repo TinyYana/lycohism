@@ -264,7 +264,7 @@ class Lycohism : JavaPlugin() {
         expeditionHazards.start()
         energyService.start()
 
-        logger.info("Lycohism v${pluginMeta.version} enabled.")
+        logger.info("Lycohism v${description.version} enabled.")
     }
 
     override fun onDisable() {

@@ -356,7 +356,7 @@ class Workshop(private val plugin: Lycohism) {
             return
         }
         val item = player.inventory.itemInMainHand
-        val meta = item.itemMeta
+        val meta = item.itemMeta ?: return
         if (item.type == Material.AIR || !Enchantment.MENDING.canEnchantItem(item)) {
             Messages.send(player, Texts.line("messages.facility.mending-invalid"))
             return

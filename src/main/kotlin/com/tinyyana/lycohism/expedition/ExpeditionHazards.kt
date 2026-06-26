@@ -4,7 +4,6 @@ import com.tinyyana.lycohism.Lycohism
 import com.tinyyana.lycohism.util.Keys
 import com.tinyyana.lycohism.util.Messages
 import com.tinyyana.lycohism.util.Texts
-import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Location
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
@@ -89,9 +88,8 @@ class ExpeditionHazards(private val plugin: Lycohism) {
     private fun spawnMob(location: Location, expedition: Expedition, hazard: ExpeditionHazard) {
         val world = location.world ?: return
         val entity = world.spawnEntity(location, hazard.mobType) as? LivingEntity ?: return
-        entity.customName(
-            Messages.parse(Texts.line(hazard.displayNameKey)).decoration(TextDecoration.ITALIC, false),
-        )
+        @Suppress("DEPRECATION")
+        entity.setCustomName(Messages.format(Texts.line(hazard.displayNameKey)))
         entity.isCustomNameVisible = false
         entity.removeWhenFarAway = true
         entity.persistentDataContainer.set(Keys.expeditionMob, PersistentDataType.STRING, expedition.id)
@@ -109,10 +107,7 @@ class ExpeditionHazards(private val plugin: Lycohism) {
     private fun applyScale(entity: LivingEntity, scale: Double) {
         runCatching {
             val attribute = org.bukkit.Registry.ATTRIBUTE.get(org.bukkit.NamespacedKey.minecraft("scale")) ?: return
-            val instance = entity.getAttribute(attribute) ?: run {
-                entity.registerAttribute(attribute)
-                entity.getAttribute(attribute)
-            }
+            val instance = entity.getAttribute(attribute)
             instance?.baseValue = scale
         }.onFailure { plugin.debugLog("Could not scale hazard mob: ${it.message}") }
     }

@@ -6,7 +6,7 @@ import com.tinyyana.lycohism.util.Items
 import com.tinyyana.lycohism.util.Keys
 import com.tinyyana.lycohism.util.Messages
 import com.tinyyana.lycohism.util.Texts
-import net.kyori.adventure.text.format.TextDecoration
+import com.tinyyana.lycohism.util.modifyMeta
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -40,9 +40,9 @@ object FacilityUi {
         }
         val icon = if (target >= 3) Material.HEART_OF_THE_SEA else Material.AMETHYST_CLUSTER
         return ItemStack(icon).apply {
-            editMeta { meta ->
-                meta.displayName(Messages.parse(Texts.render("gui.facility.upgrade", "level" to target.toString())).decoration(TextDecoration.ITALIC, false))
-                meta.lore(lore.map { line -> Messages.parse(line).decoration(TextDecoration.ITALIC, false) })
+            modifyMeta { meta ->
+                Messages.applyDisplayName(meta, Texts.render("gui.facility.upgrade", "level" to target.toString()))
+                Messages.applyLore(meta, lore)
                 meta.setEnchantmentGlintOverride(true)
             }
         }
@@ -53,9 +53,9 @@ object FacilityUi {
      * "already at max" note, so the slot reads as intentional instead of an empty filler pane.
      */
     fun maxedButton(): ItemStack = ItemStack(Material.BARRIER).apply {
-        editMeta { meta ->
-            meta.displayName(Messages.parse(Texts.line("gui.facility.maxed")).decoration(TextDecoration.ITALIC, false))
-            meta.lore(Texts.lines("gui.facility.maxed-lore").map { Messages.parse(it).decoration(TextDecoration.ITALIC, false) })
+        modifyMeta { meta ->
+            Messages.applyDisplayName(meta, Texts.line("gui.facility.maxed"))
+            Messages.applyLore(meta, Texts.lines("gui.facility.maxed-lore"))
         }
     }
 
@@ -110,23 +110,24 @@ object FacilityUi {
         actionPath: String,
         playerData: PlayerData? = null,
     ): ItemStack {
-        item.editMeta { meta ->
-            val lore = (meta.lore() ?: mutableListOf()).toMutableList()
-            lore.add(component(""))
-            lore.add(component(Texts.line("gui.common.requires")))
+        item.modifyMeta { meta ->
+            val lore = Messages.getLore(meta)
+            lore.add(Messages.loreLine(""))
+            lore.add(Messages.loreLine(Texts.line("gui.common.requires")))
             requirements.forEach { requirement ->
                 val path = if (playerData == null || Cost.isKnown(playerData, requirement)) {
                     costLine(requirement)
                 } else {
                     Texts.render("gui.common.cost-hidden", "amount" to requirement.amount.toString())
                 }
-                lore.add(component(path))
+                lore.add(Messages.loreLine(path))
             }
             if (playerData != null && requirements.any { !Cost.isKnown(playerData, it) }) {
-                lore.add(component(Texts.line("gui.common.cost-hidden-hint")))
+                lore.add(Messages.loreLine(Texts.line("gui.common.cost-hidden-hint")))
             }
-            lore.add(component(Texts.line(actionPath)))
-            meta.lore(lore)
+            lore.add(Messages.loreLine(Texts.line(actionPath)))
+            @Suppress("DEPRECATION")
+            meta.setLore(lore)
         }
         return item
     }
@@ -142,6 +143,4 @@ object FacilityUi {
     private fun costLine(requirement: Cost.Requirement): String =
         Texts.render("gui.common.cost-line", "item" to requirement.label, "amount" to requirement.amount.toString())
 
-    private fun component(text: String) =
-        Messages.parse(text).decoration(TextDecoration.ITALIC, false)
 }

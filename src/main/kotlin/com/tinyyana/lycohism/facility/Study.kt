@@ -8,6 +8,7 @@ import com.tinyyana.lycohism.util.ConfigFiles
 import com.tinyyana.lycohism.util.Messages
 import com.tinyyana.lycohism.util.Texts
 import com.tinyyana.lycohism.util.Items
+import com.tinyyana.lycohism.util.modifyMeta
 import com.tinyyana.lycohism.tool.MoonPouch
 import com.tinyyana.lycohism.tool.WindVane
 import org.bukkit.Material
@@ -296,9 +297,9 @@ class Study(private val plugin: Lycohism) {
         view.addRenderer(TowerMarkerRenderer(towerCursorType()))
         val towerName = Texts.line("content-names.${if (nearest.type == com.tinyyana.lycohism.energy.EnergyType.SUN) "sun_tower" else "moon_tower"}")
         val map = ItemStack(Material.FILLED_MAP).apply {
-            editMeta(org.bukkit.inventory.meta.MapMeta::class.java) { meta ->
+            modifyMeta(org.bukkit.inventory.meta.MapMeta::class.java) { meta ->
                 meta.mapView = view
-                meta.displayName(Messages.parse(Texts.render("gui.study.map-mark-name", "name" to towerName)).decoration(net.kyori.adventure.text.format.TextDecoration.ITALIC, false))
+                Messages.applyDisplayName(meta, Texts.render("gui.study.map-mark-name", "name" to towerName))
             }
         }
         Items.give(player, map)

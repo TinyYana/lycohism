@@ -5,7 +5,7 @@ import com.tinyyana.lycohism.util.ConfigFiles
 import com.tinyyana.lycohism.util.Keys
 import com.tinyyana.lycohism.util.Messages
 import com.tinyyana.lycohism.util.Texts
-import net.kyori.adventure.text.format.TextDecoration
+import com.tinyyana.lycohism.util.modifyMeta
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -32,9 +32,9 @@ class StarCompass(private val plugin: Lycohism) {
     }
 
     fun createItem(amount: Int = 1): ItemStack = ItemStack(Material.RECOVERY_COMPASS, amount).apply {
-        editMeta { meta ->
-            meta.displayName(Messages.parse(displayName).decoration(TextDecoration.ITALIC, false))
-            meta.lore(loreLines.map { Messages.parse(it).decoration(TextDecoration.ITALIC, false) })
+        modifyMeta { meta ->
+            Messages.applyDisplayName(meta, displayName)
+            Messages.applyLore(meta, loreLines)
             meta.persistentDataContainer.set(Keys.itemId, PersistentDataType.STRING, ID)
             meta.setEnchantmentGlintOverride(true)
         }

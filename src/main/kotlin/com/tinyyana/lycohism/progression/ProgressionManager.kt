@@ -7,8 +7,8 @@ import com.tinyyana.lycohism.gui.ProgressionHolder
 import com.tinyyana.lycohism.util.Advancements
 import com.tinyyana.lycohism.util.ConfigFiles
 import com.tinyyana.lycohism.util.Texts
+import com.tinyyana.lycohism.util.modifyMeta
 import com.google.gson.JsonObject
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
@@ -187,7 +187,7 @@ class ProgressionManager(private val plugin: Lycohism) {
     }
 
     private fun glint(item: ItemStack): ItemStack = item.apply {
-        editMeta { it.setEnchantmentGlintOverride(true) }
+        modifyMeta { it.setEnchantmentGlintOverride(true) }
     }
 
     // ---- Parsing -----------------------------------------------------------
@@ -283,7 +283,6 @@ class ProgressionManager(private val plugin: Lycohism) {
                 ),
             )
         }
-        plugin.server.updateResources()
     }
 
     @Suppress("DEPRECATION")
@@ -330,7 +329,8 @@ class ProgressionManager(private val plugin: Lycohism) {
     }.toString()
 
     private fun plain(text: String): String =
-        PlainTextComponentSerializer.plainText().serialize(com.tinyyana.lycohism.util.Messages.parse(text))
+        com.tinyyana.lycohism.util.Messages.format(text)
+            .replace(Regex("§[0-9a-fk-or]", RegexOption.IGNORE_CASE), "")
 
     private fun key(id: String) = NamespacedKey(plugin, "progression/$id")
 
