@@ -22,8 +22,9 @@ For the full feature set, exact costs and current limits, see [`docs/FEATURES.md
 - **Radiance system (sun & moon)**: stand under the open sky to gather Sunlight by day and Moonlight by night; when your pool fills, the overflow spills into Energy Crystals in your inventory. Sun/Moon Towers produce → Relays carry hop by hop → the Radiance Nexus stores → you spend it upgrading facilities.
 - **Base automation**: the Attunement Engine, Seedling Cultivator and Phenomenon Condenser hook into a Nexus, pull inputs from the container directly above, and process them by spending radiance. The three currently share one recipe pool — playable first, split finer later if testing calls for it.
 - **Expedition worlds**: Rainfall Forest, Moonless Waste, Tidal Depths and Eclipse Realm — running from plant returns and Sun/Moon Cores all the way to a mini-boss and the Eclipse Warden.
-- **Exploration side-paths**: the Overworld has Sealed Shrines unlocked by progression + an Energy Crystal; the Nether has ember-line mob drops and claimable Infernal Ruins.
-- **Path of Attunement**: a progression line mapped onto vanilla advancements that points you roughly toward the next step — without laying everything ahead bare, leaving room to explore.
+- **Exploration side-paths**: the Overworld has Sealed Shrines unlocked by progression + an Energy Crystal (key blocks are protected from being broken before the shrine is solved); the Nether has ember-line mob drops and claimable Infernal Ruins.
+- **Path of Attunement**: a progression line mapped onto vanilla advancements that points you roughly toward the next step — without laying everything ahead bare, leaving room to explore. Type `/lyco progress` any time to see your current objective.
+- **First-join onboarding**: a short hint tells new players about Morning Dew, the Attunement Manual and how to open facilities — shown once, then never again.
 
 ## How to run it
 
@@ -48,7 +49,7 @@ Player-facing text ships in **Traditional Chinese and English**. The active lang
 
 ## Status
 
-`v0.9.33-ALPHA` WIP. The features are mostly all there, and **each release is tested in-game during development**. It just hasn't been through a full long-term run on a public multiplayer Paper server yet, and the content are almost entirely data-driven and tuned often. There will be bugs — saying so up front.
+`v0.9.34-ALPHA`. The features are mostly all there, and **each release is tested in-game during development**. It just hasn't been through a full long-term run on a public multiplayer Paper server yet, and the content are almost entirely data-driven and tuned often. There will be bugs — saying so up front.
 
 ## License
 

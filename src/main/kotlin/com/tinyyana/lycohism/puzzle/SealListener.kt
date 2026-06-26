@@ -7,6 +7,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
+import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.inventory.InventoryOpenEvent
 import org.bukkit.event.player.PlayerInteractEvent
 
@@ -27,6 +28,13 @@ class SealListener(private val plugin: Lycohism) : Listener {
             SealManager.UnlockResult.NOT_A_SEAL -> return
         }
         Messages.send(event.player, Texts.line(key))
+    }
+
+    @EventHandler
+    fun onBlockBreak(event: BlockBreakEvent) {
+        if (!plugin.sealManager.isShrineBlockProtectedFor(event.player, event.block)) return
+        event.isCancelled = true
+        Messages.send(event.player, Texts.line("messages.puzzle.seal.protected-break"))
     }
 
     @EventHandler

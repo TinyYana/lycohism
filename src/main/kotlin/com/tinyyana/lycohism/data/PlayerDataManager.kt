@@ -41,6 +41,7 @@ class PlayerDataManager(private val plugin: Lycohism) {
             data.sunEnergy = yaml.getInt("sun-energy", 0)
             data.moonEnergy = yaml.getInt("moon-energy", 0)
             data.unsealed.addAll(yaml.getStringList("unsealed"))
+            data.seenWelcome = yaml.getBoolean("seen-welcome", false)
         }
         cache[uuid] = data
         return data
@@ -59,6 +60,7 @@ class PlayerDataManager(private val plugin: Lycohism) {
         yaml.set("sun-energy", data.sunEnergy)
         yaml.set("moon-energy", data.moonEnergy)
         yaml.set("unsealed", data.unsealed.toList())
+        yaml.set("seen-welcome", data.seenWelcome)
         runCatching { saveAtomically(uuid, yaml) }
             .onFailure { plugin.logger.warning("Failed to save player data for $uuid: ${it.message}") }
     }

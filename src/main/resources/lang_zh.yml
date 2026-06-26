@@ -779,6 +779,13 @@ terms:
     below: "下方"
 
 messages:
+  # 新玩家首次登入導引（每個帳號只顯示一次）。
+  welcome:
+    - "<gradient:#8fd3ff:#d9f3ff>這個世界多了一層自然現象。</gradient>"
+    - "<gray>清晨打草或花，有機會取得<white>晨露</white>。</gray>"
+    - "<gray>取得第一個自然現象後，你會拿到<white>調律手冊</white>。</gray>"
+    - "<gray>卡住時輸入 <yellow>/lyco progress</yellow>。</gray>"
+    - "<dark_gray>設施可用「潛行＋空手＋右鍵」開啟。</dark_gray>"
   common:
     missing-materials: "<red>材料不足。</red> <gray>需要：{costs}</gray>"
     recipe-locked: "<gray>這份做法還有素材未辨認；先親手拿起那些素材。</gray>"
@@ -979,6 +986,7 @@ messages:
       hint-item: "<gray>封印的石面微微震動。手持某種輝能的結晶，感受它與石刻的頻率是否相符？</gray>"
       unlocked: "<gradient:#b0b8ff:#ffd6ff>封印的紋路流動，祠心共鳴解開。</gradient>"
       already-open: "<gray>這座祠對你已無封印。</gray>"
+      protected-break: "<dark_gray>封印仍在，這個方塊還無法移動。</dark_gray>"
 
 commands:
   root: "<gray>Lycohism <white>v{version}</white> — 自然調律生存擴充。輸入 <yellow>/{label} help</yellow> 查看指令。</gray>"
