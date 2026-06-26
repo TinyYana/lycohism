@@ -17,14 +17,32 @@ import org.bukkit.inventory.ItemStack
  */
 object Cost {
 
-    /** One required ingredient: how to recognise it, how many, and a display label. */
+    /**
+     * One required ingredient.
+     *
+     * [labelFor] resolves the display name in the given player locale (Bukkit `player.locale`,
+     * e.g. "zh_TW", "en_US", "ja_JP"). zh_* → ZH lang file; everything else → EN.
+     * [label] is a convenience shorthand that uses the plugin's configured language.
+     */
     data class Requirement(
-        val label: String,
         val amount: Int,
-        val contentId: String?,
-        val material: Material?,
+        val contentId: String?,   // null for vanilla materials
+        val material: Material?,  // null for Lycohism custom items
+        val fallbackLabel: String,
         val matches: (ItemStack) -> Boolean,
-    )
+    ) {
+        val label: String get() = labelFor("")
+
+        fun labelFor(playerLocale: String): String {
+            val lang = if (playerLocale.isEmpty()) Texts.activeLanguage
+                       else Texts.langCodeFor(playerLocale)
+            return when {
+                material != null -> VanillaItems.tag(material, lang)
+                contentId != null -> Texts.lineInLang("content-names.$contentId", lang, fallbackLabel)
+                else -> fallbackLabel
+            }
+        }
+    }
 
     fun parse(tokens: List<String>, plugin: Lycohism): List<Requirement> =
         tokens.mapNotNull { parseOne(it, plugin) }
@@ -36,14 +54,14 @@ object Cost {
 
         val material = Material.matchMaterial(id)
         if (material != null) {
-            return Requirement(VanillaItems.tag(material), amount, null, material) {
+            return Requirement(amount, null, material, "") {
                 it.type == material && Items.idOf(it) == null
             }
         }
 
-        // Lycohism custom item id (e.g. morning_dew). Label from its display name if known.
-        val label = Texts.line("content-names.$id", plugin.phenomenonManager.get(id)?.displayName ?: id)
-        return Requirement(label, amount, id, null) { Items.idOf(it) == id }
+        // Lycohism custom item id (e.g. morning_dew).
+        val fallback = plugin.phenomenonManager.get(id)?.displayName ?: id
+        return Requirement(amount, id, null, fallback) { Items.idOf(it) == id }
     }
 
     fun isKnown(data: PlayerData, requirement: Requirement): Boolean =
@@ -71,7 +89,6 @@ object Cost {
                 if (remaining <= 0) break
                 val stack = contents[i] ?: continue
                 if (!requirement.matches(stack)) continue
-
                 val take = minOf(remaining, stack.amount)
                 stack.amount -= take
                 remaining -= take

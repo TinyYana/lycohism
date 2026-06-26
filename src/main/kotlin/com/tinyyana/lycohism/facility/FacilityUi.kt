@@ -15,12 +15,7 @@ import org.bukkit.persistence.PersistentDataType
 /** Shared facility lore formatting so cost/action blocks stay visually identical. */
 object FacilityUi {
 
-    /**
-     * The Lv1→Lv2 upgrade button shown in a facility's main menu. Spells out the v0.7.4 #3 flow:
-     * build the 升級 structure, fill a nexus via towers→relays, then upgrade here. Also names the
-     * concrete costs (nexus 輝能 + materials) so players see exactly how the upgrade happens (#2).
-     */
-    fun upgradeButton(plugin: Lycohism, facility: String, currentLevel: Int): ItemStack {
+    fun upgradeButton(plugin: Lycohism, facility: String, currentLevel: Int, playerLocale: String = ""): ItemStack {
         val target = currentLevel + 1
         val cfg = plugin.config.getConfigurationSection("facility-upgrade")
         val (sun, moon, requirements) = FacilityUpgrade.costFor(plugin, cfg, target)
@@ -33,7 +28,7 @@ object FacilityUi {
             }
             if (requirements.isNotEmpty()) {
                 add(Texts.line("gui.common.requires"))
-                addAll(costLines(requirements))
+                addAll(costLines(requirements, playerLocale))
             }
             add("")
             add(Texts.line("gui.facility.upgrade-action"))
@@ -48,10 +43,6 @@ object FacilityUi {
         }
     }
 
-    /**
-     * Shown in the upgrade slot once a facility is fully upgraded (v0.9.2 #2): a barrier with a short
-     * "already at max" note, so the slot reads as intentional instead of an empty filler pane.
-     */
     fun maxedButton(): ItemStack = ItemStack(Material.BARRIER).apply {
         modifyMeta { meta ->
             Messages.applyDisplayName(meta, Texts.line("gui.facility.maxed"))
@@ -59,13 +50,7 @@ object FacilityUi {
         }
     }
 
-    /**
-     * Upgrade-button click: if the player is at a complete upgrade structure, upgrade; otherwise hand
-     * them the structure's 藍圖 (once) so they can ghost-preview and build it (v0.7.5 #2 — players, and
-     * frankly the dev, couldn't tell how to build the upgrade structure).
-     */
     fun upgradeClick(plugin: Lycohism, player: Player, facility: String, reopen: () -> Unit) {
-        // Lv2→Lv3 needs no upgrade structure (it's gated on the 蝕輝結晶), so go straight to the upgrade.
         if (FacilityUpgrade.level(plugin, player, facility) >= 2) {
             runUpgrade(plugin, player, facility, reopen)
             return
@@ -84,7 +69,6 @@ object FacilityUi {
         player.closeInventory()
     }
 
-    /** Runs the upgrade and reports the result; [reopen] refreshes the menu on success. */
     fun runUpgrade(plugin: Lycohism, player: Player, facility: String, reopen: () -> Unit) {
         val result = FacilityUpgrade.upgrade(plugin, player, facility)
         val key = when (result) {
@@ -109,6 +93,7 @@ object FacilityUi {
         requirements: List<Cost.Requirement>,
         actionPath: String,
         playerData: PlayerData? = null,
+        playerLocale: String = "",
     ): ItemStack {
         item.modifyMeta { meta ->
             val lore = Messages.getLore(meta)
@@ -116,7 +101,7 @@ object FacilityUi {
             lore.add(Messages.loreLine(Texts.line("gui.common.requires")))
             requirements.forEach { requirement ->
                 val path = if (playerData == null || Cost.isKnown(playerData, requirement)) {
-                    costLine(requirement)
+                    costLine(requirement, playerLocale)
                 } else {
                     Texts.render("gui.common.cost-hidden", "amount" to requirement.amount.toString())
                 }
@@ -132,15 +117,14 @@ object FacilityUi {
         return item
     }
 
-    fun costLines(requirements: List<Cost.Requirement>): List<String> =
-        requirements.map(::costLine)
+    fun costLines(requirements: List<Cost.Requirement>, playerLocale: String = ""): List<String> =
+        requirements.map { costLine(it, playerLocale) }
 
-    fun describe(requirements: List<Cost.Requirement>): String =
+    fun describe(requirements: List<Cost.Requirement>, playerLocale: String = ""): String =
         requirements.joinToString(Texts.line("terms.list-separator")) {
-            Texts.render("gui.common.cost-plain", "item" to it.label, "amount" to it.amount.toString())
+            Texts.render("gui.common.cost-plain", "item" to it.labelFor(playerLocale), "amount" to it.amount.toString())
         }
 
-    private fun costLine(requirement: Cost.Requirement): String =
-        Texts.render("gui.common.cost-line", "item" to requirement.label, "amount" to requirement.amount.toString())
-
+    private fun costLine(requirement: Cost.Requirement, playerLocale: String = ""): String =
+        Texts.render("gui.common.cost-line", "item" to requirement.labelFor(playerLocale), "amount" to requirement.amount.toString())
 }

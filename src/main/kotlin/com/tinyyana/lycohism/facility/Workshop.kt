@@ -96,7 +96,7 @@ class Workshop(private val plugin: Lycohism) {
                     addAll(Texts.lines("gui.workshop.repair-lore"))
                     add("")
                     add(Texts.line("gui.common.requires"))
-                    addAll(FacilityUi.costLines(Cost.parse(repairCost, plugin)))
+                    addAll(FacilityUi.costLines(Cost.parse(repairCost, plugin), player.locale))
                     add("")
                     add(Texts.line("gui.common.click-repair"))
                 }),
@@ -105,7 +105,7 @@ class Workshop(private val plugin: Lycohism) {
             inv.setItem(SLOT_TOOLS, button(Material.GLASS_BOTTLE, Texts.line("gui.workshop.tools-leaf"), Texts.lines("gui.workshop.tools-lore")))
             inv.setItem(SLOT_MATERIALS, button(Material.STONECUTTER, Texts.line("gui.workshop.materials-leaf"), Texts.lines("gui.workshop.materials-lore")))
             inv.setItem(SLOT_STATUS, button(Material.LECTERN, Texts.line("gui.workshop.status"), Texts.renderLines("gui.workshop.status-lore", "level" to stored.toString())))
-            if (stored in 1 until FacilityUpgrade.MAX_LEVEL) inv.setItem(SLOT_UPGRADE, FacilityUi.upgradeButton(plugin, "workshop", stored))
+            if (stored in 1 until FacilityUpgrade.MAX_LEVEL) inv.setItem(SLOT_UPGRADE, FacilityUi.upgradeButton(plugin, "workshop", stored, player.locale))
             else inv.setItem(SLOT_UPGRADE, FacilityUi.maxedButton())
         }
         player.openInventory(inv)
@@ -152,6 +152,7 @@ class Workshop(private val plugin: Lycohism) {
                 mendingRequirements,
                 "gui.common.click-enchant",
                 plugin.playerDataManager.rememberInventoryMaterials(player),
+                player.locale,
             ),
         )
         inv.setItem(Menu.backSlotAfter(listOf(toolsMaxSlot(effective))), backButton())
@@ -436,7 +437,7 @@ class Workshop(private val plugin: Lycohism) {
     private fun putCraftButton(inv: Inventory, slot: Int, player: Player, item: ItemStack, cost: List<String>) {
         val requirements = Cost.parse(cost, plugin)
         val data = plugin.playerDataManager.rememberInventoryMaterials(player)
-        inv.setItem(slot, FacilityUi.withCost(item, requirements, "gui.common.click-craft", data))
+        inv.setItem(slot, FacilityUi.withCost(item, requirements, "gui.common.click-craft", data, player.locale))
     }
 
     private fun recipeUnlocked(player: Player, requirements: List<Cost.Requirement>): Boolean =
@@ -445,11 +446,11 @@ class Workshop(private val plugin: Lycohism) {
     private fun backButton(): ItemStack = Menu.back()
 
     private fun sendMissing(player: Player, reqs: List<Cost.Requirement>) {
-        Messages.send(player, Texts.render("messages.common.missing-materials", "costs" to FacilityUi.describe(reqs)))
+        Messages.send(player, Texts.render("messages.common.missing-materials", "costs" to FacilityUi.describe(reqs, player.locale)))
     }
 
-    private fun prettyName(material: Material): String =
-        VanillaItems.tag(material)
+    private fun prettyName(material: Material, playerLocale: String = ""): String =
+        VanillaItems.tag(material, Texts.langCodeFor(playerLocale))
 
     companion object {
         private const val FILE_NAME = "facilities.yml"
