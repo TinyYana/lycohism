@@ -6,12 +6,11 @@ plugins {
 
 repositories {
     mavenCentral()
-    maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
 }
 
 dependencies {
-    // ponytail: compile against local Spigot API to surface all Paper-only calls as errors
-    compileOnly(files("D:/02 Games/Minecraft/MinecraftServer/SpigotBuildTool/Spigot/Spigot-API/target/spigot-api-26.2-R0.1-SNAPSHOT-shaded.jar"))
+    compileOnly(libs.spigot.api)
     implementation(libs.kotlin.stdlib)
     testImplementation(kotlin("test"))
 }

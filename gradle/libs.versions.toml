@@ -1,14 +1,14 @@
 [versions]
 kotlin = "2.4.0"
 
-paper-api = "26.2.build.+"
+spigot-api = "26.2-R0.1-SNAPSHOT"
 minecraft = "26.2"
 
 shadow = "9.4.2"
 run-task = "3.0.2"
 
 [libraries]
-paper-api = { module = "io.papermc.paper:paper-api", version.ref = "paper-api" }
+spigot-api = { module = "org.spigotmc:spigot-api", version.ref = "spigot-api" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
 
 [plugins]
