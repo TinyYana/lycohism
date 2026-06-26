@@ -1590,3 +1590,39 @@ books:
         label: "星圖羅盤"
       - id: lunar_spore
         label: "月華灑"
+
+# 原版素材的顯示名稱（配方成本用）。key 為 Material 名稱小寫，值為該語系的顯示名。
+# 只需補上有用到的素材；沒列到的會自動 title-case fallback（英文）。
+vanilla-names:
+  amethyst_shard: 紫水晶碎片
+  blaze_rod: 烈焰棒
+  bone_meal: 骨粉
+  book: 書
+  bookshelf: 書架
+  bundle: 收納袋
+  clock: 時鐘
+  cobblestone: 圓石
+  compass: 指南針
+  copper_ingot: 銅錠
+  diamond: 鑽石
+  diamond_pickaxe: 鑽石鎬
+  ender_pearl: 終界珍珠
+  glass: 玻璃
+  glass_bottle: 玻璃瓶
+  glistering_melon_slice: 光芒西瓜片
+  glowstone: 螢光石
+  glowstone_dust: 螢光石粉
+  glow_berries: 發光漿果
+  gold_block: 金塊
+  gold_ingot: 金錠
+  iron_ingot: 鐵錠
+  lectern: 講台
+  magma_block: 岩漿塊
+  moss_block: 苔蘚塊
+  nether_wart: 地獄疣
+  oak_planks: 橡木板
+  paper: 紙
+  redstone: 紅石粉
+  scaffolding: 鷹架
+  stick: 木棍
+  string: 線

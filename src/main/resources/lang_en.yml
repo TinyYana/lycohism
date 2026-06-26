@@ -1597,3 +1597,40 @@ books:
         label: "Star Compass"
       - id: lunar_spore
         label: "Lunar Spore"
+
+# Vanilla material display names used in recipe costs.
+# Key = Material name lowercase; value = display name in this language.
+# Only list materials that appear in costs; missing ones fall back to title-case.
+vanilla-names:
+  amethyst_shard: Amethyst Shard
+  blaze_rod: Blaze Rod
+  bone_meal: Bone Meal
+  book: Book
+  bookshelf: Bookshelf
+  bundle: Bundle
+  clock: Clock
+  cobblestone: Cobblestone
+  compass: Compass
+  copper_ingot: Copper Ingot
+  diamond: Diamond
+  diamond_pickaxe: Diamond Pickaxe
+  ender_pearl: Ender Pearl
+  glass: Glass
+  glass_bottle: Glass Bottle
+  glistering_melon_slice: Glistering Melon Slice
+  glowstone: Glowstone
+  glowstone_dust: Glowstone Dust
+  glow_berries: Glow Berries
+  gold_block: Gold Block
+  gold_ingot: Gold Ingot
+  iron_ingot: Iron Ingot
+  lectern: Lectern
+  magma_block: Magma Block
+  moss_block: Moss Block
+  nether_wart: Nether Wart
+  oak_planks: Oak Planks
+  paper: Paper
+  redstone: Redstone
+  scaffolding: Scaffolding
+  stick: Stick
+  string: String
