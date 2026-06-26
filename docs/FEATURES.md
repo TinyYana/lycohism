@@ -6,7 +6,7 @@
 > - the lighter, player-facing tutorial focused on "where people get stuck" → [`TUTORIAL.md`](TUTORIAL.md)
 >
 > Most numbers live in `src/main/resources/*.yml` and can be `/lyco reload`ed live. Anything marked "tunable" here is in a config file.
-> This document reflects the current working tree's **v0.9.34-ALPHA WIP code and default YAML**. Each release is tested in-game during development, but passing compile/unit tests and solo testing is not the same as a long-term multiplayer Paper acceptance run.
+> This document reflects the current **v1.0.0-BETA** code and default YAML. Each release is tested in-game during development, but passing compile/unit tests and solo testing is not the same as a long-term multiplayer Spigot/Paper acceptance run.
 
 ---
 
@@ -369,12 +369,12 @@ Both the vanilla crafting guard and structure break-confirm use a "do it again w
 
 ---
 
-## 13. Current WIP / next steps
+## 13. Current status / next steps
 
-- **v0.9.34**: Beta onboarding pass — first-join welcome hint, `/lyco progress` as the main stuck-recovery entry point, Sealed Shrine block protection, and doc refresh.
-- **Sealed Shrine protection (v0.9.34)**: the controller block and chest are now protected from being broken before the player has solved the shrine. Teardown after solving remains unrestricted.
-- **First-join onboarding (v0.9.34)**: a 5-line hint is shown once per player on first join, covering Morning Dew, the Attunement Manual, `/lyco progress` and the facility gesture.
-- **Loose ends (Beta TODO)**: the three automation machines still share one recipe pool; the Infernal Ruins are exploration/recipe only, not yet a real derelict energy network; `/lyco progress` stage ordering and discoverability have been checked but a full paging/filtering UI is deferred post-playtest.
-- **Spigot compatibility**: not handled for now. The code leans heavily on Paper's Adventure/MiniMessage.
+- **v1.0.0-BETA**: Spigot compatibility, first-join welcome hint, `/lyco progress` as the main stuck-recovery entry point, Sealed Shrine block protection, and doc refresh.
+- **Sealed Shrine protection**: the controller block and chest are now protected from being broken before the player has solved the shrine. Teardown after solving remains unrestricted.
+- **First-join onboarding**: a 5-line hint is shown once per player on first join, covering Morning Dew, the Attunement Manual, `/lyco progress` and the facility gesture.
+- **Loose ends after Beta**: the three automation machines still share one recipe pool; the Infernal Ruins are exploration/recipe only, not yet a real derelict energy network; `/lyco progress` stage ordering and discoverability have been checked but a full paging/filtering UI is deferred post-playtest.
+- **Server support**: Spigot is the compile target; Paper should work as a compatible server runtime.
 
-> This system is still ALPHA; content will keep being tuned from actual play.
+> This system is now BETA; content will keep being tuned from actual play.

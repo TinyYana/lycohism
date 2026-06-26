@@ -73,7 +73,7 @@ Once the Radiance Nexus is built and energy is flowing, you can make an **Attune
 
 Use: place a chest **directly above it** and drop in inputs (like cobblestone). As long as it's within 48 blocks of a Nexus that has the matching radiance, it takes one input every few seconds, spends a little radiance, and returns the product to the chest. This is the first "continuous radiance sink" beyond upgrading facilities and summoning the BOSS.
 
-Once the Greenhouse and Study reach Lv2, their tools pages each gain a blueprint too: the **Seedling Cultivator** uses a composter as its controller and is flavoured toward plant processing; the **Phenomenon Condenser** uses a lectern and is flavoured toward material condensing. All three currently share one recipe pool, so in practice don't fuss over "which category does this input belong to" — drop it into any of the three and it may run. This is an ALPHA simplification; whether to split is a post-playtest decision.
+Once the Greenhouse and Study reach Lv2, their tools pages each gain a blueprint too: the **Seedling Cultivator** uses a composter as its controller and is flavoured toward plant processing; the **Phenomenon Condenser** uses a lectern and is flavoured toward material condensing. All three currently share one recipe pool, so in practice don't fuss over "which category does this input belong to" — drop it into any of the three and it may run. This is a BETA simplification; whether to split is a post-playtest decision.
 
 ## Upgrading facilities: build the "upgrade structure" first
 
@@ -89,7 +89,7 @@ After the Study reaches Lv3, on top of the regional forecast, your personal Sunl
 
 New chunks in the Overworld occasionally grow a small shrine of a deepslate platform, amethyst pillars and soul lanterns. The chest won't open directly — first touch the Radiance Nexus line, then **right-click the central chiseled deepslate while holding an Energy Crystal**. The controller gives different directional hints depending on which condition is missing.
 
-Unseal progress is tracked per player; one player solving a shrine doesn't mean you have. One ALPHA boundary to flag: currently only the chest is locked, the whole structure isn't teardown-protected yet — don't pickaxe the puzzle apart physically.
+Unseal progress is tracked per player; one player solving a shrine doesn't mean you have. Before you solve it, the controller block and chest are protected so the puzzle can't be bypassed by simply breaking the important bits.
 
 ## Expeditions
 
@@ -125,4 +125,4 @@ If you're unsure which item is the catalyst, empty-hand right-click the altar an
 - `/lyco progress`: opens the Path of Attunement directly (when you don't want to run to the study).
 - Facilities can all be opened with `/lyco workshop`, `/lyco study`, `/lyco greenhouse`, but for normal play, opening with blocks feels more like "using your base".
 
-Finally: this is still ALPHA, the numbers will be tuned, and you may hit bugs. If you're stuck or something feels off, it's usually not you — it's just not dialled in yet.
+Finally: this is BETA, the numbers will still be tuned, and you may hit bugs. If you're stuck or something feels off, it's usually not you — it's just not dialled in yet.

@@ -2,9 +2,9 @@
 
 *[繁體中文版 README](README.zh-TW.md)*
 
-A server-side survival expansion for Minecraft (a PaperMC plugin). No client mod required — it grows a layer of "nature magic / living tools / base growth / exploration" on top of vanilla survival.
+A server-side survival expansion for Minecraft (Spigot / Paper). No client mod required — it grows a layer of "nature magic / living tools / base growth / exploration" on top of vanilla survival.
 
-Lycohism is currently **ALPHA**; features are still being adjusted quickly.
+Lycohism is currently **BETA** at `1.0.0-BETA`; the full loop is playable, with tuning still expected from real servers.
 
 ## What it does
 
@@ -28,7 +28,7 @@ For the full feature set, exact costs and current limits, see [`docs/FEATURES.md
 
 ## How to run it
 
-Requires Paper (matching the `api-version` in `plugin.yml`).
+Requires Spigot or Paper matching the `api-version` in `plugin.yml`.
 
 Build:
 
@@ -49,7 +49,7 @@ Player-facing text ships in **Traditional Chinese and English**. The active lang
 
 ## Status
 
-`v0.9.34-ALPHA`. The features are mostly all there, and **each release is tested in-game during development**. It just hasn't been through a full long-term run on a public multiplayer Paper server yet, and the content are almost entirely data-driven and tuned often. There will be bugs — saying so up front.
+`v1.0.0-BETA`. The main play loop is in place, Spigot is supported, and **each release is tested in-game during development**. It still needs more long-term multiplayer mileage, and most content is data-driven so tuning can keep moving. There will be bugs — saying so up front.
 
 ## License
 
