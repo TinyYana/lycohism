@@ -1,4 +1,4 @@
-# Lycohism — Features & Mechanics Overview (v0.9.33-ALPHA)
+# Lycohism — Features & Mechanics Overview (v0.9.34-ALPHA)
 
 *[繁體中文版](FEATURES.zh-TW.md)*
 
@@ -6,7 +6,7 @@
 > - the lighter, player-facing tutorial focused on "where people get stuck" → [`TUTORIAL.md`](TUTORIAL.md)
 >
 > Most numbers live in `src/main/resources/*.yml` and can be `/lyco reload`ed live. Anything marked "tunable" here is in a config file.
-> This document reflects the current working tree's **v0.9.33-ALPHA WIP code and default YAML**. Each release is tested in-game during development, but passing compile/unit tests and solo testing is not the same as a long-term multiplayer Paper acceptance run.
+> This document reflects the current working tree's **v0.9.34-ALPHA WIP code and default YAML**. Each release is tested in-game during development, but passing compile/unit tests and solo testing is not the same as a long-term multiplayer Paper acceptance run.
 
 ---
 
@@ -371,8 +371,10 @@ Both the vanilla crafting guard and structure break-confirm use a "do it again w
 
 ## 13. Current WIP / next steps
 
-- **v0.9.33 working tree**: Sealed Shrine, the three automation machines, Study Lv3 caps, Infernal Ruins and the ember material line are all in code; offline test/build passes and each version is tested in-game, with a long-term multiplayer Paper run still to come.
-- **Loose ends**: the Sealed Shrine only locks the chest, not the whole structure against teardown; the three automation machines share a recipe pool; the Infernal Ruins are exploration/recipe only, not yet a real derelict energy network.
+- **v0.9.34**: Beta onboarding pass — first-join welcome hint, `/lyco progress` as the main stuck-recovery entry point, Sealed Shrine block protection, and doc refresh.
+- **Sealed Shrine protection (v0.9.34)**: the controller block and chest are now protected from being broken before the player has solved the shrine. Teardown after solving remains unrestricted.
+- **First-join onboarding (v0.9.34)**: a 5-line hint is shown once per player on first join, covering Morning Dew, the Attunement Manual, `/lyco progress` and the facility gesture.
+- **Loose ends (Beta TODO)**: the three automation machines still share one recipe pool; the Infernal Ruins are exploration/recipe only, not yet a real derelict energy network; `/lyco progress` stage ordering and discoverability have been checked but a full paging/filtering UI is deferred post-playtest.
 - **Spigot compatibility**: not handled for now. The code leans heavily on Paper's Adventure/MiniMessage.
 
 > This system is still ALPHA; content will keep being tuned from actual play.

@@ -40,5 +40,8 @@ class PlayerData(val uuid: UUID) {
     /** Coordinate keys ("world,x,y,z") of sealed shrines this player has already unlocked. */
     val unsealed: MutableSet<String> = mutableSetOf()
 
+    /** True once the first-join welcome hint has been shown; never show it again. */
+    var seenWelcome: Boolean = false
+
     fun hasDiscovered(id: String): Boolean = id in discoveries
 }

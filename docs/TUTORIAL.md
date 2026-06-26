@@ -49,6 +49,8 @@ Same logic, different blocks.
 
 The study can open the "Path of Attunement". It's a chain of milestones; the first uncompleted chapter is your current objective and gives a hint, while later chapters stay hidden to keep a sense of pushing forward.
 
+**Shortcut: type `/lyco progress` any time.** You don't need the study open — the command works from anywhere and always shows your current objective first.
+
 If you log in one day and forget where you were stuck, check this first. It also maps onto the vanilla advancement screen, so you can see it there too.
 
 ## Radiance: sun and moon

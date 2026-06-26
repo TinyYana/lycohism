@@ -781,6 +781,13 @@ terms:
     below: "below"
 
 messages:
+  # First-join welcome hint (shown once per account, never repeated).
+  welcome:
+    - "<gradient:#8fd3ff:#d9f3ff>This world has a layer of natural phenomena.</gradient>"
+    - "<gray>At dawn, break grass or flowers for a chance to get <white>Morning Dew</white>.</gray>"
+    - "<gray>Once you find your first natural phenomenon, you'll receive an <white>Attunement Manual</white>.</gray>"
+    - "<gray>Stuck? Type <yellow>/lyco progress</yellow>.</gray>"
+    - "<dark_gray>Facilities open with Sneak + empty hand + right-click.</dark_gray>"
   common:
     missing-materials: "<red>Not enough materials.</red> <gray>Requires: {costs}</gray>"
     recipe-locked: "<gray>This recipe still has unidentified materials; pick those materials up by hand first.</gray>"
@@ -981,6 +988,7 @@ messages:
       hint-item: "<gray>The sealed stone trembles faintly. Hold some crystal of radiance and feel whether its frequency matches the carving?</gray>"
       unlocked: "<gradient:#b0b8ff:#ffd6ff>The sealed patterns flow, and the shrine's heart resonates open.</gradient>"
       already-open: "<gray>This shrine holds no seal for you now.</gray>"
+      protected-break: "<dark_gray>The seal holds — this block cannot be moved yet.</dark_gray>"
 
 commands:
   root: "<gray>Lycohism <white>v{version}</white> — a nature-attunement survival expansion. Type <yellow>/{label} help</yellow> to see the commands.</gray>"

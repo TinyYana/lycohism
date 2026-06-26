@@ -72,6 +72,18 @@ class SealManager(private val plugin: Lycohism) {
 
     fun isSealController(block: Block): Boolean = blockKey(block) in entries
 
+    /**
+     * True if [block] is a controller or chest of a shrine the player has not yet unlocked.
+     * Breaking either key block before solving the puzzle would let the player bypass it.
+     */
+    fun isShrineBlockProtectedFor(player: Player, block: Block): Boolean =
+        shouldProtectBreak(
+            entries.keys.toSet(),
+            chestIndex,
+            plugin.playerDataManager.get(player.uniqueId).unsealed,
+            blockKey(block),
+        )
+
     /** True if this chest belongs to a seal the player hasn't yet solved. */
     fun isSealedChestFor(player: Player, block: Block): Boolean {
         val ck = chestIndex[blockKey(block)] ?: return false
@@ -119,5 +131,24 @@ class SealManager(private val plugin: Lycohism) {
 
         fun blockKey(block: Block): String = "${block.world.name},${block.x},${block.y},${block.z}"
         private fun locKey(loc: Location): String = "${loc.world!!.name},${loc.blockX},${loc.blockY},${loc.blockZ}"
+
+        /**
+         * Bukkit-free predicate: should breaking [blockKey] be blocked for a player
+         * whose [unsealed] set is known?
+         * Protects both the controller (in [controllerKeys]) and the chest ([chestToController]).
+         */
+        fun shouldProtectBreak(
+            controllerKeys: Set<String>,
+            chestToController: Map<String, String>,
+            unsealed: Set<String>,
+            blockKey: String,
+        ): Boolean {
+            val controllerKey = when {
+                blockKey in controllerKeys -> blockKey
+                blockKey in chestToController -> chestToController[blockKey]!!
+                else -> return false
+            }
+            return controllerKey !in unsealed
+        }
     }
 }
