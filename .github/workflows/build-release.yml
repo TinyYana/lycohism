@@ -50,9 +50,13 @@ jobs:
           if gh release view "$tag" >/dev/null 2>&1; then
             echo "Release $tag already exists — skipping (bump version in gradle.properties to cut a new one)."
           else
+            # Extract this version's section from CHANGELOG.md (between its ## heading and the next one).
+            ver="${{ steps.ver.outputs.version }}"
+            notes=$(awk "/^## \[${ver}\]/{found=1; next} found && /^## /{exit} found{print}" CHANGELOG.md)
+            [ -z "$notes" ] && notes="See [CHANGELOG.md](CHANGELOG.md) for details."
             gh release create "$tag" \
               "build/libs/lycohism-${{ steps.ver.outputs.version }}.jar" \
               --title "$tag" \
-              --notes "Automated release for $tag. ALPHA — see docs/FEATURES.md." \
+              --notes "$notes" \
               --target "$GITHUB_SHA"
           fi
