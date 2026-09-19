@@ -5,6 +5,13 @@ Format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.0.1-BETA] — 2026-09-19
+
+### Fixed
+- **Paper / DivineMC 26.2 Compatibility**: Resolve gamerules (`advance_time` and `advance_weather`) dynamically via `Registry.GAME_RULE` and `GameRule.getByName` instead of Spigot-only static fields (`GameRule.ADVANCE_*`), fixing `NoSuchFieldError` when entering Expedition worlds.
+
+---
+
 ## [1.0.0-BETA] — 2026-06-26
 
 ### Breaking / Infrastructure

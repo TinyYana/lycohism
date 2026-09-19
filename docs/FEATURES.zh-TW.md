@@ -1,4 +1,4 @@
-# Lycohism 玩法與特色全覽（v1.0.0-BETA）
+# Lycohism 玩法與特色全覽（v1.0.1-BETA）
 
 *[English version](FEATURES.md)*
 
@@ -6,7 +6,7 @@
 > - 玩家向、講「卡關處」的輕量教學 → [`TUTORIAL.md`](TUTORIAL.md)
 >
 > 數值大多寫在 `src/main/resources/*.yml`，可即時 `/lyco reload`。本文標「可調」的代表在設定檔裡。
-> 本文以目前 **v1.0.0-BETA** 程式與預設 YAML 為準；每個版本都有實際進遊戲測試，但編譯／測試通過與單機測試不等於長期多人 Spigot/Paper 實機驗收。
+> 本文以目前 **v1.0.1-BETA** 程式與預設 YAML 為準；每個版本都有實際進遊戲測試，但編譯／測試通過與單機測試不等於長期多人 Spigot/Paper 實機驗收。
 
 ---
 

@@ -1,4 +1,4 @@
-# Lycohism — Features & Mechanics Overview (v1.0.0-BETA)
+# Lycohism — Features & Mechanics Overview (v1.0.1-BETA)
 
 *[繁體中文版](FEATURES.zh-TW.md)*
 
@@ -6,7 +6,7 @@
 > - the lighter, player-facing tutorial focused on "where people get stuck" → [`TUTORIAL.md`](TUTORIAL.md)
 >
 > Most numbers live in `src/main/resources/*.yml` and can be `/lyco reload`ed live. Anything marked "tunable" here is in a config file.
-> This document reflects the current **v1.0.0-BETA** code and default YAML. Each release is tested in-game during development, but passing compile/unit tests and solo testing is not the same as a long-term multiplayer Spigot/Paper acceptance run.
+> This document reflects the current **v1.0.1-BETA** code and default YAML. Each release is tested in-game during development, but passing compile/unit tests and solo testing is not the same as a long-term multiplayer Spigot/Paper acceptance run.
 
 ---
 
