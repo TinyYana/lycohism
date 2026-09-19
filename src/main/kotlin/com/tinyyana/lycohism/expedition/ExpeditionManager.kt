@@ -163,7 +163,7 @@ class ExpeditionManager(private val plugin: Lycohism) {
 
     /** Locks the world to permanent night for the 永夜荒原 atmosphere (and round-the-clock 月輝). */
     private fun lockNight(world: World) {
-        world.setGameRule(GameRule.ADVANCE_TIME, false)
+        setBooleanGameRule(world, "advance_time", "doDaylightCycle", false)
         world.time = 18000
     }
 
@@ -181,10 +181,22 @@ class ExpeditionManager(private val plugin: Lycohism) {
 
     /** Locks the world to permanent rain so the "雨後森林" atmosphere never cycles away. */
     private fun lockRain(world: World) {
-        world.setGameRule(GameRule.ADVANCE_WEATHER, false)
+        setBooleanGameRule(world, "advance_weather", "doWeatherCycle", false)
         world.setStorm(true)
         world.isThundering = false
         world.weatherDuration = Int.MAX_VALUE
+    }
+
+    private fun setBooleanGameRule(world: World, key: String, legacyFallbackKey: String? = null, value: Boolean) {
+        @Suppress("UNCHECKED_CAST")
+        val rule = (Registry.GAME_RULE.get(NamespacedKey.minecraft(key))
+            ?: GameRule.getByName(key)
+            ?: legacyFallbackKey?.let { GameRule.getByName(it) }) as? GameRule<Boolean>
+        if (rule != null) {
+            world.setGameRule(rule, value)
+        } else {
+            plugin.logger.warning("Expedition: could not resolve gamerule '$key' (fallback: '$legacyFallbackKey')")
+        }
     }
 
     private fun safeSpawn(world: World): Location {
